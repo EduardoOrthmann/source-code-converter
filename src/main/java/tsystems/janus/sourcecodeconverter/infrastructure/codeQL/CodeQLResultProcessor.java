@@ -11,6 +11,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -112,8 +113,8 @@ public class CodeQLResultProcessor {
         public int staticQueries = 0;
         public int dynamicQueries = 0;
         public int parameterizedQueries = 0;
-        public Map<String, Integer> fileCount = new java.util.HashMap<>();
-        public Map<String, Integer> classCount = new java.util.HashMap<>();
+        public Map<String, Integer> fileCount = new HashMap<>();
+        public Map<String, Integer> classCount = new HashMap<>();
 
         @Override
         public String toString() {

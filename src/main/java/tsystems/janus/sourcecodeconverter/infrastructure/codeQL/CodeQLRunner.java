@@ -1,65 +1,69 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.codeQL;
 
 import org.springframework.stereotype.Component;
+import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerConfig;
+import tsystems.janus.sourcecodeconverter.infrastructure.docker.DockerContainerManager;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.UUID;
+import java.util.function.Consumer;
 
 @Component
 public class CodeQLRunner {
 
-    private static final String CODEQL_CMD = "codeql";
+    private final DockerContainerManager containerManager;
+    private final CodeQLDockerConfig config;
 
-    public File createDatabase(File projectDir) throws IOException, InterruptedException {
-        File dbDir = new File(projectDir.getParentFile(), "codeql-db-" + UUID.randomUUID());
-
-        List<String> command = List.of(
-                CODEQL_CMD, "database", "create", dbDir.getAbsolutePath(),
-                "--language=java",
-                "--source-root", projectDir.getAbsolutePath()
-        );
-
-        runCommand(command, projectDir);
-        return dbDir;
+    public CodeQLRunner(DockerContainerManager containerManager, CodeQLDockerConfig config) {
+        this.containerManager = containerManager;
+        this.config = config;
     }
 
-    public File runQuery(File dbDir, File qlFile) throws IOException, InterruptedException {
-        File resultFile = new File(dbDir.getParentFile(), "results.bqrs");
-
-        List<String> command = List.of(
-                CODEQL_CMD, "query", "run", qlFile.getAbsolutePath(),
-                "--database", dbDir.getAbsolutePath(),
-                "--output", resultFile.getAbsolutePath()
+    public void createDatabase(String containerName, String projectPathInContainer, String dbPathInContainer, String language, Consumer<String> logConsumer) throws IOException, InterruptedException {
+        logConsumer.accept("Running CodeQL database creation for language " + language + " in container " + containerName + "...");
+        containerManager.executeCommandInContainer(
+                containerName,
+                List.of("bash", "-c",
+                        "rm -rf ~/.codeql/packages/codeql/java-all/7.3.0/ext/ && " +
+                                "codeql database create " + dbPathInContainer +
+                                " --language=" + language +
+                                " --source-root=" + projectPathInContainer +
+                                " --overwrite"
+                ),
+                logConsumer
         );
-
-        runCommand(command, dbDir);
-        return resultFile;
+        logConsumer.accept("✅ CodeQL database created at " + dbPathInContainer + " in container " + containerName);
     }
 
-    public File decodeResultsToFile(File resultFile) throws IOException, InterruptedException {
-        File outputCsv = new File(resultFile.getParentFile(), "raw-results.json");
-
-        List<String> command = List.of(
-                CODEQL_CMD, "bqrs", "decode",
-                "--format=json",
-                "--output", outputCsv.getAbsolutePath(),
-                resultFile.getAbsolutePath()
+    public void runQuery(String containerName, String qlFilePathInContainer, String dbPathInContainer, String resultPathInContainer, String queryDirInContainer, Consumer<String> logConsumer) throws IOException, InterruptedException {
+        logConsumer.accept("✅ CodeQL query executed successfully in container " + containerName + ". Results at " + resultPathInContainer + ".");
+        containerManager.executeCommandInContainer(
+                containerName,
+                List.of("bash", "-c",
+                        "cd " + queryDirInContainer + " && " +
+                                "codeql pack install && " +
+                                "codeql query run " + qlFilePathInContainer +
+                                " --database=" + dbPathInContainer +
+                                " --output=" + resultPathInContainer
+                ),
+                logConsumer
         );
-
-        runCommand(command, resultFile.getParentFile());
-        return outputCsv;
+        logConsumer.accept("✅ CodeQL query executed successfully in container " + containerName + ". Results at " + resultPathInContainer + ".");
     }
 
-    private void runCommand(List<String> command, File workingDir) throws IOException, InterruptedException {
-        ProcessBuilder pb = new ProcessBuilder(command);
-        pb.directory(workingDir);
-        pb.inheritIO();
-        Process process = pb.start();
-        int exitCode = process.waitFor();
-        if (exitCode != 0) {
-            throw new RuntimeException("CodeQL command failed: " + String.join(" ", command));
-        }
+    public void decodeResultsInContainer(String containerName, String bqrsPathInContainer, String jsonOutputPathInContainer, Consumer<String> logConsumer) throws IOException, InterruptedException {
+        logConsumer.accept("Decoding BQRS results from '" + bqrsPathInContainer + "' to JSON '" + jsonOutputPathInContainer + "' in container '" + containerName + "'...");
+        containerManager.executeCommandInContainer(
+                containerName,
+                List.of(
+                        "codeql", "bqrs", "decode",
+                        "--format=json",
+                        "--output", jsonOutputPathInContainer,
+                        bqrsPathInContainer
+                ),
+                logConsumer
+        );
+        logConsumer.accept("✅ BQRS results decoded to JSON at " + jsonOutputPathInContainer + " in container " + containerName + ".");
     }
 }

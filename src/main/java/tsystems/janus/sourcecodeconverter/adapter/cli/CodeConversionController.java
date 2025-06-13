@@ -5,7 +5,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
-import tsystems.janus.sourcecodeconverter.application.port.input.CodeConversionUseCase;
+import tsystems.janus.sourcecodeconverter.application.service.CodeConversionService;
 import tsystems.janus.sourcecodeconverter.domain.model.CodeQLResult;
 import tsystems.janus.sourcecodeconverter.infrastructure.codeQL.CodeQLResultProcessor;
 
@@ -22,12 +22,12 @@ import java.util.concurrent.Executors;
 @CrossOrigin(origins = "http://localhost:3000")
 public class CodeConversionController {
 
-    private final CodeConversionUseCase codeConversionUseCase;
+    private final CodeConversionService codeConversionService;
     private final CodeQLResultProcessor codeQLResultProcessor;
     private final ExecutorService sseExecutor = Executors.newCachedThreadPool();
 
-    public CodeConversionController(CodeConversionUseCase codeConversionUseCase, CodeQLResultProcessor codeQLResultProcessor) {
-        this.codeConversionUseCase = codeConversionUseCase;
+    public CodeConversionController(CodeConversionService codeConversionService, CodeQLResultProcessor codeQLResultProcessor) {
+        this.codeConversionService = codeConversionService;
         this.codeQLResultProcessor = codeQLResultProcessor;
     }
 
@@ -37,7 +37,7 @@ public class CodeConversionController {
 
         sseExecutor.execute(() -> {
             try {
-                codeConversionUseCase.convertRepository(repoUrl, logMessage -> {
+                codeConversionService.convertRepository(repoUrl, logMessage -> {
                     try {
                         emitter.send(SseEmitter.event().name("log").data(logMessage));
                     } catch (IOException e) {
