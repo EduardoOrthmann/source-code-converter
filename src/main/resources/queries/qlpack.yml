@@ -1,0 +1,5 @@
+name: janus/sql-finder
+version: 0.0.1
+dependencies:
+  codeql/java-all: "~0.7.0"
+extractor: java

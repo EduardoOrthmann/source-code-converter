@@ -1,0 +1,166 @@
+[ {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "addDepartment",
+    "start_line" : 14,
+    "end_line" : 14,
+    "body" : "INSERT INTO Departments (name, location) VALUES (?, ?)",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "INSERT INTO Departments (name, location) VALUES (?, ?)",
+      "line_start" : 15,
+      "line_end" : 15
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "getDepartmentById",
+    "start_line" : 23,
+    "end_line" : 23,
+    "body" : "SELECT * FROM Departments WHERE id = ?",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "SELECT * FROM Departments WHERE id = ?",
+      "line_start" : 24,
+      "line_end" : 24
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "getAllDepartments",
+    "start_line" : 40,
+    "end_line" : 40,
+    "body" : "SELECT * FROM Departments",
+    "sql_query" : {
+      "type" : "static",
+      "query_string" : "SELECT * FROM Departments",
+      "line_start" : 42,
+      "line_end" : 42
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "updateDepartment",
+    "start_line" : 56,
+    "end_line" : 56,
+    "body" : "UPDATE Departments SET name = ?, location = ? WHERE id = ?",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "UPDATE Departments SET name = ?, location = ? WHERE id = ?",
+      "line_start" : 57,
+      "line_end" : 57
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "deleteDepartment",
+    "start_line" : 66,
+    "end_line" : 66,
+    "body" : "DELETE FROM Departments WHERE id = ?",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "DELETE FROM Departments WHERE id = ?",
+      "line_start" : 67,
+      "line_end" : 67
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "class" : "DepartmentRepository",
+  "method" : {
+    "name" : "listDepartmentsWithProjects",
+    "start_line" : 74,
+    "end_line" : 74,
+    "body" : "    SELECT d.id AS dept_id, d.name AS dept_name, p.name AS project_name\n    FROM Departments d\n    LEFT OUTER JOIN Projects p ON d.id = p.department_id\n    FETCH FIRST 10 ROWS ONLY\n",
+    "sql_query" : {
+      "type" : "static",
+      "query_string" : "    SELECT d.id AS dept_id, d.name AS dept_name, p.name AS project_name\n    FROM Departments d\n    LEFT OUTER JOIN Projects p ON d.id = p.department_id\n    FETCH FIRST 10 ROWS ONLY\n",
+      "line_start" : 75,
+      "line_end" : 80
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+  "class" : "EmployeeRepository",
+  "method" : {
+    "name" : "addEmployee",
+    "start_line" : 16,
+    "end_line" : 16,
+    "body" : "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)",
+      "line_start" : 17,
+      "line_end" : 17
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+  "class" : "EmployeeRepository",
+  "method" : {
+    "name" : "getAllEmployees",
+    "start_line" : 27,
+    "end_line" : 27,
+    "body" : "SELECT * FROM Employees",
+    "sql_query" : {
+      "type" : "static",
+      "query_string" : "SELECT * FROM Employees",
+      "line_start" : 29,
+      "line_end" : 29
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+  "class" : "EmployeeRepository",
+  "method" : {
+    "name" : "getFirstFiveEmployees",
+    "start_line" : 45,
+    "end_line" : 45,
+    "body" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR",
+    "sql_query" : {
+      "type" : "static",
+      "query_string" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR",
+      "line_start" : 47,
+      "line_end" : 47
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+  "class" : "ProjectRepository",
+  "method" : {
+    "name" : "addProject",
+    "start_line" : 14,
+    "end_line" : 14,
+    "body" : "INSERT INTO Projects (name, department_id) VALUES (?, ?)",
+    "sql_query" : {
+      "type" : "parameterized",
+      "query_string" : "INSERT INTO Projects (name, department_id) VALUES (?, ?)",
+      "line_start" : 15,
+      "line_end" : 15
+    }
+  }
+}, {
+  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+  "class" : "ProjectRepository",
+  "method" : {
+    "name" : "getAllProjects",
+    "start_line" : 23,
+    "end_line" : 23,
+    "body" : "SELECT * FROM Projects",
+    "sql_query" : {
+      "type" : "static",
+      "query_string" : "SELECT * FROM Projects",
+      "line_start" : 25,
+      "line_end" : 25
+    }
+  }
+} ]
