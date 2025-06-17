@@ -33,7 +33,15 @@ public class CodeQLDockerAnalysisRunner {
 
         if (config.isPersistDbVolume()) {
             logConsumer.accept("Ensuring CodeQL database volume '" + config.getDbVolumeName() + "' exists...");
-            containerManager.createVolume(config.getDbVolumeName(), logConsumer);
+            boolean exists = containerManager.volumeExists(config.getDbVolumeName());
+
+            if (!exists) {
+                logConsumer.accept("📦 Creating CodeQL database volume: " + config.getDbVolumeName());
+                containerManager.createVolume(config.getDbVolumeName(), logConsumer);
+            } else {
+                logConsumer.accept("✅ CodeQL database volume already exists: " + config.getDbVolumeName());
+            }
+
             volumes.add(config.getDbVolumeName() + ":" + config.getContainerDbPath());
         } else {
             logConsumer.accept("CodeQL database volume persistence is disabled. The database will be temporary.");

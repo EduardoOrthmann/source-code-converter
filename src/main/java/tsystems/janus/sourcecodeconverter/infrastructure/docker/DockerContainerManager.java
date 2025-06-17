@@ -83,4 +83,17 @@ public class DockerContainerManager {
         commandExecutor.execute(List.of("docker", "volume", "rm", "-f", volumeName), logConsumer);
         logConsumer.accept("✅ Docker volume '" + volumeName + "' removed.");
     }
+
+    public boolean volumeExists(String volumeName) {
+        try {
+            Process process = new ProcessBuilder("docker", "volume", "inspect", volumeName)
+                    .redirectErrorStream(true)
+                    .start();
+
+            int exitCode = process.waitFor();
+            return exitCode == 0;
+        } catch (IOException | InterruptedException e) {
+            throw new RuntimeException("Error checking Docker volume existence", e);
+        }
+    }
 }

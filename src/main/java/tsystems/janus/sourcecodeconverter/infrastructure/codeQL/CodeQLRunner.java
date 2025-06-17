@@ -1,10 +1,8 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.codeQL;
 
 import org.springframework.stereotype.Component;
-import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerConfig;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.DockerContainerManager;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.function.Consumer;
@@ -13,11 +11,9 @@ import java.util.function.Consumer;
 public class CodeQLRunner {
 
     private final DockerContainerManager containerManager;
-    private final CodeQLDockerConfig config;
 
-    public CodeQLRunner(DockerContainerManager containerManager, CodeQLDockerConfig config) {
+    public CodeQLRunner(DockerContainerManager containerManager) {
         this.containerManager = containerManager;
-        this.config = config;
     }
 
     public void createDatabase(String containerName, String projectPathInContainer, String dbPathInContainer, String language, Consumer<String> logConsumer) throws IOException, InterruptedException {

@@ -1,5 +1,6 @@
 import java
 import semmle.code.java.dataflow.DataFlow
+import semmle.code.java.dataflow.TaintTracking
 
 predicate containsSql(StringLiteral lit) {
   exists(string val | val = lit.getValue().toLowerCase() |
@@ -8,7 +9,6 @@ predicate containsSql(StringLiteral lit) {
     val.matches("%delete%") or val.matches("%create%") or val.matches("%alter%") or
     val.matches("%drop%") or val.matches("%from%") or val.matches("%where%") or
     val.matches("%join%") or val.matches("%group by%") or val.matches("%order by%") or
-    // DB2 specific patterns
     val.matches("%sysibm%") or val.matches("%syscat%") or val.matches("%sysstat%") or
     val.matches("%fetch first%") or val.matches("%rows only%") or
     val.matches("%with ur%") or val.matches("%with cs%") or val.matches("%with rs%") or
@@ -17,37 +17,61 @@ predicate containsSql(StringLiteral lit) {
   )
 }
 
-// Helper predicate to determine SQL query type
 string getSqlQueryType(StringLiteral sql) {
-  if sql.getValue().matches("%?%") or sql.getValue().matches("%:%") 
-  then result = "parameterized"
-  else if sql.getValue().matches("%\"%") or sql.getValue().matches("%'%") 
-  then result = "dynamic"
-  else result = "static"
+  exists(string val | val = sql.getValue() |
+    if (val.matches("%?%") or val.matches("%:%") or val.matches("%#{%") or val.matches("%${%"))
+    then result = "PARAMETERIZED"
+
+    else if
+      exists(BinaryExpr be |
+        be instanceof AddExpr and
+        be.getAnOperand() = sql
+      ) or
+      exists(MethodAccess ma |
+        ma.getMethod().getName() = "append" and
+        DataFlow::localExprFlow(sql, ma.getAnArgument())
+      )
+    then result = "DYNAMIC"
+    
+    else result = "STATIC"
+  )
 }
 
 // Main query to generate JSON output
-from StringLiteral sql, Method method, Type declaringType
+from StringLiteral sql, Method method, Type declaringType, File file
 where 
   containsSql(sql) and
   method = sql.getEnclosingCallable() and
   declaringType = method.getDeclaringType() and
+  file = sql.getFile() and
   not sql.getFile().getAbsolutePath().matches("%test%") and
-  not sql.getFile().getAbsolutePath().matches("%generated%")
+  not sql.getFile().getAbsolutePath().matches("%generated%") and
+  not sql.getFile().getAbsolutePath().matches("%/target/classes%")
 select 
   "{" +
-  "\"file\": \"" + sql.getFile().getAbsolutePath() + "\"," +
-  "\"class\": \"" + declaringType.getName() + "\"," +
-  "\"method\": {" +
-    "\"name\": \"" + method.getName() + "\"," +
-    "\"start_line\": " + method.getLocation().getStartLine() + "," +
-    "\"end_line\": " + method.getLocation().getEndLine() + "," +
-    "\"body\": \"" + sql.getValue().replaceAll("\"", "\\\"").replaceAll("\n", "\\n") + "\"," +
-    "\"sql_query\": {" +
-      "\"type\": \"" + getSqlQueryType(sql) + "\"," +
-      "\"query_string\": \"" + sql.getValue().replaceAll("\"", "\\\"").replaceAll("\n", "\\n") + "\"," +
-      "\"line_start\": " + sql.getLocation().getStartLine() + "," +
-      "\"line_end\": " + sql.getLocation().getEndLine() +
-    "}" +
-  "}" +
+    "\"id\": \"" + sql.getFile().getAbsolutePath() + ":" + sql.getLocation().getStartLine() + "\"," +
+    "\"type\": \"" + getSqlQueryType(sql) + "\"," +
+    "\"file\": {" +
+      "\"path\": \"" + file.getAbsolutePath() + "\"," +
+      "\"language\": \"" + file.getExtension().toUpperCase() + "\"" +
+    "}," +
+    "\"location\": {" +
+      "\"startLine\": " + sql.getLocation().getStartLine() + "," +
+      "\"endLine\": " + sql.getLocation().getEndLine() + "," +
+      "\"startColumn\": " + sql.getLocation().getStartColumn() + "," +
+      "\"endColumn\": " + sql.getLocation().getEndColumn() +
+    "}," +
+    "\"extractedSql\": \"" + sql.getValue().replaceAll("\"", "\"\"").replaceAll("\n", "\\n").replaceAll("\r", "") + "\"," +
+    "\"codeContext\": {" +
+      "\"containingClass\": \"" + declaringType.getName() + "\"," +
+      "\"containingMethod\": \"" + method.getName() + "\"," +
+      "\"variableBindings\": [" +
+        "{" +
+          "\"name\": \"" + "PLACEHOLDER" + "\"," +
+          "\"javaType\": \"" + "PLACEHOLDER" + "\"," +
+          "\"context\": \"" + "PLACEHOLDER" + "\"" +
+        "}" +
+      "]" +
+    "}," +
+    "\"methodParameters\": \"" + concat(Parameter p | p = method.getAParameter() | p.getType().getName() + " " + p.getName(), ", ") + "\"" +
   "}"  

@@ -6,6 +6,7 @@ import tsystems.janus.sourcecodeconverter.infrastructure.codeQL.CodeQLRunner;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.AnalysisPathProvider;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerAnalysisRunner;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerConfig;
+import tsystems.janus.sourcecodeconverter.infrastructure.docker.DockerContainerManager;
 import tsystems.janus.sourcecodeconverter.infrastructure.git.GitCloner;
 
 import java.io.File;
@@ -19,15 +20,17 @@ public class CodeConversionService {
     private final GitCloner repositoryCloner;
     private final CodeQLDockerAnalysisRunner codeQLDockerAnalysisRunner;
     private final CodeQLRunner codeQLCliExecutor;
+    private final DockerContainerManager dockerContainerManager;
     private final CodeQLResultProcessor resultProcessor;
     private final AnalysisPathProvider pathProvider;
     private final CodeQLDockerConfig dockerConfig;
     private final CodeQLDockerConfig codeQLDockerConfig;
 
-    public CodeConversionService(GitCloner repositoryCloner, CodeQLDockerAnalysisRunner codeQLDockerAnalysisRunner, CodeQLRunner codeQLCliExecutor, CodeQLResultProcessor resultProcessor, AnalysisPathProvider pathProvider, CodeQLDockerConfig dockerConfig, CodeQLDockerConfig codeQLDockerConfig) {
+    public CodeConversionService(GitCloner repositoryCloner, CodeQLDockerAnalysisRunner codeQLDockerAnalysisRunner, CodeQLRunner codeQLCliExecutor, DockerContainerManager dockerContainerManager, CodeQLResultProcessor resultProcessor, AnalysisPathProvider pathProvider, CodeQLDockerConfig dockerConfig, CodeQLDockerConfig codeQLDockerConfig) {
         this.repositoryCloner = repositoryCloner;
         this.codeQLDockerAnalysisRunner = codeQLDockerAnalysisRunner;
         this.codeQLCliExecutor = codeQLCliExecutor;
+        this.dockerContainerManager = dockerContainerManager;
         this.resultProcessor = resultProcessor;
         this.pathProvider = pathProvider;
         this.dockerConfig = dockerConfig;
@@ -53,15 +56,22 @@ public class CodeConversionService {
             containerName = codeQLDockerAnalysisRunner.prepareAnalysisEnvironment(projectDir, qlFile, outputDir, logConsumer);
             logConsumer.accept("✅ Docker environment ready. Container: " + containerName);
 
-            logConsumer.accept("Creating CodeQL database inside container...");
-            codeQLCliExecutor.createDatabase(
-                    containerName,
-                    codeQLDockerConfig.getContainerProjectPath(),
-                    codeQLDockerConfig.getContainerDbPath(),
-                    "java",
-                    logConsumer
-            );
-            logConsumer.accept("✅ CodeQL database created successfully.");
+            logConsumer.accept("Persist Volume is set to true. CodeQL will use a persistent volume for the database.");
+            logConsumer.accept("🔍 Checking if CodeQL database already exists in volume...");
+
+            if (!dockerContainerManager.volumeExists(codeQLDockerConfig.getDbVolumeName())) {
+                logConsumer.accept("📦 No existing database found. Creating new CodeQL database...");
+                codeQLCliExecutor.createDatabase(
+                        containerName,
+                        codeQLDockerConfig.getContainerProjectPath(),
+                        codeQLDockerConfig.getContainerDbPath(),
+                        "java",
+                        logConsumer
+                );
+                logConsumer.accept("✅ CodeQL database created successfully.");
+            } else {
+                logConsumer.accept("✅ CodeQL database volume already exists: " + codeQLDockerConfig.getDbVolumeName());
+            }
 
             logConsumer.accept("Running CodeQL query inside Docker container...");
             codeQLCliExecutor.runQuery(

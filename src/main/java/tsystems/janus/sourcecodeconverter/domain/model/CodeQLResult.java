@@ -1,34 +1,67 @@
 package tsystems.janus.sourcecodeconverter.domain.model;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 public class CodeQLResult {
-    private String file;
-    @JsonProperty("class")
-    private String clazz;
-    private MethodInfo method;
+    private String id;
+    private String type;
+    private FileInfo file;
+    private LocationInfo location;
+    private String extractedSql;
+    private CodeContext codeContext;
+    private String methodParameters;
 
-    public String getFile() {
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public FileInfo getFile() {
         return file;
     }
 
-    public String getClazz() {
-        return clazz;
-    }
-
-    public MethodInfo getMethod() {
-        return method;
-    }
-
-    public void setFile(String file) {
+    public void setFile(FileInfo file) {
         this.file = file;
     }
 
-    public void setClazz(String clazz) {
-        this.clazz = clazz;
+    public LocationInfo getLocation() {
+        return location;
     }
 
-    public void setMethod(MethodInfo method) {
-        this.method = method;
+    public void setLocation(LocationInfo location) {
+        this.location = location;
+    }
+
+    public String getExtractedSql() {
+        return extractedSql;
+    }
+
+    public void setExtractedSql(String extractedSql) {
+        this.extractedSql = extractedSql;
+    }
+
+    public CodeContext getCodeContext() {
+        return codeContext;
+    }
+
+    public void setCodeContext(CodeContext codeContext) {
+        this.codeContext = codeContext;
+    }
+
+    public String getMethodParameters() {
+        return methodParameters;
+    }
+
+    public void setMethodParameters(String methodParameters) {
+        this.methodParameters = methodParameters;
     }
 }

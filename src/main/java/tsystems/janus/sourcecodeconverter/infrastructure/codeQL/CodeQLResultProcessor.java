@@ -75,8 +75,7 @@ public class CodeQLResultProcessor {
             stats.totalQueries = rootNode.size();
 
             for (JsonNode result : rootNode) {
-                JsonNode sqlQuery = result.path("method").path("sql_query");
-                String queryType = sqlQuery.path("type").asText();
+                String queryType = result.path("type").asText();
 
                 switch (queryType.toLowerCase()) {
                     case "static":
@@ -90,10 +89,10 @@ public class CodeQLResultProcessor {
                         break;
                 }
 
-                String fileName = result.path("file").asText();
+                String fileName = result.path("file").path("path").asText();
                 stats.fileCount.merge(fileName, 1, Integer::sum);
 
-                String className = result.path("class").asText();
+                String className = result.path("codeContext").path("containingClass").asText();
                 stats.classCount.merge(className, 1, Integer::sum);
             }
         }
