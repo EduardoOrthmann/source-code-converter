@@ -1,0 +1,73 @@
+[ {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+    "methodName" : "getFirstFiveEmployees",
+    "approximateEndLine" : 47
+  },
+  "constructionTrace" : [ {
+    "order" : 1,
+    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+    "methodName" : "getFirstFiveEmployees",
+    "description" : "SQL fragment found in class EmployeeRepository",
+    "blockId" : "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
+    "codeSnippet" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR"
+  } ],
+  "inferredPreConversionSql" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR",
+  "supplementalContext" : {
+    "sourceClassName" : "EmployeeRepository"
+  }
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+    "methodName" : "getAllEmployees",
+    "approximateEndLine" : 29
+  },
+  "constructionTrace" : [ {
+    "order" : 1,
+    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+    "methodName" : "getAllEmployees",
+    "description" : "SQL fragment found in class EmployeeRepository",
+    "blockId" : "GETALLEMPLOYEES_BLOCK_29",
+    "codeSnippet" : "SELECT * FROM Employees"
+  } ],
+  "inferredPreConversionSql" : "SELECT * FROM Employees",
+  "supplementalContext" : {
+    "sourceClassName" : "EmployeeRepository"
+  }
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+    "methodName" : "getAllProjects",
+    "approximateEndLine" : 25
+  },
+  "constructionTrace" : [ {
+    "order" : 1,
+    "filePath" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+    "methodName" : "getAllProjects",
+    "description" : "SQL fragment found in class ProjectRepository",
+    "blockId" : "GETALLPROJECTS_BLOCK_25",
+    "codeSnippet" : "SELECT * FROM Projects"
+  } ],
+  "inferredPreConversionSql" : "SELECT * FROM Projects",
+  "supplementalContext" : {
+    "sourceClassName" : "ProjectRepository"
+  }
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+    "methodName" : "getAllDepartments",
+    "approximateEndLine" : 42
+  },
+  "constructionTrace" : [ {
+    "order" : 1,
+    "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+    "methodName" : "getAllDepartments",
+    "description" : "SQL fragment found in class DepartmentRepository",
+    "blockId" : "GETALLDEPARTMENTS_BLOCK_42",
+    "codeSnippet" : "SELECT * FROM Departments"
+  } ],
+  "inferredPreConversionSql" : "SELECT * FROM Departments",
+  "supplementalContext" : {
+    "sourceClassName" : "DepartmentRepository"
+  }
+} ]

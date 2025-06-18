@@ -2,12 +2,13 @@ package tsystems.janus.sourcecodeconverter.domain.model;
 
 public class CodeQLResult {
     private String id;
+    private String path;
+    private int startLine;
+    private String methodName;
+    private String code;
+    private String sourceExpressionType;
+    private String className;
     private String type;
-    private FileInfo file;
-    private LocationInfo location;
-    private String extractedSql;
-    private CodeContext codeContext;
-    private String methodParameters;
 
     public String getId() {
         return id;
@@ -17,51 +18,59 @@ public class CodeQLResult {
         this.id = id;
     }
 
+    public String getPath() {
+        return path;
+    }
+
+    public void setPath(String path) {
+        this.path = path;
+    }
+
+    public int getStartLine() {
+        return startLine;
+    }
+
+    public void setStartLine(int startLine) {
+        this.startLine = startLine;
+    }
+
+    public String getMethodName() {
+        return methodName;
+    }
+
+    public void setMethodName(String methodName) {
+        this.methodName = methodName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public String getSourceExpressionType() {
+        return sourceExpressionType;
+    }
+
+    public void setSourceExpressionType(String sourceExpressionType) {
+        this.sourceExpressionType = sourceExpressionType;
+    }
+
+    public String getClassName() {
+        return className;
+    }
+
+    public void setClassName(String className) {
+        this.className = className;
+    }
+
     public String getType() {
         return type;
     }
 
     public void setType(String type) {
         this.type = type;
-    }
-
-    public FileInfo getFile() {
-        return file;
-    }
-
-    public void setFile(FileInfo file) {
-        this.file = file;
-    }
-
-    public LocationInfo getLocation() {
-        return location;
-    }
-
-    public void setLocation(LocationInfo location) {
-        this.location = location;
-    }
-
-    public String getExtractedSql() {
-        return extractedSql;
-    }
-
-    public void setExtractedSql(String extractedSql) {
-        this.extractedSql = extractedSql;
-    }
-
-    public CodeContext getCodeContext() {
-        return codeContext;
-    }
-
-    public void setCodeContext(CodeContext codeContext) {
-        this.codeContext = codeContext;
-    }
-
-    public String getMethodParameters() {
-        return methodParameters;
-    }
-
-    public void setMethodParameters(String methodParameters) {
-        this.methodParameters = methodParameters;
     }
 }

@@ -1,20 +1,62 @@
 import java
-import semmle.code.java.dataflow.DataFlow
 import semmle.code.java.dataflow.TaintTracking
+import semmle.code.java.dataflow.DataFlow
+import semmle.code.java.dataflow.FlowSources
+import semmle.code.java.controlflow.Guards
 
-predicate containsSql(StringLiteral lit) {
-  exists(string val | val = lit.getValue().toLowerCase() |
-    // Standard SQL keywords
-    val.matches("%select%") or val.matches("%insert%") or val.matches("%update%") or
-    val.matches("%delete%") or val.matches("%create%") or val.matches("%alter%") or
-    val.matches("%drop%") or val.matches("%from%") or val.matches("%where%") or
-    val.matches("%join%") or val.matches("%group by%") or val.matches("%order by%") or
-    val.matches("%sysibm%") or val.matches("%syscat%") or val.matches("%sysstat%") or
-    val.matches("%fetch first%") or val.matches("%rows only%") or
-    val.matches("%with ur%") or val.matches("%with cs%") or val.matches("%with rs%") or
-    val.matches("%with rr%") or val.matches("%current timestamp%") or
-    val.matches("%varchar_format%") or val.matches("%substr%") or val.matches("%locate%")
-  )
+class SqlExecutionMethod extends Method {
+    SqlExecutionMethod() {
+        exists(RefType t | t.hasQualifiedName("java.sql", "Statement") |
+            this.getDeclaringType().getASupertype*() = t and
+            (this.getName().matches("execute%") or this.getName().matches("addBatch"))
+        )
+        or
+        exists(RefType t | t.hasQualifiedName("java.sql", "PreparedStatement") |
+            this.getDeclaringType().getASupertype*() = t and
+            this.getName().matches("execute%")
+        )
+        or
+        // Add other common frameworks here
+        exists(RefType t | t.hasQualifiedName("org.springframework.jdbc.core", "JdbcTemplate") |
+            this.getDeclaringType().getASupertype*() = t and
+            this.getName().matches("query%")
+        )
+    }
+}
+
+class SqlTaintTrackingConfig extends TaintTracking::Configuration {
+    SqlTaintTrackingConfig() { this = "SqlTaintTrackingConfig" }
+
+    override predicate isSource(DataFlow::Node source) {
+        // A source is any string literal that looks like part of an SQL query
+        exists(StringLiteral lit | 
+            lit = source.asExpr() and
+            lit.getValue().toLowerCase().matches([
+                "%select%", "%insert%", "%update%", "%delete%", "%from%", "%where%", 
+                "%join%", "%order by%", "%fetch first%", "%with ur%"
+            ])
+        )
+    }
+
+    override predicate isSink(DataFlow::Node sink) {
+        // A sink is the first argument to one of our defined SQL execution methods
+        exists(MethodAccess ma, SqlExecutionMethod method |
+            ma.getMethod() = method and
+            sink.asExpr() = ma.getArgument(0)
+        )
+    }
+
+    override predicate isAdditionalTaintStep(DataFlow::Node node1, DataFlow::Node node2) {
+        // Track string concatenation and StringBuilder appends
+        exists(AddExpr add | add = node2.asExpr() |
+            node1.asExpr() = add.getAnOperand()
+        )
+        or
+        exists(MethodAccess ma | ma.getMethod().getName() = "append" |
+            node2.asExpr() = ma and
+            node1.asExpr() = ma.getAnArgument()
+        )
+    }
 }
 
 string getSqlQueryType(StringLiteral sql) {
@@ -37,41 +79,16 @@ string getSqlQueryType(StringLiteral sql) {
   )
 }
 
-// Main query to generate JSON output
-from StringLiteral sql, Method method, Type declaringType, File file
-where 
-  containsSql(sql) and
-  method = sql.getEnclosingCallable() and
-  declaringType = method.getDeclaringType() and
-  file = sql.getFile() and
-  not sql.getFile().getAbsolutePath().matches("%test%") and
-  not sql.getFile().getAbsolutePath().matches("%generated%") and
-  not sql.getFile().getAbsolutePath().matches("%/target/classes%")
+from SqlTaintTrackingConfig config, DataFlow::PathNode sourceNode, DataFlow::PathNode sinkNode
+where config.hasFlowPath(sourceNode, sinkNode)
 select 
   "{" +
-    "\"id\": \"" + sql.getFile().getAbsolutePath() + ":" + sql.getLocation().getStartLine() + "\"," +
-    "\"type\": \"" + getSqlQueryType(sql) + "\"," +
-    "\"file\": {" +
-      "\"path\": \"" + file.getAbsolutePath() + "\"," +
-      "\"language\": \"" + file.getExtension().toUpperCase() + "\"" +
-    "}," +
-    "\"location\": {" +
-      "\"startLine\": " + sql.getLocation().getStartLine() + "," +
-      "\"endLine\": " + sql.getLocation().getEndLine() + "," +
-      "\"startColumn\": " + sql.getLocation().getStartColumn() + "," +
-      "\"endColumn\": " + sql.getLocation().getEndColumn() +
-    "}," +
-    "\"extractedSql\": \"" + sql.getValue().replaceAll("\"", "\"\"").replaceAll("\n", "\\n").replaceAll("\r", "") + "\"," +
-    "\"codeContext\": {" +
-      "\"containingClass\": \"" + declaringType.getName() + "\"," +
-      "\"containingMethod\": \"" + method.getName() + "\"," +
-      "\"variableBindings\": [" +
-        "{" +
-          "\"name\": \"" + "PLACEHOLDER" + "\"," +
-          "\"javaType\": \"" + "PLACEHOLDER" + "\"," +
-          "\"context\": \"" + "PLACEHOLDER" + "\"" +
-        "}" +
-      "]" +
-    "}," +
-    "\"methodParameters\": \"" + concat(Parameter p | p = method.getAParameter() | p.getType().getName() + " " + p.getName(), ", ") + "\"" +
+    "\"id\": \"" + sinkNode.getNode().getLocation().getFile().getAbsolutePath() + ":" + sinkNode.getNode().getLocation().getStartLine() + "\"," +
+    "\"path\": \"" + sourceNode.getNode().getLocation().getFile().getAbsolutePath() + "\"," +
+    "\"startLine\": " + sourceNode.getNode().getLocation().getStartLine() + "," +
+    "\"methodName\": \"" + sourceNode.getNode().getEnclosingCallable().getName() + "\"," +
+    "\"code\": \"" + sourceNode.getNode().asExpr().(StringLiteral).getValue().replaceAll("\"", "\\\"") + "\"," +
+    "\"sourceExpressionType\": \"" + sourceNode.getNode().asExpr().getType().toString() + "\"," +
+    "\"type\": \"" + getSqlQueryType(sourceNode.getNode().asExpr()) + "\"," +
+    "\"className\": \"" + sourceNode.getNode().getEnclosingCallable().getDeclaringType().getName() + "\"" +
   "}"  

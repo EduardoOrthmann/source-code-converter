@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import org.springframework.stereotype.Component;
 import tsystems.janus.sourcecodeconverter.domain.model.CodeQLResult;
+import tsystems.janus.sourcecodeconverter.domain.model.ConversionTask;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -89,10 +90,10 @@ public class CodeQLResultProcessor {
                         break;
                 }
 
-                String fileName = result.path("file").path("path").asText();
+                String fileName = result.path("path").asText();
                 stats.fileCount.merge(fileName, 1, Integer::sum);
 
-                String className = result.path("codeContext").path("containingClass").asText();
+                String className = result.path("className").asText();
                 stats.classCount.merge(className, 1, Integer::sum);
             }
         }
@@ -105,6 +106,13 @@ public class CodeQLResultProcessor {
             throw new FileNotFoundException("Results file not found in path: " + resultsFile.getAbsolutePath());
         }
         return objectMapper.readValue(resultsFile, new TypeReference<List<CodeQLResult>>() {});
+    }
+
+    public List<ConversionTask> loadConversionTasks(File tasksFile) throws IOException {
+        if (!tasksFile.exists()) {
+            throw new FileNotFoundException("Tasks file not found in path: " + tasksFile.getAbsolutePath());
+        }
+        return objectMapper.readValue(tasksFile, new TypeReference<List<ConversionTask>>() {});
     }
 
     public static class ProcessingStats {
