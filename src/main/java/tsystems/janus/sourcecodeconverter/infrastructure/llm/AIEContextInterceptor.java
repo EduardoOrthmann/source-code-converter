@@ -23,8 +23,7 @@ public class AIEContextInterceptor implements HandlerInterceptor {
   private String aiePassword;
 
   @Override
-  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-    // Set AIE context for this request thread
+  public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
     AIEContext.setContext(new AIEAuthContextWrapper(
         aieProject,
         aieUsername,
@@ -33,9 +32,7 @@ public class AIEContextInterceptor implements HandlerInterceptor {
   }
 
   @Override
-  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex)
-      throws Exception {
-    // Clear AIE context after request completion
+  public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) {
     AIEContext.clear();
   }
 }

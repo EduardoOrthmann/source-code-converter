@@ -1,6 +1,13 @@
 package tsystems.janus.sourcecodeconverter.application.service;
 
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.StandardCopyOption;
+import java.util.function.Consumer;
+
 import org.springframework.stereotype.Service;
+
+import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 import tsystems.janus.sourcecodeconverter.infrastructure.codeQL.CodeQLResultProcessor;
 import tsystems.janus.sourcecodeconverter.infrastructure.codeQL.CodeQLRunner;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.AnalysisPathProvider;
@@ -8,11 +15,8 @@ import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerAnal
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerConfig;
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.DockerContainerManager;
 import tsystems.janus.sourcecodeconverter.infrastructure.git.GitCloner;
-
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.StandardCopyOption;
-import java.util.function.Consumer;
+import tsystems.janus.sourcecodeconverter.infrastructure.sse.LoggableTask;
+import tsystems.janus.sourcecodeconverter.infrastructure.sse.SseLogExecutor;
 
 @Service
 public class CodeConversionService {
@@ -25,8 +29,12 @@ public class CodeConversionService {
     private final AnalysisPathProvider pathProvider;
     private final CodeQLDockerConfig dockerConfig;
     private final CodeQLDockerConfig codeQLDockerConfig;
+    private final SseLogExecutor sseLogExecutor;
 
-    public CodeConversionService(GitCloner repositoryCloner, CodeQLDockerAnalysisRunner codeQLDockerAnalysisRunner, CodeQLRunner codeQLCliExecutor, DockerContainerManager dockerContainerManager, CodeQLResultProcessor resultProcessor, AnalysisPathProvider pathProvider, CodeQLDockerConfig dockerConfig, CodeQLDockerConfig codeQLDockerConfig) {
+    public CodeConversionService(GitCloner repositoryCloner, CodeQLDockerAnalysisRunner codeQLDockerAnalysisRunner,
+                                 CodeQLRunner codeQLCliExecutor, DockerContainerManager dockerContainerManager,
+                                 CodeQLResultProcessor resultProcessor, AnalysisPathProvider pathProvider, CodeQLDockerConfig dockerConfig,
+                                 CodeQLDockerConfig codeQLDockerConfig, SseLogExecutor sseLogExecutor) {
         this.repositoryCloner = repositoryCloner;
         this.codeQLDockerAnalysisRunner = codeQLDockerAnalysisRunner;
         this.codeQLCliExecutor = codeQLCliExecutor;
@@ -35,9 +43,10 @@ public class CodeConversionService {
         this.pathProvider = pathProvider;
         this.dockerConfig = dockerConfig;
         this.codeQLDockerConfig = codeQLDockerConfig;
+        this.sseLogExecutor = sseLogExecutor;
     }
 
-    public void convertRepository(String repoUrl, Consumer<String> logConsumer) throws Exception {
+    private void convertRepository(String repoUrl, Consumer<String> logConsumer) throws Exception {
         logConsumer.accept("Starting code conversion for repository: " + repoUrl);
 
         File projectDir = repositoryCloner.cloneRepository(repoUrl);
@@ -66,8 +75,7 @@ public class CodeConversionService {
                         codeQLDockerConfig.getContainerProjectPath(),
                         codeQLDockerConfig.getContainerDbPath(),
                         "java",
-                        logConsumer
-                );
+                        logConsumer);
                 logConsumer.accept("✅ CodeQL database created successfully.");
             } else {
                 logConsumer.accept("✅ CodeQL database volume already exists: " + codeQLDockerConfig.getDbVolumeName());
@@ -80,8 +88,7 @@ public class CodeConversionService {
                     dockerConfig.getContainerDbPath(),
                     dockerConfig.getContainerResultPath(),
                     dockerConfig.getContainerQueryDir(),
-                    logConsumer
-            );
+                    logConsumer);
 
             File bqrsFile = pathProvider.getBQRSFile(outputDir);
             logConsumer.accept("CodeQL analysis complete. BQRS file generated: " + bqrsFile.getAbsolutePath());
@@ -97,8 +104,7 @@ public class CodeConversionService {
                     containerName,
                     dockerConfig.getContainerResultPath(),
                     pathProvider.getContainerRawJsonPath(),
-                    logConsumer
-            );
+                    logConsumer);
             logConsumer.accept("✅ Raw CodeQL JSON: " + rawJsonFile.getAbsolutePath());
 
             logConsumer.accept("Processing raw JSON to clean JSON...");
@@ -118,10 +124,15 @@ public class CodeConversionService {
             CodeQLResultProcessor.ProcessingStats stats = resultProcessor.analyzeResults(finalJsonFile);
             logConsumer.accept("✅ Analysis complete. Statistics:" + stats.toString());
             logConsumer.accept("✅ Code conversion process completed.");
-        } finally {
-            if (containerName != null) {
-                codeQLDockerAnalysisRunner.cleanupAnalysisEnvironment(containerName, logConsumer);
-            }
+        } catch (Exception e) {
+            logConsumer.accept("❌ Error during code conversion: " + e.getMessage());
+            throw e;
         }
+    }
+
+    public SseEmitter convertRepositoryWithSse(String repoUrl) {
+        LoggableTask conversionTask = logger -> convertRepository(repoUrl, logger);
+
+        return sseLogExecutor.streamConversionLogs(conversionTask);
     }
 }

@@ -44,26 +44,17 @@ public class DockerContainerManager {
         commandExecutor.execute(execCommand, logConsumer);
     }
 
-    public void cleanupContainer(String containerName, String dbVolumeName, boolean persistDbVolume, Consumer<String> logConsumer) {
-        try {
-            logConsumer.accept("\n🧹 Cleaning up Docker container...");
-            commandExecutor.execute(List.of("docker", "rm", "-f", containerName), logConsumer);
-            logConsumer.accept("✅ Container stopped and removed.");
+    public String executeCommandInContainerAndCaptureOutput(String containerName, String workDir, List<String> command) throws IOException, InterruptedException {
+        List<String> execCommand = new ArrayList<>(List.of("docker", "exec"));
 
-            if (!persistDbVolume) {
-                logConsumer.accept("Attempting to remove associated CodeQL database volume '" + dbVolumeName + "'...");
-                removeVolume(dbVolumeName, logConsumer);
-            } else {
-                logConsumer.accept("✅ CodeQL database volume '" + dbVolumeName + "' is configured to persist. Skipping removal.");
-            }
-        } catch (IOException | InterruptedException e) {
-            logConsumer.accept("⚠️ Failed to clean up container: " + e.getMessage());
-            System.err.println("⚠️ Failed to clean up container: " + e.getMessage());
+        if (workDir != null && !workDir.isEmpty()) {
+            execCommand.add("-w");
+            execCommand.add(workDir);
         }
-    }
 
-    public void registerShutdownHook(String containerName, String dbVolumeName, boolean persistDbVolume, Consumer<String> logConsumer) {
-        Runtime.getRuntime().addShutdownHook(new Thread(() -> cleanupContainer(containerName, dbVolumeName, persistDbVolume, logConsumer)));
+        execCommand.add(containerName);
+        execCommand.addAll(command);
+        return commandExecutor.executeAndCaptureOutput(execCommand);
     }
 
     public void createVolume(String volumeName, Consumer<String> logConsumer) throws IOException, InterruptedException {
@@ -76,12 +67,6 @@ public class DockerContainerManager {
         } else {
             logConsumer.accept("✅ Docker volume '" + volumeName + "' already exists. Skipping creation.");
         }
-    }
-
-    public void removeVolume(String volumeName, Consumer<String> logConsumer) throws IOException, InterruptedException {
-        logConsumer.accept("Removing Docker volume '" + volumeName + "'...");
-        commandExecutor.execute(List.of("docker", "volume", "rm", "-f", volumeName), logConsumer);
-        logConsumer.accept("✅ Docker volume '" + volumeName + "' removed.");
     }
 
     public boolean volumeExists(String volumeName) {

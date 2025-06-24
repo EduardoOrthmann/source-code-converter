@@ -1,22 +1,22 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.llm;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsystems.aiecommon.service.chat.AIEChatService;
 import org.springframework.stereotype.Service;
 import tsystems.janus.sourcecodeconverter.domain.model.ConstructionStep;
 import tsystems.janus.sourcecodeconverter.domain.model.ConversionTask;
 import tsystems.janus.sourcecodeconverter.domain.model.LlmReplacementsResponse;
-import tsystems.janus.sourcecodeconverter.infrastructure.util.JsonHelper;
 
 import java.io.IOException;
 import java.util.List;
 
+import static tsystems.janus.sourcecodeconverter.infrastructure.llm.LlmParser.parseLlmResponse;
+
 @Service
-public class LlmConversionService {
+public class LlmPromptExecutor {
 
     private final AIEChatService chatService;
 
-    public LlmConversionService(AIEChatService chatService) {
+    public LlmPromptExecutor(AIEChatService chatService) {
         this.chatService = chatService;
     }
 
@@ -54,8 +54,8 @@ public class LlmConversionService {
                             "file": "path/to/file.java",
                             "replacements": [
                                 {
-                                    "block_id": "BLOCK_ID_1",
-                                    "converted_code": "converted code here"
+                                    "blockId": "BLOCK_ID_1",
+                                    "convertedCode": "converted code here"
                                 }
                             ],
                             "explanation": "Your concise explanation of the changes made."
@@ -130,14 +130,4 @@ public class LlmConversionService {
 
         return pb.toString();
     }
-
-    private List<LlmReplacementsResponse> parseLlmResponse(String llmResponse) {
-        if (llmResponse == null || llmResponse.isEmpty() || !JsonHelper.isValidJson(llmResponse)) {
-            throw new IllegalArgumentException("Invalid LLM response format. Expected a valid JSON array.");
-        }
-
-        return JsonHelper.parseJsonArray(llmResponse, new ObjectMapper().getTypeFactory().constructCollectionType(List.class, LlmReplacementsResponse.class));
-    }
-
-
 }

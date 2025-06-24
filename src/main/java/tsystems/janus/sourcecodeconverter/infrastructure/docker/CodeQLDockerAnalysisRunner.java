@@ -13,11 +13,13 @@ public class CodeQLDockerAnalysisRunner {
 
     private final DockerImageBuilder imageBuilder;
     private final DockerContainerManager containerManager;
+    private final DockerShutdown dockerShutdown;
     private final CodeQLDockerConfig config;
 
-    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, CodeQLDockerConfig config) {
+    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, DockerShutdown dockerShutdown, CodeQLDockerConfig config) {
         this.imageBuilder = imageBuilder;
         this.containerManager = containerManager;
+        this.dockerShutdown = dockerShutdown;
         this.config = config;
     }
 
@@ -49,13 +51,12 @@ public class CodeQLDockerAnalysisRunner {
 
         String containerName = config.getContainerName();
         containerManager.startContainer(config.getImageName(), containerName, volumes, logConsumer);
-        containerManager.registerShutdownHook(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
 
         logConsumer.accept("Docker environment prepared. Container: '" + containerName + "'" );
         return containerName;
     }
 
     public void cleanupAnalysisEnvironment(String containerName, Consumer<String> logConsumer) {
-        containerManager.cleanupContainer(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
+        dockerShutdown.cleanupContainer(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
     }
 }

@@ -1,6 +1,5 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.llm;
 
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -12,15 +11,6 @@ import com.tsystems.aiecommon.service.workflow.AIEWorkflowService;
 
 @Configuration
 public class AIEConfig {
-
-  @Value("${aie.project}")
-  private String aieProject;
-
-  @Value("${aie.username}")
-  private String aieUsername;
-
-  @Value("${aie.password}")
-  private String aiePassword;
 
   @Bean
   public AIEAuthService aieAuthService() {
