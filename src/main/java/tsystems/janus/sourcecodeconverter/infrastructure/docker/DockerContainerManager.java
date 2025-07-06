@@ -35,16 +35,16 @@ public class DockerContainerManager {
         return containerName;
     }
 
-    public void executeCommandInContainer(String containerName, List<String> command, Consumer<String> logConsumer) throws IOException, InterruptedException {
-        List<String> execCommand = new ArrayList<>(List.of(
-                "docker", "exec", containerName
-        ));
-        execCommand.addAll(command);
-
-        commandExecutor.execute(execCommand, logConsumer);
+    public void executeCommandInContainer(String containerName, String workDir, List<String> command, Consumer<String> logConsumer) throws IOException, InterruptedException {
+        commandExecutor.execute(executeCommand(containerName, workDir, command), logConsumer);
     }
 
+
     public String executeCommandInContainerAndCaptureOutput(String containerName, String workDir, List<String> command) throws IOException, InterruptedException {
+        return commandExecutor.executeAndCaptureOutput(executeCommand(containerName, workDir, command));
+    }
+
+    private List<String> executeCommand(String containerName, String workDir, List<String> command) {
         List<String> execCommand = new ArrayList<>(List.of("docker", "exec"));
 
         if (workDir != null && !workDir.isEmpty()) {
@@ -54,7 +54,7 @@ public class DockerContainerManager {
 
         execCommand.add(containerName);
         execCommand.addAll(command);
-        return commandExecutor.executeAndCaptureOutput(execCommand);
+        return execCommand;
     }
 
     public void createVolume(String volumeName, Consumer<String> logConsumer) throws IOException, InterruptedException {

@@ -9,9 +9,6 @@ import tsystems.janus.sourcecodeconverter.infrastructure.docker.CodeQLDockerConf
 import tsystems.janus.sourcecodeconverter.infrastructure.docker.DockerContainerManager;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,16 +23,10 @@ public class PatchApplierService {
         this.dockerConfig = dockerConfig;
     }
 
-    public void applyPatch(LlmReplacementsResponse llmResponse, ConversionTask originalTask) throws IOException {
-        Path filePath = Paths.get(llmResponse.getFile());
-
-        if (!Files.exists(filePath)) {
-            System.err.println("File not found, skipping patch: " + filePath);
-            return;
-        }
-
-        List<String> lines = Files.readAllLines(filePath);
-        boolean fileModified = false;
+    public void applyPatch(LlmReplacementsResponse llmResponse, ConversionTask originalTask) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String filePathInContainer = llmResponse.getFile();
+        String workDir = dockerConfig.getContainerProjectPath();
 
         for (LlmReplacement replacement : llmResponse.getReplacements()) {
             Optional<ConstructionStep> originalStepOpt = originalTask.getConstructionTrace().stream()
@@ -45,41 +36,47 @@ public class PatchApplierService {
             if (originalStepOpt.isPresent()) {
                 String originalCode = originalStepOpt.get().getCodeSnippet();
                 String convertedCode = replacement.getConvertedCode();
+                String blockId = replacement.getBlockId();
+                int lineNumber = Integer.parseInt(blockId.substring(blockId.lastIndexOf('_') + 1));
 
-                for (int i = 0; i < lines.size(); i++) {
-                    if (lines.get(i).contains(originalCode)) {
-                        System.out.println("Found original code in " + filePath.getFileName() + " at line " + (i + 1));
-                        String modifiedLine = lines.get(i).replace(originalCode, convertedCode);
+                String commandToExecute = String.format("sed -i '%ds#%s#%s#' %s",
+                        lineNumber,
+                        escapeSed(originalCode),
+                        escapeSed(convertedCode),
+                        filePathInContainer);
 
-                        lines.set(i, modifiedLine);
-                        fileModified = true;
+                containerManager.executeCommandInContainer(containerName, workDir, List.of("bash", "-c", commandToExecute), System.out::println);
 
-                        System.out.println("Replaced with: " + convertedCode);
-                        break;
-                    }
-                }
+                System.out.println("Replaced with: " + convertedCode);
             } else {
                 System.err.println("Could not find original code for blockId: " + replacement.getBlockId());
             }
         }
+    }
 
-
-        if (fileModified) {
-            Files.write(filePath, lines);
-            System.out.println("Successfully patched file: " + filePath.getFileName());
-        }
+    private String escapeSed(String text) {
+        return text.replace("#", "\\#")
+                .replace("\"", "\\\"")
+                .replace("&", "\\&")
+                .replace("*", "\\*")
+                .replace("?", "\\?")
+                .replace(".", "\\.")
+                .replace("[", "\\[")
+                .replace("]", "\\]")
+                .replace("|", "\\|");
     }
 
     public String generatePatchForFile(String filePath) throws IOException, InterruptedException {
         String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
 
         List<String> command = List.of(
-                "git", "diff", "--", filePath.replace(dockerConfig.getContainerProjectPath() + "/", "")
+                "git", "diff", "--ignore-cr-at-eol", "--", filePath.replace(workDir + "/", "")
         );
 
         return containerManager.executeCommandInContainerAndCaptureOutput(
                 containerName,
-                dockerConfig.getContainerProjectPath(),
+                workDir,
                 command
         );
     }

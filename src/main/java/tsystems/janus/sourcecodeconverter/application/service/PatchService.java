@@ -6,7 +6,6 @@ import tsystems.janus.sourcecodeconverter.domain.model.ConversionTask;
 import tsystems.janus.sourcecodeconverter.domain.model.LlmReplacementsResponse;
 import tsystems.janus.sourcecodeconverter.infrastructure.codeQL.CodeQLResultProcessor;
 import tsystems.janus.sourcecodeconverter.infrastructure.git.PatchApplierService;
-import tsystems.janus.sourcecodeconverter.infrastructure.llm.LlmPromptExecutor;
 
 import java.io.File;
 import java.io.IOException;

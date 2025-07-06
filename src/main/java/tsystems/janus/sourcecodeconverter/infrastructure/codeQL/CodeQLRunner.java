@@ -20,6 +20,7 @@ public class CodeQLRunner {
         logConsumer.accept("Running CodeQL database creation for language " + language + " in container " + containerName + "...");
         containerManager.executeCommandInContainer(
                 containerName,
+                null,
                 List.of("bash", "-c",
                         "rm -rf ~/.codeql/packages/codeql/java-all/7.3.0/ext/ && " +
                                 "codeql database create " + dbPathInContainer +
@@ -36,6 +37,7 @@ public class CodeQLRunner {
         logConsumer.accept("✅ CodeQL query executed successfully in container " + containerName + ". Results at " + resultPathInContainer + ".");
         containerManager.executeCommandInContainer(
                 containerName,
+                null,
                 List.of("bash", "-c",
                         "cd " + queryDirInContainer + " && " +
                                 "codeql pack install && " +
@@ -52,6 +54,7 @@ public class CodeQLRunner {
         logConsumer.accept("Decoding BQRS results from '" + bqrsPathInContainer + "' to JSON '" + jsonOutputPathInContainer + "' in container '" + containerName + "'...");
         containerManager.executeCommandInContainer(
                 containerName,
+                null,
                 List.of(
                         "codeql", "bqrs", "decode",
                         "--format=json",
