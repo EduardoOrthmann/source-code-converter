@@ -1,6 +1,6 @@
 [ {
   "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-  "explanation" : "Converted DB2 FETCH FIRST 5 ROWS ONLY to PostgreSQL LIMIT 5.",
+  "explanation" : "Replaced DB2's FETCH FIRST 5 ROWS ONLY with PostgreSQL's LIMIT 5.",
   "replacements" : [ {
     "blockId" : "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
     "convertedCode" : "SELECT * FROM Employees LIMIT 5"

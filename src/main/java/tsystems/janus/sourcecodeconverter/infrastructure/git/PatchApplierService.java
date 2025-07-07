@@ -54,6 +54,44 @@ public class PatchApplierService {
         }
     }
 
+    public void revertChanges(String filePath) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+        String relativePath = filePath.replace(workDir + "/", "");
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "checkout", "--", relativePath), System.out::println);
+        System.out.println("Reverted changes in: " + relativePath);
+    }
+
+    public void commitChanges(String filePath, String explanation) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+        String relativePath = filePath.replace(workDir + "/", "");
+
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "config", "user.email", "conversion-bot@example.com"), s -> {
+        });
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "config", "user.name", "Conversion Bot"), s -> {
+        });
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "add", relativePath), System.out::println);
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "commit", "-m", "Auto-convert DB2 to PostgreSQL", "-m", explanation), System.out::println);
+        System.out.println("Committed changes for: " + relativePath);
+    }
+
+    public String formatPatch() throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+
+        String patchFileName = containerManager.executeCommandInContainerAndCaptureOutput(
+                containerName, workDir, List.of("git", "format-patch", "-1", "HEAD")
+        ).trim();
+
+        if (patchFileName.isBlank()) {
+            System.err.println("❌ Patch file generation failed.");
+            return null;
+        }
+
+        return patchFileName;
+    }
+
     private String escapeSed(String text) {
         return text.replace("#", "\\#")
                 .replace("\"", "\\\"")
@@ -64,20 +102,5 @@ public class PatchApplierService {
                 .replace("[", "\\[")
                 .replace("]", "\\]")
                 .replace("|", "\\|");
-    }
-
-    public String generatePatchForFile(String filePath) throws IOException, InterruptedException {
-        String containerName = dockerConfig.getContainerName();
-        String workDir = dockerConfig.getContainerProjectPath();
-
-        List<String> command = List.of(
-                "git", "diff", "--ignore-cr-at-eol", "--", filePath.replace(workDir + "/", "")
-        );
-
-        return containerManager.executeCommandInContainerAndCaptureOutput(
-                containerName,
-                workDir,
-                command
-        );
     }
 }

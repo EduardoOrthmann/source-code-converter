@@ -28,6 +28,39 @@ public class CodeQLDockerAnalysisRunner {
         imageBuilder.buildImageIfNecessary(config.getImageName(), config.getDockerfileDir(), logConsumer);
         logConsumer.accept("✅ Docker image built.");
 
+        List<String> volumes = prepareVolumes(projectDir, qlFile, outputDir, logConsumer);
+
+        String containerName = config.getContainerName();
+        containerManager.startContainer(config.getImageName(), containerName, volumes, logConsumer);
+
+        addGitAttributes(containerName, logConsumer);
+
+        logConsumer.accept("Docker environment prepared. Container: '" + containerName + "'");
+        return containerName;
+    }
+
+
+    public void cleanupAnalysisEnvironment(String containerName, Consumer<String> logConsumer) {
+        dockerShutdown.cleanupContainer(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
+    }
+
+    private void addGitAttributes(String containerName, Consumer<String> logConsumer) {
+        try {
+            logConsumer.accept("✍️ Creating .gitattributes to normalize line endings...");
+            String command = "echo '* text=auto' > .gitattributes";
+            containerManager.executeCommandInContainer(
+                    containerName,
+                    config.getContainerProjectPath(),
+                    List.of("bash", "-c", command),
+                    logConsumer
+            );
+            logConsumer.accept("✅ .gitattributes file created successfully.");
+        } catch (Exception e) {
+            logConsumer.accept("⚠️ Could not create .gitattributes file. Patches may have line ending issues.");
+        }
+    }
+
+    private List<String> prepareVolumes(File projectDir, File qlFile, File outputDir, Consumer<String> logConsumer) throws IOException, InterruptedException {
         List<String> volumes = new ArrayList<>();
         volumes.add(projectDir.getAbsolutePath() + ":" + config.getContainerProjectPath());
         volumes.add(qlFile.getParentFile().getAbsolutePath() + ":" + config.getContainerQueryDir());
@@ -49,14 +82,6 @@ public class CodeQLDockerAnalysisRunner {
             logConsumer.accept("CodeQL database volume persistence is disabled. The database will be temporary.");
         }
 
-        String containerName = config.getContainerName();
-        containerManager.startContainer(config.getImageName(), containerName, volumes, logConsumer);
-
-        logConsumer.accept("Docker environment prepared. Container: '" + containerName + "'" );
-        return containerName;
-    }
-
-    public void cleanupAnalysisEnvironment(String containerName, Consumer<String> logConsumer) {
-        dockerShutdown.cleanupContainer(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
+        return volumes;
     }
 }

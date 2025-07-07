@@ -1,15 +1,20 @@
+## Environment Setup
+
+Create a `application.properties` file in the `src/main/resources` directory of your project with the following content:
+
+```
 spring.application.name=source-code-converter
 
 codeql.docker.image-name=codeql-runner-image
 codeql.docker.container-name=temp-code-converter
-codeql.docker.dockerfile-dir=C:/Users/orthm/Documents/Projetos/t-systems/source-code-converter/src/codeql-docker
+codeql.docker.dockerfile-dir=C:/your-path-to-project/t-systems/source-code-converter/src/codeql-docker
 codeql.db.persist-volume=true
 codeql.db.volume-name=codeql-test-db-volume
 
 # AIE-Common-Core Configuration
 aie.project=AMS4TRUCK
-aie.username=eduardo.sasse@t-systems.com
-aie.password=Heron$55342113
+aie.username=your_username
+aie.password=your_password
 
 # Files paths for the conversion process
 conversion.output.directory=src/main/resources/output
@@ -18,3 +23,4 @@ conversion.output.structured-tasks-json=structured_tasks.json
 conversion.output.converted-sql-json=converted_sql.json
 conversion.output.patch-diff=patch.diff
 conversion.output.patches-directory=src/main/resources/output/patches
+```

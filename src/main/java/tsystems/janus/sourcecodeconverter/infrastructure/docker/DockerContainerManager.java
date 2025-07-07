@@ -81,4 +81,15 @@ public class DockerContainerManager {
             throw new RuntimeException("Error checking Docker volume existence", e);
         }
     }
+
+    public void copyFileFromContainer(String containerName, String containerPath, String hostPath) throws IOException, InterruptedException {
+        System.out.println("Copying file from container '" + containerName + "'...");
+        System.out.println("Source: " + containerPath);
+        System.out.println("Destination: " + hostPath);
+
+        commandExecutor.execute(
+                List.of("docker", "cp", containerName + ":" + containerPath, hostPath),
+                System.out::println
+        );
+    }
 }
