@@ -1,0 +1,182 @@
+import java
+import semmle.code.java.dataflow.TaintTracking
+import semmle.code.java.dataflow.DataFlow
+import semmle.code.java.dataflow.FlowSources
+import semmle.code.java.controlflow.Guards
+import semmle.code.xml.XML
+
+class SqlExecutionMethod extends Method {
+  SqlExecutionMethod() {
+    // Standard JDBC
+    exists(RefType t |
+      t.hasQualifiedName("java.sql", "Statement") or
+      t.hasQualifiedName("java.sql", "PreparedStatement")
+    |
+      this.getDeclaringType().getASupertype*() = t and
+      (this.getName().matches("execute%") or this.getName().matches("addBatch"))
+    )
+    or
+    // Spring JDBC Template
+    exists(RefType t | t.hasQualifiedName("org.springframework.jdbc.core", "JdbcTemplate") |
+      this.getDeclaringType().getASupertype*() = t and
+      this.getName().matches("query%")
+    )
+    or
+    // Custom framework
+    exists(RefType t | t.hasQualifiedName("com.tsystems.dao.xml.db", "DefaultDBAccess") |
+      this.getDeclaringType().getASupertype*() = t and
+      (
+        this.getName() = "createPreparedStatement" or
+        this.getName() = "execute" or
+        this.getName().matches("execute%")
+      )
+    )
+  }
+}
+
+class SqlTaintTrackingConfig extends TaintTracking::Configuration {
+  SqlTaintTrackingConfig() { this = "SqlTaintTrackingConfig" }
+
+  override predicate isSource(DataFlow::Node source) {
+    exists(StringLiteral lit |
+      lit = source.asExpr() and
+      lit.getValue()
+          .toLowerCase()
+          .regexpMatch("(?s).*\\b(select|insert|update|delete|from|where|join|fetch first|with ur|merge into)\\b.*")
+    )
+  }
+
+  override predicate isSink(DataFlow::Node sink) {
+    exists(MethodAccess ma, SqlExecutionMethod method |
+      ma.getMethod() = method and
+      sink.asExpr() = ma.getAnArgument()
+    )
+  }
+
+  override predicate isAdditionalTaintStep(DataFlow::Node node1, DataFlow::Node node2) {
+    exists(AddExpr add | add = node2.asExpr() | node1.asExpr() = add.getAnOperand())
+    or
+    exists(MethodAccess ma | ma.getMethod().getName().matches("append|concat") |
+      node2.asExpr() = ma and
+      (node1.asExpr() = ma.getAnArgument() or node1.asExpr() = ma.getQualifier())
+    )
+  }
+}
+
+string getSqlQueryType(StringLiteral sql) {
+  exists(string val | val = sql.getValue() |
+    if val.matches("%?%") or val.matches("%:%") or val.matches("%#{%") or val.matches("%${%")
+    then result = "PARAMETERIZED"
+    else
+      if
+        exists(BinaryExpr be |
+          be instanceof AddExpr and
+          be.getAnOperand() = sql
+        )
+        or
+        exists(MethodAccess ma |
+          ma.getMethod().getName() = "append" and
+          DataFlow::localExprFlow(sql, ma.getAnArgument())
+        )
+      then result = "DYNAMIC"
+      else result = "STATIC"
+  )
+}
+
+abstract class SqlQueryFinding extends Element {
+  abstract string getFilePath();
+
+  abstract int getStartLine();
+
+  abstract string getMethodName();
+
+  abstract string getCode();
+
+  abstract string getSourceExpressionType();
+
+  abstract string getType();
+
+  abstract string getClassName();
+
+  string getId() { result = this.getFilePath() + ":" + this.getStartLine() }
+
+  string toJson() {
+    result =
+      "{" + "\"id\": \"" + this.getId() + "\"," + "\"path\": \"" + this.getFilePath() + "\"," +
+        "\"startLine\": " + this.getStartLine() + "," + "\"methodName\": \"" + this.getMethodName() +
+        "\"," + "\"code\": \"" + this.getCode().replaceAll("\"", "\\\"").replaceAll("\n", "\\n") +
+        "\"," + "\"sourceExpressionType\": \"" + this.getSourceExpressionType() + "\"," +
+        "\"type\": \"" + this.getType() + "\"," + "\"className\": \"" + this.getClassName() + "\"" +
+        "}"
+  }
+}
+
+class TaintedSqlFinding extends SqlQueryFinding {
+  DataFlow::PathNode sourceNode;
+
+  TaintedSqlFinding() {
+    exists(SqlTaintTrackingConfig config, DataFlow::PathNode sinkNode |
+      config.hasFlowPath(sourceNode, sinkNode) and this = sourceNode
+    )
+  }
+
+  override string getFilePath() {
+    result = sourceNode.getSource().getLocation().getFile().getAbsolutePath()
+  }
+
+  override int getStartLine() { result = sourceNode.getSource().getLocation().getStartLine() }
+
+  override string getMethodName() {
+    result = sourceNode.getSource().asExpr().getEnclosingCallable().getName()
+  }
+
+  override string getCode() { result = sourceNode.getSource().asExpr().(StringLiteral).getValue() }
+
+  override string getSourceExpressionType() {
+    result = sourceNode.getSource().asExpr().getType().toString()
+  }
+
+  override string getType() { result = getSqlQueryType(sourceNode.getSource().asExpr()) }
+
+  override string getClassName() {
+    result = sourceNode.getSource().asExpr().getEnclosingCallable().getDeclaringType().getName()
+  }
+}
+
+class XmlSqlFinding extends SqlQueryFinding {
+  MethodAccess ma;
+  string sqlText;
+
+  XmlSqlFinding() {
+    exists(XmlFile xmlFile, XmlElement statementTag, XmlAttribute nameAttr |
+      statementTag = xmlFile.getARootElement().getAChild*() and
+      statementTag.getName() = "statement" and
+      nameAttr = statementTag.getAttribute("name") and
+      sqlText = statementTag.getTextValue() and
+      exists(StringLiteral queryName |
+        ma.getMethod() instanceof SqlExecutionMethod and
+        queryName = ma.getArgument(0) and
+        queryName.getValue() = nameAttr.getValue() and
+        this.getLocation() = ma.getLocation()
+      )
+    )
+  }
+
+  override string getFilePath() { result = ma.getLocation().getFile().getAbsolutePath() }
+
+  override int getStartLine() { result = ma.getLocation().getStartLine() }
+
+  override string getMethodName() { result = ma.getEnclosingCallable().getName() }
+
+  override string getCode() { result = sqlText }
+
+  override string getSourceExpressionType() { result = "String (from XML)" }
+
+  override string getType() { result = "STATIC" }
+
+  override string getClassName() { result = ma.getEnclosingCallable().getDeclaringType().getName() }
+}
+
+from SqlQueryFinding finding
+select finding.toJson()
+

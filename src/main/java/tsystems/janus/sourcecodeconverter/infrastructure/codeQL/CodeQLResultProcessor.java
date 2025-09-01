@@ -41,7 +41,7 @@ public class CodeQLResultProcessor {
         List<JsonNode> cleanResults = new ArrayList<>();
 
         for (JsonNode tuple : tuplesNode) {
-            if (tuple.isArray() && tuple.size() > 0) {
+            if (tuple.isArray() && !tuple.isEmpty()) {
                 String jsonString = tuple.get(0).asText();
 
                 try {

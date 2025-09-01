@@ -39,7 +39,6 @@ public class DockerContainerManager {
         commandExecutor.execute(executeCommand(containerName, workDir, command), logConsumer);
     }
 
-
     public String executeCommandInContainerAndCaptureOutput(String containerName, String workDir, List<String> command) throws IOException, InterruptedException {
         return commandExecutor.executeAndCaptureOutput(executeCommand(containerName, workDir, command));
     }
@@ -58,27 +57,32 @@ public class DockerContainerManager {
     }
 
     public void createVolume(String volumeName, Consumer<String> logConsumer) throws IOException, InterruptedException {
-        logConsumer.accept("Creating Docker volume '" + volumeName + "' if it does not exist...");
+        logConsumer.accept("Creating Docker volume '" + volumeName + "'");
+        commandExecutor.execute(List.of("docker", "volume", "create", volumeName), logConsumer);
+        logConsumer.accept("✅ Docker volume '" + volumeName + "' created.");
+    }
 
-        String existingVolumes = commandExecutor.executeAndCaptureOutput(List.of("docker", "volume", "ls", "-q", "--filter", "name=" + volumeName));
-        if (existingVolumes.isEmpty()) {
-            commandExecutor.execute(List.of("docker", "volume", "create", volumeName), logConsumer);
-            logConsumer.accept("✅ Docker volume '" + volumeName + "' created.");
-        } else {
-            logConsumer.accept("✅ Docker volume '" + volumeName + "' already exists. Skipping creation.");
+    public boolean isMountedVolumeInContainerEmpty(String containerName, String wordDir, String mountPath) {
+        List<String> command = List.of("sh", "-c", "\"if ls " + mountPath + "/* "+ mountPath +"/.* >/dev/null 2>&1; then echo 'not empty'; else echo 'empty'; fi\"");
+
+        try {
+            String output = this.executeCommandInContainerAndCaptureOutput(containerName, wordDir, command);
+            System.out.println("Checking mounted volume in container: " + output.trim());
+            return "empty".equals(output.trim());
+        } catch (Exception e) {
+            System.err.println("Error checking mounted volume in container: " + e.getMessage());
+            return true;
         }
     }
 
     public boolean volumeExists(String volumeName) {
-        try {
-            Process process = new ProcessBuilder("docker", "volume", "inspect", volumeName)
-                    .redirectErrorStream(true)
-                    .start();
+        List<String> command = List.of("docker", "volume", "inspect", volumeName);
 
-            int exitCode = process.waitFor();
-            return exitCode == 0;
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException("Error checking Docker volume existence", e);
+        try {
+            commandExecutor.execute(command, System.out::println);
+            return true;
+        } catch (Exception e) {
+            return false;
         }
     }
 

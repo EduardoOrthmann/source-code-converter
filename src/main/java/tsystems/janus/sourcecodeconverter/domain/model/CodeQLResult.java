@@ -4,6 +4,9 @@ public class CodeQLResult {
     private String id;
     private String path;
     private int startLine;
+    private int startColumn;
+    private int endLine;
+    private int endColumn;
     private String methodName;
     private String code;
     private String sourceExpressionType;
@@ -32,6 +35,30 @@ public class CodeQLResult {
 
     public void setStartLine(int startLine) {
         this.startLine = startLine;
+    }
+
+    public int getStartColumn() {
+        return startColumn;
+    }
+
+    public void setStartColumn(int startColumn) {
+        this.startColumn = startColumn;
+    }
+
+    public int getEndLine() {
+        return endLine;
+    }
+
+    public void setEndLine(int endLine) {
+        this.endLine = endLine;
+    }
+
+    public int getEndColumn() {
+        return endColumn;
+    }
+
+    public void setEndColumn(int endColumn) {
+        this.endColumn = endColumn;
     }
 
     public String getMethodName() {

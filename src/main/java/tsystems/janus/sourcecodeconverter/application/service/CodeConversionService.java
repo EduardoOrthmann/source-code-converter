@@ -65,10 +65,10 @@ public class CodeConversionService {
             containerName = codeQLDockerAnalysisRunner.prepareAnalysisEnvironment(projectDir, qlFile, outputDir, logConsumer);
             logConsumer.accept("✅ Docker environment ready. Container: " + containerName);
 
-            logConsumer.accept("Persist Volume is set to true. CodeQL will use a persistent volume for the database.");
             logConsumer.accept("🔍 Checking if CodeQL database already exists in volume...");
 
-            if (!dockerContainerManager.volumeExists(codeQLDockerConfig.getDbVolumeName())) {
+            if (dockerContainerManager.isMountedVolumeInContainerEmpty(codeQLDockerConfig.getContainerName(), codeQLDockerConfig.getContainerBasePath(),
+                    codeQLDockerConfig.getContainerDbPath())) {
                 logConsumer.accept("📦 No existing database found. Creating new CodeQL database...");
                 codeQLCliExecutor.createDatabase(
                         containerName,
@@ -78,7 +78,7 @@ public class CodeConversionService {
                         logConsumer);
                 logConsumer.accept("✅ CodeQL database created successfully.");
             } else {
-                logConsumer.accept("✅ CodeQL database volume already exists: " + codeQLDockerConfig.getDbVolumeName());
+                logConsumer.accept("✅ CodeQL database already exists: " + codeQLDockerConfig.getDbVolumeName());
             }
 
             logConsumer.accept("Running CodeQL query inside Docker container...");

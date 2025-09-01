@@ -1,73 +1,716 @@
-[ {
-  "sink" : {
-    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-    "methodName" : "getFirstFiveEmployees",
-    "approximateEndLine" : 47
+[
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+      "methodName": "deleteTours",
+      "approximateEndLine": 1117
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "deleteTours",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "DELETETOURS_BLOCK_1117",
+        "codeSnippet": "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\""
+      }
+    ],
+    "inferredPreConversionSql": "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\"",
+    "supplementalContext": {
+      "sourceClassName": "TourDB"
+    }
   },
-  "constructionTrace" : [ {
-    "order" : 1,
-    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-    "methodName" : "getFirstFiveEmployees",
-    "description" : "SQL fragment found in class EmployeeRepository",
-    "blockId" : "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
-    "codeSnippet" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR"
-  } ],
-  "inferredPreConversionSql" : "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR",
-  "supplementalContext" : {
-    "sourceClassName" : "EmployeeRepository"
-  }
-}, {
-  "sink" : {
-    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-    "methodName" : "getAllEmployees",
-    "approximateEndLine" : 29
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+      "methodName": "getBorderonummerGenerationInterval",
+      "approximateEndLine": 1057
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "getBorderonummerGenerationInterval",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "GETBORDERONUMMERGENERATIONINTERVAL_BLOCK_1057",
+        "codeSnippet": "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\"",
+    "supplementalContext": {
+      "sourceClassName": "TourDB"
+    }
   },
-  "constructionTrace" : [ {
-    "order" : 1,
-    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-    "methodName" : "getAllEmployees",
-    "description" : "SQL fragment found in class EmployeeRepository",
-    "blockId" : "GETALLEMPLOYEES_BLOCK_29",
-    "codeSnippet" : "SELECT * FROM Employees"
-  } ],
-  "inferredPreConversionSql" : "SELECT * FROM Employees",
-  "supplementalContext" : {
-    "sourceClassName" : "EmployeeRepository"
-  }
-}, {
-  "sink" : {
-    "filePath" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-    "methodName" : "getAllProjects",
-    "approximateEndLine" : 25
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+      "methodName": "getNewBorderoNummer",
+      "approximateEndLine": 1000
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "getNewBorderoNummer",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "GETNEWBORDERONUMMER_BLOCK_1000",
+        "codeSnippet": "\" FROM SYSIBM.SYSDUMMY1\""
+      },
+      {
+        "order": 2,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "getNewBorderoNummer",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "GETNEWBORDERONUMMER_BLOCK_1000",
+        "codeSnippet": "\"SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_\""
+      }
+    ],
+    "inferredPreConversionSql": "\" FROM SYSIBM.SYSDUMMY1\" \"SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_\"",
+    "supplementalContext": {
+      "sourceClassName": "TourDB"
+    }
   },
-  "constructionTrace" : [ {
-    "order" : 1,
-    "filePath" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-    "methodName" : "getAllProjects",
-    "description" : "SQL fragment found in class ProjectRepository",
-    "blockId" : "GETALLPROJECTS_BLOCK_25",
-    "codeSnippet" : "SELECT * FROM Projects"
-  } ],
-  "inferredPreConversionSql" : "SELECT * FROM Projects",
-  "supplementalContext" : {
-    "sourceClassName" : "ProjectRepository"
-  }
-}, {
-  "sink" : {
-    "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-    "methodName" : "getAllDepartments",
-    "approximateEndLine" : 42
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+      "methodName": "<clinit>",
+      "approximateEndLine": 111
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_75",
+        "codeSnippet": "\"INSERT.BELADELISTE\""
+      },
+      {
+        "order": 2,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_78",
+        "codeSnippet": "\"UPDATE.BELADELISTE\""
+      },
+      {
+        "order": 3,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_81",
+        "codeSnippet": "\"SELECT.BELADELISTE\""
+      },
+      {
+        "order": 4,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_81",
+        "codeSnippet": "\"SELECT.BELADELISTE\""
+      },
+      {
+        "order": 5,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_81",
+        "codeSnippet": "\"SELECT.BELADELISTE\""
+      },
+      {
+        "order": 6,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_81",
+        "codeSnippet": "\"SELECT.BELADELISTE\""
+      },
+      {
+        "order": 7,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_81",
+        "codeSnippet": "\"SELECT.BELADELISTE\""
+      },
+      {
+        "order": 8,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_84",
+        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS\""
+      },
+      {
+        "order": 9,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_84",
+        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS\""
+      },
+      {
+        "order": 10,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_87",
+        "codeSnippet": "\"SELECT.LIEFERSCHEIN_AVIS\""
+      },
+      {
+        "order": 11,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_90",
+        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\""
+      },
+      {
+        "order": 12,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_90",
+        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\""
+      },
+      {
+        "order": 13,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_93",
+        "codeSnippet": "\"SELECT.SCANNED\""
+      },
+      {
+        "order": 14,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_96",
+        "codeSnippet": "\"INSERT.SCANNED\""
+      },
+      {
+        "order": 15,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_99",
+        "codeSnippet": "\"DELETE.SCANNED\""
+      },
+      {
+        "order": 16,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_102",
+        "codeSnippet": "\"INSERT.FINGERPRINT\""
+      },
+      {
+        "order": 17,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_105",
+        "codeSnippet": "\"SELECT.FINGERPRINT\""
+      },
+      {
+        "order": 18,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_108",
+        "codeSnippet": "\"SELECT.ZOLLGUT_STATUS\""
+      },
+      {
+        "order": 19,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class BeladelisteDB",
+        "blockId": "<CLINIT>_BLOCK_111",
+        "codeSnippet": "\"SELECT.SACHNUMMERN\""
+      }
+    ],
+    "inferredPreConversionSql": "\"INSERT.BELADELISTE\" \"UPDATE.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.PACKSTUECK_AVIS\" \"SELECT.PACKSTUECK_AVIS\" \"SELECT.LIEFERSCHEIN_AVIS\" \"SELECT.PACKSTUECK_AVIS_WITH_JIS\" \"SELECT.PACKSTUECK_AVIS_WITH_JIS\" \"SELECT.SCANNED\" \"INSERT.SCANNED\" \"DELETE.SCANNED\" \"INSERT.FINGERPRINT\" \"SELECT.FINGERPRINT\" \"SELECT.ZOLLGUT_STATUS\" \"SELECT.SACHNUMMERN\"",
+    "supplementalContext": {
+      "sourceClassName": "BeladelisteDB"
+    }
   },
-  "constructionTrace" : [ {
-    "order" : 1,
-    "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-    "methodName" : "getAllDepartments",
-    "description" : "SQL fragment found in class DepartmentRepository",
-    "blockId" : "GETALLDEPARTMENTS_BLOCK_42",
-    "codeSnippet" : "SELECT * FROM Departments"
-  } ],
-  "inferredPreConversionSql" : "SELECT * FROM Departments",
-  "supplementalContext" : {
-    "sourceClassName" : "DepartmentRepository"
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+      "methodName": "addProject",
+      "approximateEndLine": 15
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+        "methodName": "addProject",
+        "description": "SQL fragment found in class ProjectRepository",
+        "blockId": "ADDPROJECT_BLOCK_15",
+        "codeSnippet": "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\""
+      }
+    ],
+    "inferredPreConversionSql": "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\"",
+    "supplementalContext": {
+      "sourceClassName": "ProjectRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "deleteDepartment",
+      "approximateEndLine": 67
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "deleteDepartment",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "DELETEDEPARTMENT_BLOCK_67",
+        "codeSnippet": "\"DELETE FROM Departments WHERE id = ?\""
+      }
+    ],
+    "inferredPreConversionSql": "\"DELETE FROM Departments WHERE id = ?\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+      "methodName": "getAllProjects",
+      "approximateEndLine": 25
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+        "methodName": "getAllProjects",
+        "description": "SQL fragment found in class ProjectRepository",
+        "blockId": "GETALLPROJECTS_BLOCK_25",
+        "codeSnippet": "\"SELECT * FROM Projects\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT * FROM Projects\"",
+    "supplementalContext": {
+      "sourceClassName": "ProjectRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+      "methodName": "addEmployee",
+      "approximateEndLine": 17
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+        "methodName": "addEmployee",
+        "description": "SQL fragment found in class EmployeeRepository",
+        "blockId": "ADDEMPLOYEE_BLOCK_17",
+        "codeSnippet": "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\""
+      }
+    ],
+    "inferredPreConversionSql": "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\"",
+    "supplementalContext": {
+      "sourceClassName": "EmployeeRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "getAllDepartments",
+      "approximateEndLine": 42
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "getAllDepartments",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "GETALLDEPARTMENTS_BLOCK_42",
+        "codeSnippet": "\"SELECT * FROM Departments\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT * FROM Departments\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "addDepartment",
+      "approximateEndLine": 15
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "addDepartment",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "ADDDEPARTMENT_BLOCK_15",
+        "codeSnippet": "\"INSERT INTO Departments (name, location) VALUES (?, ?)\""
+      }
+    ],
+    "inferredPreConversionSql": "\"INSERT INTO Departments (name, location) VALUES (?, ?)\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+      "methodName": "<clinit>",
+      "approximateEndLine": 80
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_66",
+        "codeSnippet": "\"INSERT.TOUR\""
+      },
+      {
+        "order": 2,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_67",
+        "codeSnippet": "\"UPDATE.TOUR\""
+      },
+      {
+        "order": 3,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_68",
+        "codeSnippet": "\"UPDATE.TOUR.TIME\""
+      },
+      {
+        "order": 4,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_69",
+        "codeSnippet": "\"SELECT.TOURBYID\""
+      },
+      {
+        "order": 5,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_70",
+        "codeSnippet": "\"SELECT.TOUREN\""
+      },
+      {
+        "order": 6,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_71",
+        "codeSnippet": "\"SELECT.TOURENBYSTATUS\""
+      },
+      {
+        "order": 7,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_72",
+        "codeSnippet": "\"SELECT.TOURENBYTIMEFRAMEGROUP\""
+      },
+      {
+        "order": 8,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_73",
+        "codeSnippet": "\"GET.NEXT_PRIMARY_KEY_TOUR\""
+      },
+      {
+        "order": 9,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_74",
+        "codeSnippet": "\"SELECT.TOUR.ZEITFENSTER\""
+      },
+      {
+        "order": 10,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_75",
+        "codeSnippet": "\"SELECT.BORDERONUMMERN\""
+      },
+      {
+        "order": 11,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_78",
+        "codeSnippet": "\"SELECT.LOKATIONBYWERKNUMMER\""
+      },
+      {
+        "order": 12,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class TourDB",
+        "blockId": "<CLINIT>_BLOCK_80",
+        "codeSnippet": "\"SELECT.KOORDINATENBYLOKATION\""
+      }
+    ],
+    "inferredPreConversionSql": "\"INSERT.TOUR\" \"UPDATE.TOUR\" \"UPDATE.TOUR.TIME\" \"SELECT.TOURBYID\" \"SELECT.TOUREN\" \"SELECT.TOURENBYSTATUS\" \"SELECT.TOURENBYTIMEFRAMEGROUP\" \"GET.NEXT_PRIMARY_KEY_TOUR\" \"SELECT.TOUR.ZEITFENSTER\" \"SELECT.BORDERONUMMERN\" \"SELECT.LOKATIONBYWERKNUMMER\" \"SELECT.KOORDINATENBYLOKATION\"",
+    "supplementalContext": {
+      "sourceClassName": "TourDB"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+      "methodName": "getFirstFiveEmployees",
+      "approximateEndLine": 47
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+        "methodName": "getFirstFiveEmployees",
+        "description": "SQL fragment found in class EmployeeRepository",
+        "blockId": "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
+        "codeSnippet": "\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\"",
+    "supplementalContext": {
+      "sourceClassName": "EmployeeRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
+      "methodName": "downloadDqmInhouseXmlFromDbAndValidate",
+      "approximateEndLine": 46
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
+        "methodName": "downloadDqmInhouseXmlFromDbAndValidate",
+        "description": "SQL fragment found in class DataValidationProcess",
+        "blockId": "DOWNLOADDQMINHOUSEXMLFROMDBANDVALIDATE_BLOCK_46",
+        "codeSnippet": "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\"",
+    "supplementalContext": {
+      "sourceClassName": "DataValidationProcess"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "getDepartmentById",
+      "approximateEndLine": 24
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "getDepartmentById",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "GETDEPARTMENTBYID_BLOCK_24",
+        "codeSnippet": "\"SELECT * FROM Departments WHERE id = ?\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT * FROM Departments WHERE id = ?\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "updateDepartment",
+      "approximateEndLine": 57
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "updateDepartment",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "UPDATEDEPARTMENT_BLOCK_57",
+        "codeSnippet": "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\""
+      }
+    ],
+    "inferredPreConversionSql": "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+      "methodName": "listDepartmentsWithProjects",
+      "approximateEndLine": 75
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+        "methodName": "listDepartmentsWithProjects",
+        "description": "SQL fragment found in class DepartmentRepository",
+        "blockId": "LISTDEPARTMENTSWITHPROJECTS_BLOCK_75",
+        "codeSnippet": "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\"",
+    "supplementalContext": {
+      "sourceClassName": "DepartmentRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+      "methodName": "getAllEmployees",
+      "approximateEndLine": 29
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+        "methodName": "getAllEmployees",
+        "description": "SQL fragment found in class EmployeeRepository",
+        "blockId": "GETALLEMPLOYEES_BLOCK_29",
+        "codeSnippet": "\"SELECT * FROM Employees\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT * FROM Employees\"",
+    "supplementalContext": {
+      "sourceClassName": "EmployeeRepository"
+    }
+  },
+  {
+    "sink": {
+      "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+      "methodName": "<clinit>",
+      "approximateEndLine": 85
+    },
+    "constructionTrace": [
+      {
+        "order": 1,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_54",
+        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
+      },
+      {
+        "order": 2,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_54",
+        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
+      },
+      {
+        "order": 3,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_54",
+        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
+      },
+      {
+        "order": 4,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_57",
+        "codeSnippet": "\"UPDATE.ERRORCONFIG\""
+      },
+      {
+        "order": 5,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_60",
+        "codeSnippet": "\"INSERT.ERRORCONFIG\""
+      },
+      {
+        "order": 6,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_63",
+        "codeSnippet": "\"DELETE.ERRORCONFIG\""
+      },
+      {
+        "order": 7,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_66",
+        "codeSnippet": "\"SELECT.CONFIGS.NOTIFICATION\""
+      },
+      {
+        "order": 8,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_70",
+        "codeSnippet": "\"SELECT.ERRORVALUES\""
+      },
+      {
+        "order": 9,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_73",
+        "codeSnippet": "\"UPDATE.ERRORVALUES\""
+      },
+      {
+        "order": 10,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_76",
+        "codeSnippet": "\"INSERT.ERRORVALUES\""
+      },
+      {
+        "order": 11,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_79",
+        "codeSnippet": "\"SELECT.ACTUALERRORVALUES\""
+      },
+      {
+        "order": 12,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_82",
+        "codeSnippet": "\"SELECT.ERRORVALUES.NOTIFICATION\""
+      },
+      {
+        "order": 13,
+        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+        "methodName": "<clinit>",
+        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
+        "blockId": "<CLINIT>_BLOCK_85",
+        "codeSnippet": "\"SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD\""
+      }
+    ],
+    "inferredPreConversionSql": "\"SELECT.ERRORCONFIG.ALL\" \"SELECT.ERRORCONFIG.ALL\" \"SELECT.ERRORCONFIG.ALL\" \"UPDATE.ERRORCONFIG\" \"INSERT.ERRORCONFIG\" \"DELETE.ERRORCONFIG\" \"SELECT.CONFIGS.NOTIFICATION\" \"SELECT.ERRORVALUES\" \"UPDATE.ERRORVALUES\" \"INSERT.ERRORVALUES\" \"SELECT.ACTUALERRORVALUES\" \"SELECT.ERRORVALUES.NOTIFICATION\" \"SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD\"",
+    "supplementalContext": {
+      "sourceClassName": "ErrorMonitoringDAOBean"
+    }
   }
-} ]
+]

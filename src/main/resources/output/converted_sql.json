@@ -1,8 +1,147 @@
 [ {
-  "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-  "explanation" : "Replaced DB2's FETCH FIRST 5 ROWS ONLY with PostgreSQL's LIMIT 5.",
+  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing FETCH FIRST with LIMIT, and adjusting sequence and table names to match PostgreSQL conventions.",
   "replacements" : [ {
+    "blockId" : "DELETETOURS_BLOCK_1117",
+    "convertedCode" : "DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < $1"
+  }, {
+    "blockId" : "GETBORDERONUMMERGENERATIONINTERVAL_BLOCK_1057",
+    "convertedCode" : "SELECT MINVALUE, MAXVALUE FROM information_schema.sequences WHERE sequencename = 'S0XBN_BORDERONR_'"
+  }, {
+    "blockId" : "GETNEWBORDERONUMMER_BLOCK_1000",
+    "convertedCode" : "FROM generate_series(1, 1)"
+  }, {
+    "blockId" : "GETNEWBORDERONUMMER_BLOCK_1000",
+    "convertedCode" : "SELECT NEXTVAL('S0XCTM.S0XBN_BORDERONR_')"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing table names to match PostgreSQL conventions.",
+  "replacements" : [ {
+    "blockId" : "<CLINIT>_BLOCK_75",
+    "convertedCode" : "INSERT INTO BELADELISTE"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_78",
+    "convertedCode" : "UPDATE BELADELISTE"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_81",
+    "convertedCode" : "SELECT * FROM BELADELISTE"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_84",
+    "convertedCode" : "SELECT * FROM PACKSTUECK_AVIS"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_87",
+    "convertedCode" : "SELECT * FROM LIEFERSCHEIN_AVIS"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_90",
+    "convertedCode" : "SELECT * FROM PACKSTUECK_AVIS_WITH_JIS"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_93",
+    "convertedCode" : "SELECT * FROM SCANNED"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_96",
+    "convertedCode" : "INSERT INTO SCANNED"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_99",
+    "convertedCode" : "DELETE FROM SCANNED"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_102",
+    "convertedCode" : "INSERT INTO FINGERPRINT"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_105",
+    "convertedCode" : "SELECT * FROM FINGERPRINT"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_108",
+    "convertedCode" : "SELECT * FROM ZOLLGUT_STATUS"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_111",
+    "convertedCode" : "SELECT * FROM SACHNUMMERN"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters.",
+  "replacements" : [ {
+    "blockId" : "ADDPROJECT_BLOCK_15",
+    "convertedCode" : "INSERT INTO Projects (name, department_id) VALUES ($1, $2)"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters and FETCH FIRST with LIMIT.",
+  "replacements" : [ {
+    "blockId" : "DELETEDEPARTMENT_BLOCK_67",
+    "convertedCode" : "DELETE FROM Departments WHERE id = $1"
+  }, {
+    "blockId" : "GETDEPARTMENTBYID_BLOCK_24",
+    "convertedCode" : "SELECT * FROM Departments WHERE id = $1"
+  }, {
+    "blockId" : "UPDATEDEPARTMENT_BLOCK_57",
+    "convertedCode" : "UPDATE Departments SET name = $1, location = $2 WHERE id = $3"
+  }, {
+    "blockId" : "LISTDEPARTMENTSWITHPROJECTS_BLOCK_75",
+    "convertedCode" : "SELECT d.name AS dept_name, p.name AS project_name FROM Departments d LEFT OUTER JOIN Projects p ON d.id = p.department_id LIMIT 10"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+  "explanation" : "No changes needed.",
+  "replacements" : [ {
+    "blockId" : "GETALLPROJECTS_BLOCK_25",
+    "convertedCode" : "SELECT * FROM Projects"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters and FETCH FIRST with LIMIT.",
+  "replacements" : [ {
+    "blockId" : "ADDEMPLOYEE_BLOCK_17",
+    "convertedCode" : "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES ($1, $2, $3, $4)"
+  }, {
     "blockId" : "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
     "convertedCode" : "SELECT * FROM Employees LIMIT 5"
+  }, {
+    "blockId" : "GETALLEMPLOYEES_BLOCK_29",
+    "convertedCode" : "SELECT * FROM Employees"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing FETCH FIRST with LIMIT.",
+  "replacements" : [ {
+    "blockId" : "DOWNLOADDQMINHOUSEXMLFROMDBANDVALIDATE_BLOCK_46",
+    "convertedCode" : "SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP FROM DQM.DQMIMP_DFUE ORDER BY ID DESC LIMIT 100"
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
+  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing table names to match PostgreSQL conventions.",
+  "replacements" : [ {
+    "blockId" : "<CLINIT>_BLOCK_54",
+    "convertedCode" : "SELECT * FROM ERRORCONFIG"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_57",
+    "convertedCode" : "UPDATE ERRORCONFIG"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_60",
+    "convertedCode" : "INSERT INTO ERRORCONFIG"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_63",
+    "convertedCode" : "DELETE FROM ERRORCONFIG"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_66",
+    "convertedCode" : "SELECT * FROM CONFIGS WHERE notification = true"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_70",
+    "convertedCode" : "SELECT * FROM ERRORVALUES"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_73",
+    "convertedCode" : "UPDATE ERRORVALUES"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_76",
+    "convertedCode" : "INSERT INTO ERRORVALUES"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_79",
+    "convertedCode" : "SELECT * FROM ACTUALERRORVALUES"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_82",
+    "convertedCode" : "SELECT * FROM ERRORVALUES WHERE notification = true"
+  }, {
+    "blockId" : "<CLINIT>_BLOCK_85",
+    "convertedCode" : "SELECT * FROM ERRORVALUES WHERE hour = (SELECT MAX(hour) FROM ERRORVALUES)"
   } ]
 } ]

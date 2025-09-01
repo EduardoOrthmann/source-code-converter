@@ -66,21 +66,17 @@ public class CodeQLDockerAnalysisRunner {
         volumes.add(qlFile.getParentFile().getAbsolutePath() + ":" + config.getContainerQueryDir());
         volumes.add(outputDir.getAbsolutePath() + ":" + config.getContainerOutputDir());
 
-        if (config.isPersistDbVolume()) {
-            logConsumer.accept("Ensuring CodeQL database volume '" + config.getDbVolumeName() + "' exists...");
-            boolean exists = containerManager.volumeExists(config.getDbVolumeName());
+        logConsumer.accept("Ensuring CodeQL database volume '" + config.getDbVolumeName() + "' exists...");
+        boolean exists = containerManager.volumeExists(config.getDbVolumeName());
 
-            if (!exists) {
-                logConsumer.accept("📦 Creating CodeQL database volume: " + config.getDbVolumeName());
-                containerManager.createVolume(config.getDbVolumeName(), logConsumer);
-            } else {
-                logConsumer.accept("✅ CodeQL database volume already exists: " + config.getDbVolumeName());
-            }
-
-            volumes.add(config.getDbVolumeName() + ":" + config.getContainerDbPath());
+        if (!exists) {
+            logConsumer.accept("📦 Creating CodeQL database volume: " + config.getDbVolumeName());
+            containerManager.createVolume(config.getDbVolumeName(), logConsumer);
         } else {
-            logConsumer.accept("CodeQL database volume persistence is disabled. The database will be temporary.");
+            logConsumer.accept("✅ CodeQL database volume already exists: " + config.getDbVolumeName());
         }
+
+        volumes.add(config.getDbVolumeName() + ":" + config.getContainerDbPath());
 
         return volumes;
     }

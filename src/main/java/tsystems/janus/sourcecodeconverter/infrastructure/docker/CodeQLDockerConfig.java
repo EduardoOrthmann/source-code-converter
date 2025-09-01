@@ -23,6 +23,7 @@ public class CodeQLDockerConfig {
     @Value("${codeql.db.volume-name:codeql-test-db-volume}")
     private String dbVolumeName;
 
+    private static final String CONTAINER_BASE_PATH = "/app";
     private static final String CONTAINER_PROJECT_PATH = "/app/project";
     private static final String CONTAINER_QUERY_PATH = "/app/queries/sql-detection.ql";
     private static final String CONTAINER_DB_PATH = "/app/db";
@@ -40,6 +41,10 @@ public class CodeQLDockerConfig {
 
     public File getDockerfileDir() {
         return new File(dockerfileDir);
+    }
+
+    public String getContainerBasePath() {
+        return CONTAINER_BASE_PATH;
     }
 
     public String getContainerProjectPath() {
