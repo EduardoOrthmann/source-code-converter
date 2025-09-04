@@ -1,126 +1,176 @@
 /**
- * * @name Detect All Database Code and its Sources
- * * @description This query finds all database sinks (standard JDBC and custom framework calls)
- * * and traces all of their data sources. It is specifically designed to handle frameworks
- * * that use static constants as query identifiers and case-insensitivity.
- * * @kind path-problem
- * * @id java/db-migration-source-sink-analysis
- * * @tags db-migration java jdbc
- * 
+ * @name Detect All Database Code and its Sources (Java and XML)
+ * @description This query finds all database sinks and traces their data sources,
+ * supporting both direct Java string literals and lookups in XML configuration files.
+ * @kind path-problem
+ * @id java/db-migration-source-sink-analysis
+ * @tags db-migration java jdbc xml
  */
 
 import java
 import semmle.code.java.dataflow.TaintTracking
+import semmle.code.java.dataflow.DataFlow
 import semmle.code.java.dataflow.FlowSources
+import semmle.code.xml.XML
 
-/**
- * * A method call that executes an SQL query, covering both standard JDBC
- * * and the project-specific custom framework.
- * 
- */
-abstract class DatabaseExecution extends MethodAccess {
-  /** Gets the expression that is being executed as an SQL query or query ID. */
-  abstract Expr getSql();
-}
-
-/**
- * * Models a standard JDBC execution call.
- * 
- */
-class StandardJdbcExecution extends DatabaseExecution {
-  StandardJdbcExecution() {
-    exists(Method m | m = this.getMethod() |
-      // Sink 1: Preparing a statement on a Connection object.
-      m.getDeclaringType().getASupertype*().hasQualifiedName("java.sql", "Connection") and
-      m.hasName("prepareStatement")
-      or
-      // Sink 2: Executing a query on a Statement object.
-      m.getDeclaringType().getASupertype*().hasQualifiedName("java.sql", "Statement") and
-      m.getName().regexpMatch("execute.*|addBatch")
+// ... (SqlExecutionMethod, SqlTaintTrackingConfig, and getSqlQueryType remain the same) ...
+class SqlExecutionMethod extends Method {
+  SqlExecutionMethod() {
+    // Standard JDBC
+    exists(RefType t |
+      t.hasQualifiedName("java.sql", "Statement") or
+      t.hasQualifiedName("java.sql", "PreparedStatement")
+    |
+      this.getDeclaringType().getASupertype*() = t and
+      (this.getName().matches("execute%") or this.getName().matches("addBatch"))
+    )
+    or
+    // Spring JDBC Template
+    exists(RefType t | t.hasQualifiedName("org.springframework.jdbc.core", "JdbcTemplate") |
+      this.getDeclaringType().getASupertype*() = t and
+      this.getName().matches("query%")
+    )
+    or
+    // Custom framework for XML-based queries (e.g., DefaultDBAccess)
+    exists(RefType t | t.hasQualifiedName("com.tsystems.dao.xml.db", "DefaultDBAccess") |
+      this.getDeclaringType().getASupertype*() = t and
+      (
+        this.getName() = "createPreparedStatement" or
+        this.getName() = "execute" or
+        this.getName().matches("execute%")
+      )
     )
   }
-
-  override Expr getSql() { result = this.getArgument(0) }
 }
 
-/**
- * * Models a custom framework execution call from `DefaultDBAccess`.
- * 
- */
-class CustomFrameworkExecution extends DatabaseExecution {
-  CustomFrameworkExecution() {
-    this.getMethod()
-        .getDeclaringType()
-        .hasQualifiedName("com.tsystems.dao.xml.db", "DefaultDBAccess") and
-    (
-      this.getMethod().hasName("createPreparedStatement") or
-      this.getMethod().hasName("execute") or
-      this.getMethod().hasName("executePreparedStatement")
-    )
-  }
-
-  override Expr getSql() { result = this.getArgument(0) }
-}
-
-/**
- * * Configuration for tracking taint from SQL sources to execution sinks.
- * 
- */
 class SqlTaintTrackingConfig extends TaintTracking::Configuration {
   SqlTaintTrackingConfig() { this = "SqlTaintTrackingConfig" }
 
-  /**
-   *   * Defines the sources of SQL queries or query identifiers.
-   *   
-   */
   override predicate isSource(DataFlow::Node source) {
-    exists(Expr e | source.asExpr() = e |
-      // Source 1: A raw string literal containing case-insensitive SQL keywords.
-      exists(StringLiteral sl | sl = e |
-        sl.getValue()
-            .regexpMatch("(?i).*\\b(SELECT|INSERT|UPDATE|DELETE|WITH|FETCH|VALUES|FROM|@param|MERGE|INTO|LEFT|JOIN|ORDER BY|GROUP BY|DELETE FROM|INSERT INTO|UPDATE SET)\\b.*")
-      )
-    )
-    or
-    // Source 2: The declaration of a static final String field that acts as a query ID.
-    // Correction: Use `f.getInitializer()` and `cce.getStringValue()`
-    exists(Field f, CompileTimeConstantExpr cce |
-      source.asExpr() = f.getInitializer() and
-      cce = f.getInitializer() and
-      f.isStatic() and
-      f.isFinal() and
-      f.getType() instanceof TypeString and
-      // Check that the field is initialized with something that looks like a query ID.
-      cce.getStringValue().regexpMatch("^[A-Z_]+(\\.[A-Z_]+)+$")
+    exists(StringLiteral lit |
+      lit = source.asExpr() and
+      lit.getValue()
+          .toLowerCase()
+          .regexpMatch("(?s).*\\b(select|insert|update|delete|from|where|join|fetch first|with ur|merge into)\\b.*")
     )
   }
 
-  /**
-   *   * Defines the sinks where SQL queries are executed.
-   *   
-   */
   override predicate isSink(DataFlow::Node sink) {
-    exists(DatabaseExecution exec | sink.asExpr() = exec.getSql())
+    exists(MethodAccess ma, SqlExecutionMethod method |
+      ma.getMethod() = method and
+      sink.asExpr() = ma.getAnArgument()
+    )
+  }
+
+  override predicate isAdditionalTaintStep(DataFlow::Node node1, DataFlow::Node node2) {
+    exists(AddExpr add | add = node2.asExpr() | node1.asExpr() = add.getAnOperand())
+    or
+    exists(MethodAccess ma | ma.getMethod().getName().matches("append|concat") |
+      node2.asExpr() = ma and
+      (node1.asExpr() = ma.getAnArgument() or node1.asExpr() = ma.getQualifier())
+    )
   }
 }
 
-from SqlTaintTrackingConfig config, DataFlow::PathNode source, DataFlow::PathNode sink
-where config.hasFlowPath(source, sink)
-select "{ " +
-    // The output is a single JSON string per finding.
-    "\"id\": \"" + sink.getNode().getLocation().toString().replaceAll("file://", "") + "\", " +
-    "\"path\": \"" + source.getNode().getLocation().getFile().getAbsolutePath() + "\", " +
-    "\"methodName\": \"" + source.getNode().getEnclosingCallable().getName() + "\", " +
-    "\"code\": \"" +
-    source
-        .getNode()
-        .toString()
-        .replaceAll("\"", "\\\"")
-        .replaceAll("\n", "\\n")
-        .replaceAll("\r", "\\r") + "\", " + "\"className\": \"" +
-    source.getNode().getEnclosingCallable().getDeclaringType().getName() + "\", " +
-    "\"sourceExpressionType\": \"" + source.getNode().getType().getName() + "\", " + "\"type\": \"" +
-    "STATIC" + "\", " + "\"startLine\": " + source.getNode().getLocation().getStartLine() + ", " +
-    "\"startColumn\": " + source.getNode().getLocation().getStartColumn() + ", " + "\"endLine\": " +
-    source.getNode().getLocation().getEndLine() + ", " + "\"endColumn\": " +
-    source.getNode().getLocation().getEndColumn() + " }"
+string getSqlQueryType(Expr sql) {
+  if sql.getAChildExpr*() instanceof MethodAccess and
+     (sql.(MethodAccess).getMethod().getName().matches("append|concat"))
+  then result = "DYNAMIC"
+  else if sql.getAChildExpr*() instanceof AddExpr
+  then result = "DYNAMIC"
+  else result = "STATIC"
+}
+
+
+abstract class SqlQueryFinding extends Element {
+  abstract string getFilePath();
+  abstract int getStartLine();
+  abstract int getStartColumn();
+  abstract int getEndLine();
+  abstract int getEndColumn();
+  abstract string getMethodName();
+  abstract string getCode();
+  abstract string getSourceExpressionType();
+  abstract string getType();
+  abstract string getClassName();
+
+  string getId() { result = this.getFilePath() + ":" + this.getStartLine() + ":" + this.getStartColumn() + ":" + this.getEndLine() + ":" + this.getEndColumn() }
+
+  string toJson() {
+    result =
+      "{" + "\"id\": \"" + this.getId() + "\"," + "\"path\": \"" + this.getFilePath() + "\"," +
+        "\"methodName\": \"" + this.getMethodName() + "\"," + "\"code\": \"" +
+        this.getCode().replaceAll("\"", "\\\"").replaceAll("\r", "").replaceAll("\n", "\\n") + "\"," +
+        "\"className\": \"" + this.getClassName() + "\"," +
+        "\"sourceExpressionType\": \"" + this.getSourceExpressionType() + "\"," + "\"type\": \"" +
+        this.getType() + "\"," + "\"startLine\": " + this.getStartLine() + "," +
+        "\"startColumn\": " + this.getStartColumn() + "," + "\"endLine\": " + this.getEndLine() + "," +
+        "\"endColumn\": " + this.getEndColumn() + "}"
+  }
+}
+
+class TaintedSqlFinding extends SqlQueryFinding {
+  DataFlow::PathNode sourceNode;
+
+  TaintedSqlFinding() {
+    exists(SqlTaintTrackingConfig config, DataFlow::PathNode sinkNode |
+      config.hasFlowPath(sourceNode, sinkNode) and this = sourceNode.getNode().asExpr()
+    )
+  }
+
+  override string getFilePath() { result = sourceNode.getNode().getLocation().getFile().getAbsolutePath() }
+  override int getStartLine() { result = sourceNode.getNode().getLocation().getStartLine() }
+  override int getStartColumn() { result = sourceNode.getNode().getLocation().getStartColumn() }
+  override int getEndLine() { result = sourceNode.getNode().getLocation().getEndLine() }
+  override int getEndColumn() { result = sourceNode.getNode().getLocation().getEndColumn() }
+  override string getMethodName() { result = sourceNode.getNode().getEnclosingCallable().getName() }
+  override string getCode() { result = sourceNode.getNode().toString() }
+  override string getSourceExpressionType() { result = sourceNode.getNode().getType().toString() }
+  override string getType() { result = getSqlQueryType(sourceNode.getNode().asExpr()) }
+  override string getClassName() { result = sourceNode.getNode().getEnclosingCallable().getDeclaringType().getName() }
+}
+
+/**
+ * A finding for an SQL query that originates from an XML file.
+ */
+class XmlSqlFinding extends SqlQueryFinding {
+  MethodAccess ma;
+  string sqlText;
+  XmlElement statementTag; // Make the statementTag available in the class
+
+  XmlSqlFinding() {
+    exists(XmlFile xmlFile, XmlAttribute nameAttr |
+      statementTag = xmlFile.getARootElement().getAChild*() and
+      statementTag.getName() = "statement" and
+      nameAttr = statementTag.getAttribute("name") and
+      sqlText = statementTag.getTextValue().trim() and
+      exists(Expr queryArg |
+        ma.getMethod() instanceof SqlExecutionMethod and
+        queryArg = ma.getArgument(0) and
+        this = ma and
+        (
+          queryArg.(StringLiteral).getValue() = nameAttr.getValue() or
+          queryArg.(FieldAccess).getField().getInitializer().(CompileTimeConstantExpr).getStringValue() = nameAttr.getValue()
+        )
+      )
+    )
+  }
+
+  // --- FIX STARTS HERE ---
+  // The location predicates now refer to the XML statementTag, not the Java code.
+  override string getFilePath() { result = statementTag.getLocation().getFile().getAbsolutePath() }
+  override int getStartLine() { result = statementTag.getLocation().getStartLine() }
+  override int getStartColumn() { result = statementTag.getLocation().getStartColumn() }
+  override int getEndLine() { result = statementTag.getLocation().getEndLine() }
+  override int getEndColumn() { result = statementTag.getLocation().getEndColumn() }
+  // --- FIX ENDS HERE ---
+
+  override string getMethodName() { result = ma.getEnclosingCallable().getName() }
+  override string getCode() { result = sqlText }
+  override string getSourceExpressionType() { result = "String (from XML)" }
+  override string getType() { result = "STATIC" }
+  override string getClassName() { result = ma.getEnclosingCallable().getDeclaringType().getName() }
+}
+
+from SqlQueryFinding finding
+select finding.toJson()

@@ -7,7 +7,6 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -113,7 +112,7 @@ public class DockerContainerManager {
         return contentBuilder.toString();
     }
 
-    public void writeFileToContainer(String containerName, String workDir, String filePathInContainer, String content) throws IOException, InterruptedException {
+    public void writeFileToContainer(String containerName, String filePathInContainer, String content) throws IOException, InterruptedException {
         Path tempFile = null;
         try {
             tempFile = Files.createTempFile("temp-patch-", ".java");

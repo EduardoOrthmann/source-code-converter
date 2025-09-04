@@ -1,0 +1,26 @@
+From b2c319d7cbb969bd5b585321a9d499843a45d240 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 08:30:19 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted SQL query from DB2 to PostgreSQL syntax
+---
+ src/main/java/org/example/project/ProjectRepository.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/example/project/ProjectRepository.java b/src/main/java/org/example/project/ProjectRepository.java
+index cb3a472..251b34f 100644
+--- a/src/main/java/org/example/project/ProjectRepository.java
++++ b/src/main/java/org/example/project/ProjectRepository.java
+@@ -22,7 +22,7 @@ public class ProjectRepository {
+ 
+     public List<Project> getAllProjects() throws SQLException {
+         List<Project> projects = new ArrayList<>();
+-        String sql = "SELECT * FROM Projects";
++        String sql = "SELECT * FROM Projects;";
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+             while (rs.next()) {
+-- 
+2.34.1
+

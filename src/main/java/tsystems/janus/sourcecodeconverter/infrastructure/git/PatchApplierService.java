@@ -28,6 +28,11 @@ public class PatchApplierService {
         String filePathInContainer = llmResponse.getFile();
         String workDir = dockerConfig.getContainerProjectPath();
 
+        if (filePathInContainer.contains("/target/classes/")) {
+            filePathInContainer = filePathInContainer.replace("/target/classes/", "/src/main/resources/");
+            System.out.println("Redirected resource path to source: " + filePathInContainer);
+        }
+
         String originalFileContent = containerManager.readFileFromContainer(containerName, workDir, filePathInContainer);
         String modifiedFileContent = originalFileContent.replace("\r\n", "\n");
 
@@ -56,7 +61,7 @@ public class PatchApplierService {
 
         if (!originalFileContent.replaceAll("\r\n", "\n").equals(modifiedFileContent)) {
             System.out.println("Writing patched file back to container: " + filePathInContainer);
-            containerManager.writeFileToContainer(containerName, workDir, filePathInContainer, modifiedFileContent);
+            containerManager.writeFileToContainer(containerName, filePathInContainer, modifiedFileContent);
         } else {
             System.out.println("No changes were applied to the file.");
         }

@@ -15,18 +15,6 @@
       }
     } ]
   }, {
-    "unitId" : "EmployeeRepository.addEmployee",
-    "components" : [ {
-      "code" : "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 17,
-        "startColumn" : 22,
-        "endLine" : 17,
-        "endColumn" : 111
-      }
-    } ]
-  }, {
     "unitId" : "EmployeeRepository.getAllEmployees",
     "components" : [ {
       "code" : "\"SELECT * FROM Employees\"",
@@ -41,18 +29,324 @@
   } ]
 }, {
   "sink" : {
-    "filePath" : "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java"
+    "filePath" : "/app/project/target/classes/com/tsystems/dqm/tmgmt/tourenverwaltung/Tourenverwaltung.xml"
   },
   "conversionUnits" : [ {
-    "unitId" : "DataValidationProcess.downloadDqmInhouseXmlFromDbAndValidate",
+    "unitId" : "TourDB.saveTour",
     "components" : [ {
-      "code" : "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\"",
-      "type" : "String",
+      "code" : "INSERT INTO S0XCTM.S0XRTOUR_TOUR (TOUR_ID, BORDERONUMMER, LOKATION_ID)\n            VALUES (@param{TOUR_ID}, @param{BORDERONUMMER}, @param{LOKATION_ID})",
+      "type" : "String (from XML)",
       "location" : {
-        "startLine" : 46,
-        "startColumn" : 22,
-        "endLine" : 50,
-        "endColumn" : 46
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "INSERT INTO S0XCTM.S0XRTOUR_TOUR (TOUR_ID, BORDERONUMMER, LOKATION_ID)\n            VALUES (@param{TOUR_ID}, @param{BORDERONUMMER}, @param{LOKATION_ID})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE S0XCTM.S0XRTOUR_TOUR SET STATUS = @param{STATUS} WHERE TOUR_ID = @param{TOUR_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE S0XCTM.S0XRTOUR_TOUR SET STATUS = @param{STATUS} WHERE TOUR_ID = @param{TOUR_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/target/classes/com/tsystems/dqm/monitoring/ErrorMonitoringManagement.xml"
+  },
+  "conversionUnits" : [ {
+    "unitId" : "ErrorMonitoringDAOBean.checkDuplicate",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.getErrorConfig",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.readErrorConfig",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.deleteErrorConfig",
+    "components" : [ {
+      "code" : "DELETE FROM DQM.DQMON_ERROR_CONFIG WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID} AND DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 14,
+        "startColumn" : 9,
+        "endLine" : 16,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMON_ERROR_CONFIG WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID} AND DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 14,
+        "startColumn" : 9,
+        "endLine" : 16,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.updateErrorConfig",
+    "components" : [ {
+      "code" : "UPDATE DQM.DQMON_ERROR_CONFIG SET ZIELWERT_OK = @param{ZIELWERT_OK} WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 10,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE DQM.DQMON_ERROR_CONFIG SET ZIELWERT_OK = @param{ZIELWERT_OK} WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 10,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.addErrorConfig",
+    "components" : [ {
+      "code" : "INSERT INTO DQM.DQMON_ERROR_CONFIG (FEHLERTYP_ID, DATENTYP) VALUES (@param{FEHLERTYP_ID}, @param{DATENTYP})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 11,
+        "startColumn" : 9,
+        "endLine" : 13,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "INSERT INTO DQM.DQMON_ERROR_CONFIG (FEHLERTYP_ID, DATENTYP) VALUES (@param{FEHLERTYP_ID}, @param{DATENTYP})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 11,
+        "startColumn" : 9,
+        "endLine" : 13,
+        "endColumn" : 21
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/resources/com/tsystems/dqm/tmgmt/tourenverwaltung/Tourenverwaltung.xml"
+  },
+  "conversionUnits" : [ {
+    "unitId" : "TourDB.saveTour",
+    "components" : [ {
+      "code" : "INSERT INTO S0XCTM.S0XRTOUR_TOUR (TOUR_ID, BORDERONUMMER, LOKATION_ID)\n            VALUES (@param{TOUR_ID}, @param{BORDERONUMMER}, @param{LOKATION_ID})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "INSERT INTO S0XCTM.S0XRTOUR_TOUR (TOUR_ID, BORDERONUMMER, LOKATION_ID)\n            VALUES (@param{TOUR_ID}, @param{BORDERONUMMER}, @param{LOKATION_ID})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE S0XCTM.S0XRTOUR_TOUR SET STATUS = @param{STATUS} WHERE TOUR_ID = @param{TOUR_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE S0XCTM.S0XRTOUR_TOUR SET STATUS = @param{STATUS} WHERE TOUR_ID = @param{TOUR_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/resources/com/tsystems/dqm/tmgmt/beladeliste/Beladeliste.xml"
+  },
+  "conversionUnits" : [ {
+    "unitId" : "BeladelisteDB.loadBeladeliste",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "BeladelisteDB.storeBeladeliste",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.V_BEL_PACKSTUECK_AVIS\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.V_BEL_PACKSTUECK_AVIS\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMBEL_SCAN WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMBEL_SCAN WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "BeladelisteDB.getLoadingListByDeliveryNotesOnly",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
       }
     } ]
   } ]
@@ -72,72 +366,12 @@
         "endColumn" : 45
       }
     } ]
-  }, {
-    "unitId" : "ProjectRepository.addProject",
-    "components" : [ {
-      "code" : "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 15,
-        "startColumn" : 22,
-        "endLine" : 15,
-        "endColumn" : 79
-      }
-    } ]
   } ]
 }, {
   "sink" : {
     "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java"
   },
   "conversionUnits" : [ {
-    "unitId" : "DepartmentRepository.updateDepartment",
-    "components" : [ {
-      "code" : "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 57,
-        "startColumn" : 22,
-        "endLine" : 57,
-        "endColumn" : 81
-      }
-    } ]
-  }, {
-    "unitId" : "DepartmentRepository.getDepartmentById",
-    "components" : [ {
-      "code" : "\"SELECT * FROM Departments WHERE id = ?\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 24,
-        "startColumn" : 22,
-        "endLine" : 24,
-        "endColumn" : 61
-      }
-    } ]
-  }, {
-    "unitId" : "DepartmentRepository.deleteDepartment",
-    "components" : [ {
-      "code" : "\"DELETE FROM Departments WHERE id = ?\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 67,
-        "startColumn" : 22,
-        "endLine" : 67,
-        "endColumn" : 59
-      }
-    } ]
-  }, {
-    "unitId" : "DepartmentRepository.addDepartment",
-    "components" : [ {
-      "code" : "\"INSERT INTO Departments (name, location) VALUES (?, ?)\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 15,
-        "startColumn" : 22,
-        "endLine" : 15,
-        "endColumn" : 77
-      }
-    } ]
-  }, {
     "unitId" : "DepartmentRepository.getAllDepartments",
     "components" : [ {
       "code" : "\"SELECT * FROM Departments\"",
@@ -152,7 +386,7 @@
   }, {
     "unitId" : "DepartmentRepository.listDepartmentsWithProjects",
     "components" : [ {
-      "code" : "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\"",
+      "code" : "\"SELECT d.name AS dept_name, p.name AS project_name \" +\n                     \"FROM Departments d \" +\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\n                     \"FETCH FIRST 10 ROWS ONLY\"",
       "type" : "String",
       "location" : {
         "startLine" : 75,
@@ -169,24 +403,6 @@
   "conversionUnits" : [ {
     "unitId" : "ErrorMonitoringDAOBean.<clinit>",
     "components" : [ {
-      "code" : "\"SELECT.ERRORCONFIG.ALL\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 54,
-        "startColumn" : 46,
-        "endLine" : 54,
-        "endColumn" : 69
-      }
-    }, {
-      "code" : "\"SELECT.ERRORCONFIG.ALL\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 54,
-        "startColumn" : 46,
-        "endLine" : 54,
-        "endColumn" : 69
-      }
-    }, {
       "code" : "\"SELECT.ERRORCONFIG.ALL\"",
       "type" : "String",
       "location" : {
@@ -289,12 +505,116 @@
   } ]
 }, {
   "sink" : {
+    "filePath" : "/app/project/target/classes/com/tsystems/dqm/tmgmt/beladeliste/Beladeliste.xml"
+  },
+  "conversionUnits" : [ {
+    "unitId" : "BeladelisteDB.loadBeladeliste",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "BeladelisteDB.storeBeladeliste",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.V_BEL_PACKSTUECK_AVIS\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.V_BEL_PACKSTUECK_AVIS\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 11,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMBEL_SCAN WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMBEL_SCAN WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 12,
+        "startColumn" : 9,
+        "endLine" : 14,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "BeladelisteDB.getLoadingListByDeliveryNotesOnly",
+    "components" : [ {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT VERSION FROM DQM.DQMBEL_BELADELISTE\n            WHERE BORDERONUMMER = @param{BORDERONUMMER} AND WERKNUMMER = @param{WERKNUMMER}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 4,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
     "filePath" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java"
   },
   "conversionUnits" : [ {
     "unitId" : "TourDB.getBorderonummerGenerationInterval",
     "components" : [ {
-      "code" : "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\"",
+      "code" : "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\"",
       "type" : "String",
       "location" : {
         "startLine" : 1057,
@@ -390,15 +710,6 @@
         "endColumn" : 98
       }
     }, {
-      "code" : "\"GET.NEXT_PRIMARY_KEY_TOUR\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 73,
-        "startColumn" : 61,
-        "endLine" : 73,
-        "endColumn" : 87
-      }
-    }, {
       "code" : "\"SELECT.TOUR.ZEITFENSTER\"",
       "type" : "String",
       "location" : {
@@ -433,18 +744,6 @@
         "startColumn" : 63,
         "endLine" : 80,
         "endColumn" : 92
-      }
-    } ]
-  }, {
-    "unitId" : "TourDB.deleteTours",
-    "components" : [ {
-      "code" : "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 1117,
-        "startColumn" : 26,
-        "endLine" : 1117,
-        "endColumn" : 83
       }
     } ]
   } ]
@@ -482,51 +781,6 @@
         "endColumn" : 73
       }
     }, {
-      "code" : "\"SELECT.BELADELISTE\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 81,
-        "startColumn" : 54,
-        "endLine" : 81,
-        "endColumn" : 73
-      }
-    }, {
-      "code" : "\"SELECT.BELADELISTE\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 81,
-        "startColumn" : 54,
-        "endLine" : 81,
-        "endColumn" : 73
-      }
-    }, {
-      "code" : "\"SELECT.BELADELISTE\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 81,
-        "startColumn" : 54,
-        "endLine" : 81,
-        "endColumn" : 73
-      }
-    }, {
-      "code" : "\"SELECT.BELADELISTE\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 81,
-        "startColumn" : 54,
-        "endLine" : 81,
-        "endColumn" : 73
-      }
-    }, {
-      "code" : "\"SELECT.PACKSTUECK_AVIS\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 84,
-        "startColumn" : 58,
-        "endLine" : 84,
-        "endColumn" : 81
-      }
-    }, {
       "code" : "\"SELECT.PACKSTUECK_AVIS\"",
       "type" : "String",
       "location" : {
@@ -543,15 +797,6 @@
         "startColumn" : 60,
         "endLine" : 87,
         "endColumn" : 85
-      }
-    }, {
-      "code" : "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\"",
-      "type" : "String",
-      "location" : {
-        "startLine" : 90,
-        "startColumn" : 67,
-        "endLine" : 90,
-        "endColumn" : 99
       }
     }, {
       "code" : "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\"",
@@ -624,6 +869,137 @@
         "startColumn" : 54,
         "endLine" : 111,
         "endColumn" : 73
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/resources/com/tsystems/dqm/monitoring/ErrorMonitoringManagement.xml"
+  },
+  "conversionUnits" : [ {
+    "unitId" : "ErrorMonitoringDAOBean.checkDuplicate",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.getErrorConfig",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.readErrorConfig",
+    "components" : [ {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "SELECT * FROM DQM.DQMON_ERROR_CONFIG WHERE DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 5,
+        "startColumn" : 9,
+        "endLine" : 7,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.deleteErrorConfig",
+    "components" : [ {
+      "code" : "DELETE FROM DQM.DQMON_ERROR_CONFIG WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID} AND DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 14,
+        "startColumn" : 9,
+        "endLine" : 16,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "DELETE FROM DQM.DQMON_ERROR_CONFIG WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID} AND DATENTYP = @param{DATENTYP}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 14,
+        "startColumn" : 9,
+        "endLine" : 16,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.updateErrorConfig",
+    "components" : [ {
+      "code" : "UPDATE DQM.DQMON_ERROR_CONFIG SET ZIELWERT_OK = @param{ZIELWERT_OK} WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 10,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "UPDATE DQM.DQMON_ERROR_CONFIG SET ZIELWERT_OK = @param{ZIELWERT_OK} WHERE FEHLERTYP_ID = @param{FEHLERTYP_ID}",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 8,
+        "startColumn" : 9,
+        "endLine" : 10,
+        "endColumn" : 21
+      }
+    } ]
+  }, {
+    "unitId" : "ErrorMonitoringDAOBean.addErrorConfig",
+    "components" : [ {
+      "code" : "INSERT INTO DQM.DQMON_ERROR_CONFIG (FEHLERTYP_ID, DATENTYP) VALUES (@param{FEHLERTYP_ID}, @param{DATENTYP})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 11,
+        "startColumn" : 9,
+        "endLine" : 13,
+        "endColumn" : 21
+      }
+    }, {
+      "code" : "INSERT INTO DQM.DQMON_ERROR_CONFIG (FEHLERTYP_ID, DATENTYP) VALUES (@param{FEHLERTYP_ID}, @param{DATENTYP})",
+      "type" : "String (from XML)",
+      "location" : {
+        "startLine" : 11,
+        "startColumn" : 9,
+        "endLine" : 13,
+        "endColumn" : 21
       }
     } ]
   } ]

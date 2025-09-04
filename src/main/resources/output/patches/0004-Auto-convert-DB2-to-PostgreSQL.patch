@@ -1,0 +1,67 @@
+From e60a2e10f6b5010f4e3bf2f5205026c41dad5efd Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 08:30:42 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted SQL queries from DB2 to PostgreSQL syntax
+---
+ .../monitoring/ErrorMonitoringDAOBean.java    | 22 +++++++++----------
+ 1 file changed, 11 insertions(+), 11 deletions(-)
+
+diff --git a/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java b/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java
+index 4c16d05..9bfd60a 100644
+--- a/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java
++++ b/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java
+@@ -51,38 +51,38 @@ public class ErrorMonitoringDAOBean implements javax.ejb.SessionBean {
+     private static final String CONTEXT = "Admin";
+ 
+     /** The Constant SELECT_ALL. */
+-    private static final String SELECT_ALL = "SELECT.ERRORCONFIG.ALL";
++    private static final String SELECT_ALL = "SELECT ERRORCONFIG.ALL";
+ 
+     /** The Constant UPDATE_ERROR_CONFIG. */
+-    private static final String UPDATE_ERROR_CONFIG = "UPDATE.ERRORCONFIG";
++    private static final String UPDATE_ERROR_CONFIG = "UPDATE ERRORCONFIG";
+ 
+     /** The Constant INSERT_ERROR_CONFIG. */
+-    private static final String INSERT_ERROR_CONFIG = "INSERT.ERRORCONFIG";
++    private static final String INSERT_ERROR_CONFIG = "INSERT INTO ERRORCONFIG";
+ 
+     /** The Constant DELETE_ERROR_CONFIG. */
+-    private static final String DELETE_ERROR_CONFIG = "DELETE.ERRORCONFIG";
++    private static final String DELETE_ERROR_CONFIG = "DELETE FROM ERRORCONFIG";
+ 
+     /** The Constant GET_ERROR_CONFIG. */
+-    private static final String GET_ERROR_CONFIG = "SELECT.CONFIGS.NOTIFICATION";
++    private static final String GET_ERROR_CONFIG = "SELECT CONFIGS.NOTIFICATION";
+ 
+     // for actual error values
+     /** The Constant SELECT_ERROR_VALUE. */
+-    private static final String SELECT_ERROR_VALUE = "SELECT.ERRORVALUES";
++    private static final String SELECT_ERROR_VALUE = "SELECT ERRORVALUES";
+ 
+     /** The Constant UPDATE_ERROR_VALUES. */
+-    private static final String UPDATE_ERROR_VALUES = "UPDATE.ERRORVALUES";
++    private static final String UPDATE_ERROR_VALUES = "UPDATE ERRORVALUES";
+ 
+     /** The Constant INSERT_ERROR_VALUES. */
+-    private static final String INSERT_ERROR_VALUES = "INSERT.ERRORVALUES";
++    private static final String INSERT_ERROR_VALUES = "INSERT INTO ERRORVALUES";
+ 
+     /** The Constant SELECT_ACTUAL_ERROR_VALUES. */
+-    private static final String SELECT_ACTUAL_ERROR_VALUES = "SELECT.ACTUALERRORVALUES";
++    private static final String SELECT_ACTUAL_ERROR_VALUES = "SELECT ACTUALERRORVALUES";
+ 
+     /** The Constant GET_ACTUAL_ERRORVALUES. */
+-    private static final String GET_ACTUAL_ERRORVALUES = "SELECT.ERRORVALUES.NOTIFICATION";
++    private static final String GET_ACTUAL_ERRORVALUES = "SELECT ERRORVALUES.NOTIFICATION";
+ 
+     /** The Constant GET_HOUR_OF_LAST_RECORD. */
+-    private static final String GET_HOUR_OF_LAST_RECORD = "SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD";
++    private static final String GET_HOUR_OF_LAST_RECORD = "SELECT ERRORVALUES.HOUR.OF.LAST.RECORD";
+ 
+     /**
+      * getSessionContext.
+-- 
+2.34.1
+

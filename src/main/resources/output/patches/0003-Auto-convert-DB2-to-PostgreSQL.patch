@@ -1,0 +1,35 @@
+From 707b0cb64a7ec5f2fca65b45bc381e8b1e53e61a Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 08:30:30 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted SQL queries from DB2 to PostgreSQL syntax
+---
+ .../java/org/example/department/DepartmentRepository.java     | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/org/example/department/DepartmentRepository.java b/src/main/java/org/example/department/DepartmentRepository.java
+index cecafaf..7e89ecb 100644
+--- a/src/main/java/org/example/department/DepartmentRepository.java
++++ b/src/main/java/org/example/department/DepartmentRepository.java
+@@ -39,7 +39,7 @@ public class DepartmentRepository {
+ 
+     public List<Department> getAllDepartments() throws SQLException {
+         List<Department> departments = new ArrayList<>();
+-        String sql = "SELECT * FROM Departments";
++        String sql = "SELECT * FROM Departments;";
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+             while (rs.next()) {
+@@ -75,7 +75,7 @@ public class DepartmentRepository {
+         String sql = "SELECT d.name AS dept_name, p.name AS project_name " +
+                      "FROM Departments d " +
+                      "LEFT OUTER JOIN Projects p ON d.id = p.department_id " +
+-                     "FETCH FIRST 10 ROWS ONLY";
++                     "LIMIT 10;";
+ 
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+-- 
+2.34.1
+

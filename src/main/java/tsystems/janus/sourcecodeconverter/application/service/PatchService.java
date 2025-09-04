@@ -71,19 +71,37 @@ public class PatchService {
 
 
         for (LlmReplacementsResponse response : replacements) {
+            if (response.getFile().toLowerCase().endsWith(".xml")) {
+                System.out.println("⚠️ Skipping patch for XML file as requested: " + response.getFile());
+                continue;
+            }
+
             String branchName = "patch-branch-" + patchCounter++;
 
             patchApplierService.createAndCheckoutBranch(branchName);
 
+            String filePath = response.getFile();
+            if (filePath.contains("/target/classes/")) {
+                filePath = filePath.replace("/target/classes/", "/src/main/resources/");
+                response.setFile(filePath);
+            }
+
+            final String finalSourcePath = filePath;
             ConversionTask originalTask = originalTasks.stream()
-                    .filter(task -> task.getSink().getFilePath().equals(response.getFile()))
+                    .filter(task -> {
+                        String taskPath = task.getSink().getFilePath();
+                        String normalizedTaskPath = taskPath.contains("/target/classes/")
+                                ? taskPath.replace("/target/classes/", "/src/main/resources/")
+                                : taskPath;
+                        return normalizedTaskPath.equals(finalSourcePath);
+                    })
                     .findFirst()
-                    .orElseThrow(() -> new NoSuchElementException("Original task not found for file: " + response.getFile()));
+                    .orElseThrow(() -> new NoSuchElementException("Original task not found for file: " + finalSourcePath));
 
             patchApplierService.applyPatch(response, originalTask);
 
-            if (buildTestService.testSingleFile(response.getFile())) {
-                patchApplierService.commitChanges(response.getFile(), response.getExplanation());
+            if (buildTestService.testSingleFile(filePath)) {
+                patchApplierService.commitChanges(filePath, response.getExplanation());
                 String patchFileNameInContainer = patchApplierService.formatPatch();
 
                 if (patchFileNameInContainer != null && !patchFileNameInContainer.isBlank()) {
@@ -96,8 +114,8 @@ public class PatchService {
                     appliedPatches++;
                 }
             } else {
-                System.err.println("Compilation failed for: " + response.getFile() + ". Reverting changes.");
-                patchApplierService.revertChanges(response.getFile());
+                System.err.println("Compilation failed for: " + filePath + ". Reverting changes.");
+                patchApplierService.revertChanges(filePath);
             }
 
             patchApplierService.resetAndCleanBranch(branchName);

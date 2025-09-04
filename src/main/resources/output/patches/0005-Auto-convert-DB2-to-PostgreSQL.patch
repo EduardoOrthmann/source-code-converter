@@ -1,0 +1,37 @@
+From 2882febaf9d2c46618dd5c398322dfd21a7320c6 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 08:30:54 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted SQL queries from DB2 to PostgreSQL syntax
+---
+ .../com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java b/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java
+index 5fa9009..35703be 100644
+--- a/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java
++++ b/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java
+@@ -997,7 +997,7 @@ public class TourDB
+ //			connection = dbAccess.openConnection(Connection.TRANSACTION_READ_COMMITTED);
+             connection = dbAccess.openConnection(Connection.TRANSACTION_NONE);
+ 
+-            String sql = "SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_" + werknummer + " FROM SYSIBM.SYSDUMMY1";
++            String sql = "SELECT NEXTVAL('S0XCTM.S0XBN_BORDERONR_')" + werknummer + " FROM generate_series(1, 1)";
+             st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql);
+ 
+@@ -1054,8 +1054,8 @@ public class TourDB
+ //			connection = dbAccess.openConnection(Connection.TRANSACTION_READ_COMMITTED);
+             connection = dbAccess.openConnection(Connection.TRANSACTION_NONE);
+ 
+-            String sql = "SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES " +
+-                         "WHERE seqname = 'S0XBN_BORDERONR_" + werknummer + "'";
++            String sql = "SELECT MINVALUE, MAXVALUE FROM pg_sequences " +
++                         "WHERE sequencename = 'S0XBN_BORDERONR_'" + werknummer + "'";
+ 
+             st = connection.createStatement();
+             ResultSet res = st.executeQuery(sql);
+-- 
+2.34.1
+

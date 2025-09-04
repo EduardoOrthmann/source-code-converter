@@ -1,0 +1,74 @@
+From 0a5dd3783a35197bd7268937e0c7c4e41e66ffe2 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 08:31:06 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted SQL queries from DB2 to PostgreSQL syntax
+---
+ .../tmgmt/beladeliste/dao/BeladelisteDB.java  | 26 +++++++++----------
+ 1 file changed, 13 insertions(+), 13 deletions(-)
+
+diff --git a/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java b/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java
+index 42c7334..f64d2a5 100644
+--- a/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java
++++ b/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java
+@@ -72,43 +72,43 @@ public class BeladelisteDB implements UnresolvedFilterListener,
+     private static final String CONTEXT = "Beladeliste";
+ 
+     /** The Constant INSERT_BELADELISTE. */
+-    private static final String INSERT_BELADELISTE = "INSERT.BELADELISTE";
++    private static final String INSERT_BELADELISTE = "INSERT INTO beladeliste";
+ 
+     /** The Constant UPDATE_BELADELISTE. */
+-    private static final String UPDATE_BELADELISTE = "UPDATE.BELADELISTE";
++    private static final String UPDATE_BELADELISTE = "UPDATE beladeliste";
+ 
+     /** The Constant SELECT_BELADELISTE. */
+-    private static final String SELECT_BELADELISTE = "SELECT.BELADELISTE";
++    private static final String SELECT_BELADELISTE = "SELECT * FROM beladeliste";
+ 
+     /** The Constant SELECT_PACKSTUECK_AVIS. */
+-    private static final String SELECT_PACKSTUECK_AVIS = "SELECT.PACKSTUECK_AVIS";
++    private static final String SELECT_PACKSTUECK_AVIS = "SELECT * FROM packstueck_avis";
+ 
+     /** The Constant SELECT_LIEFERSCHEIN_AVIS. */
+-    private static final String SELECT_LIEFERSCHEIN_AVIS = "SELECT.LIEFERSCHEIN_AVIS";
++    private static final String SELECT_LIEFERSCHEIN_AVIS = "SELECT * FROM lieferchein_avis";
+ 
+     /** The Constant SELECT_PACKSTUECK_AVIS_WITH_JIS. */
+-    private static final String SELECT_PACKSTUECK_AVIS_WITH_JIS = "SELECT.PACKSTUECK_AVIS_WITH_JIS";
++    private static final String SELECT_PACKSTUECK_AVIS_WITH_JIS = "SELECT * FROM packstueck_avis WITH (jis)";
+ 
+     /** The Constant SELECT_SCANNED. */
+-    private static final String SELECT_SCANNED = "SELECT.SCANNED";
++    private static final String SELECT_SCANNED = "SELECT * FROM scanned";
+ 
+     /** The Constant INSERT_SCANNED. */
+-    private static final String INSERT_SCANNED = "INSERT.SCANNED";
++    private static final String INSERT_SCANNED = "INSERT INTO scanned";
+ 
+     /** The Constant DELETE_SCANNED. */
+-    private static final String DELETE_SCANNED = "DELETE.SCANNED";
++    private static final String DELETE_SCANNED = "DELETE FROM scanned";
+ 
+     /** The Constant INSERT_FINGERPRINT. */
+-    private static final String INSERT_FINGERPRINT = "INSERT.FINGERPRINT";
++    private static final String INSERT_FINGERPRINT = "INSERT INTO fingerprint";
+ 
+     /** The Constant SELECT_FINGERPRINT. */
+-    private static final String SELECT_FINGERPRINT = "SELECT.FINGERPRINT";
++    private static final String SELECT_FINGERPRINT = "SELECT * FROM fingerprint";
+ 
+     /** The Constant SELECT_ZOLLGUT_STATUS. */
+-    private static final String SELECT_ZOLLGUT_STATUS = "SELECT.ZOLLGUT_STATUS";
++    private static final String SELECT_ZOLLGUT_STATUS = "SELECT * FROM zollgut_status";
+ 
+     /** The Constant SELECT_SACHNUMMERN. */
+-    private static final String SELECT_SACHNUMMERN = "SELECT.SACHNUMMERN";
++    private static final String SELECT_SACHNUMMERN = "SELECT * FROM sachnummern";
+ 
+     /** The Constant BATCH_COMMIT_COUNT. */
+     private static final int BATCH_COMMIT_COUNT = 100;
+-- 
+2.34.1
+

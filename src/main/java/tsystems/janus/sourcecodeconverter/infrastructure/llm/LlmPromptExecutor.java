@@ -83,6 +83,17 @@ public class LlmPromptExecutor {
                  **Objective:**
                  Your task is to analyze a "Construction Trace" which shows how a final SQL query is built across multiple files and methods. You must analyze the code and convert it to PostgreSQL syntax, ensuring that the final SQL query remains functionally equivalent.
                 
+                 **PAY ATTENTION TO `sourceExpressionType`:**
+                    - If `sourceExpressionType` is `"String (from XML)"`, the `code` field contains the real SQL from an XML file. This is your highest priority for conversion.
+                    - If `sourceExpressionType` is `"String"`, examine the `code` value. If it contains SQL keywords, convert it. If it is a key (like `"SELECT.BELADELISTE"`), ignore it completely and do not include it in your output.
+
+                 **DON'T CHANGE VARIABLES OR PLACEHOLDERS:**
+                    - Maintain all variable names, placeholders (like `?`), and concatenation logic as is. Only change the SQL syntax.
+
+                **DON'T CHANGE CONSTANTS IF THEY ARE NOT SQL:**
+                    - If a constant does not contain a syntactically relevant SQL part, do not change it.
+                    - For example, do not change `private static final String SELECT_ALL = "SELECT.ERRORCONFIG.ALL";` because it is just a key.
+                
                  **Global Conversion Context:**
                  - Source DB: DB2 LUW
                  - Target DB: PostgreSQL 14+
