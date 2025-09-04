@@ -4,6 +4,8 @@ import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
@@ -112,15 +114,25 @@ public class DockerContainerManager {
     }
 
     public void writeFileToContainer(String containerName, String workDir, String filePathInContainer, String content) throws IOException, InterruptedException {
-        String base64Content = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
+        Path tempFile = null;
+        try {
+            tempFile = Files.createTempFile("temp-patch-", ".java");
 
-        String command = String.format("echo \"$1\" | base64 --decode > %s", filePathInContainer);
+            Files.writeString(tempFile, content, StandardCharsets.UTF_8);
 
-        executeCommandInContainer(
-                containerName,
-                workDir,
-                List.of("bash", "-c", command, "--", base64Content),
-                System.out::println
-        );
+            String containerDestination = containerName + ":" + filePathInContainer;
+            commandExecutor.execute(
+                    List.of("docker", "cp", tempFile.toAbsolutePath().toString(), containerDestination),
+                    System.out::println
+            );
+        } finally {
+            if (tempFile != null) {
+                try {
+                    Files.deleteIfExists(tempFile);
+                } catch (IOException e) {
+                    System.err.println("Warning: Failed to delete temporary file: " + tempFile.toAbsolutePath());
+                }
+            }
+        }
     }
 }

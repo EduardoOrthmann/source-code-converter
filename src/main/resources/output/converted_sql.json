@@ -120,7 +120,7 @@
       "endLine" : 54,
       "endColumn" : 69
     },
-    "convertedCode" : "\"SELECT ERRORCONFIG.*\""
+    "convertedCode" : "\"SELECT * FROM error_config\""
   }, {
     "location" : {
       "startLine" : 57,
@@ -128,7 +128,7 @@
       "endLine" : 57,
       "endColumn" : 74
     },
-    "convertedCode" : "\"UPDATE ERRORCONFIG SET \""
+    "convertedCode" : "\"UPDATE error_config SET ...\""
   }, {
     "location" : {
       "startLine" : 60,
@@ -136,7 +136,7 @@
       "endLine" : 60,
       "endColumn" : 74
     },
-    "convertedCode" : "\"INSERT INTO ERRORCONFIG (\""
+    "convertedCode" : "\"INSERT INTO error_config (...) VALUES (...)\""
   }, {
     "location" : {
       "startLine" : 63,
@@ -144,7 +144,7 @@
       "endLine" : 63,
       "endColumn" : 74
     },
-    "convertedCode" : "\"DELETE FROM ERRORCONFIG \""
+    "convertedCode" : "\"DELETE FROM error_config ...\""
   }, {
     "location" : {
       "startLine" : 66,
@@ -152,7 +152,7 @@
       "endLine" : 66,
       "endColumn" : 80
     },
-    "convertedCode" : "\"SELECT * FROM CONFIGS_NOTIFICATION\""
+    "convertedCode" : "\"SELECT * FROM configs WHERE type = 'notification'\""
   }, {
     "location" : {
       "startLine" : 70,
@@ -160,7 +160,7 @@
       "endLine" : 70,
       "endColumn" : 73
     },
-    "convertedCode" : "\"SELECT * FROM ERRORVALUES\""
+    "convertedCode" : "\"SELECT * FROM error_values\""
   }, {
     "location" : {
       "startLine" : 73,
@@ -168,7 +168,7 @@
       "endLine" : 73,
       "endColumn" : 74
     },
-    "convertedCode" : "\"UPDATE ERRORVALUES SET \""
+    "convertedCode" : "\"UPDATE error_values SET ...\""
   }, {
     "location" : {
       "startLine" : 76,
@@ -176,7 +176,7 @@
       "endLine" : 76,
       "endColumn" : 74
     },
-    "convertedCode" : "\"INSERT INTO ERRORVALUES (\""
+    "convertedCode" : "\"INSERT INTO error_values (...) VALUES (...)\""
   }, {
     "location" : {
       "startLine" : 79,
@@ -184,7 +184,7 @@
       "endLine" : 79,
       "endColumn" : 87
     },
-    "convertedCode" : "\"SELECT * FROM ACTUAL_ERRORVALUES\""
+    "convertedCode" : "\"SELECT * FROM actual_error_values\""
   }, {
     "location" : {
       "startLine" : 82,
@@ -192,7 +192,7 @@
       "endLine" : 82,
       "endColumn" : 90
     },
-    "convertedCode" : "\"SELECT * FROM ERRORVALUES_NOTIFICATION\""
+    "convertedCode" : "\"SELECT * FROM error_values WHERE type = 'notification'\""
   }, {
     "location" : {
       "startLine" : 85,
@@ -200,11 +200,11 @@
       "endLine" : 85,
       "endColumn" : 98
     },
-    "convertedCode" : "\"SELECT * FROM ERRORVALUES_HOUR_OF_LAST_RECORD\""
+    "convertedCode" : "\"SELECT EXTRACT(HOUR FROM last_record) FROM error_values\""
   } ]
 }, {
   "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-  "explanation" : "Converted SQL queries from DB2 to PostgreSQL syntax",
+  "explanation" : "Converted DB2 SQL queries to PostgreSQL syntax",
   "replacements" : [ {
     "location" : {
       "startLine" : 1057,
@@ -220,7 +220,7 @@
       "endLine" : 1000,
       "endColumn" : 109
     },
-    "convertedCode" : "\" FROM generate_series\""
+    "convertedCode" : "\" FROM generate_series(1, 1)\""
   }, {
     "location" : {
       "startLine" : 1000,
@@ -260,7 +260,7 @@
       "endLine" : 69,
       "endColumn" : 77
     },
-    "convertedCode" : "\"SELECT * FROM TOUR WHERE id = ?\""
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE ID = ?\""
   }, {
     "location" : {
       "startLine" : 70,
@@ -276,7 +276,7 @@
       "endLine" : 71,
       "endColumn" : 83
     },
-    "convertedCode" : "\"SELECT * FROM TOUR WHERE status = ?\""
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE STATUS = ?\""
   }, {
     "location" : {
       "startLine" : 72,
@@ -284,7 +284,7 @@
       "endLine" : 72,
       "endColumn" : 98
     },
-    "convertedCode" : "\"SELECT * FROM TOUR WHERE timeframe_group = ?\""
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE TIME_FRAME_GROUP = ?\""
   }, {
     "location" : {
       "startLine" : 73,
@@ -292,7 +292,7 @@
       "endLine" : 73,
       "endColumn" : 87
     },
-    "convertedCode" : "\"SELECT nextval('S0XCTM.S0XRTOUR_TOUR_SEQ')\""
+    "convertedCode" : "\"SELECT nextval('TOUR_ID_SEQ')\""
   }, {
     "location" : {
       "startLine" : 74,
@@ -300,7 +300,7 @@
       "endLine" : 74,
       "endColumn" : 85
     },
-    "convertedCode" : "\"SELECT * FROM TOUR WHERE zeitfenster = ?\""
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE TIME_FRAME = ?\""
   }, {
     "location" : {
       "startLine" : 75,
@@ -316,7 +316,7 @@
       "endLine" : 78,
       "endColumn" : 81
     },
-    "convertedCode" : "\"SELECT * FROM LOKATION WHERE werknr = ?\""
+    "convertedCode" : "\"SELECT * FROM LOKATION WHERE WERKNUMMER = ?\""
   }, {
     "location" : {
       "startLine" : 80,
@@ -324,7 +324,7 @@
       "endLine" : 80,
       "endColumn" : 92
     },
-    "convertedCode" : "\"SELECT * FROM KOORDINATEN WHERE lokation = ?\""
+    "convertedCode" : "\"SELECT * FROM KOORDINATEN WHERE LOKATION = ?\""
   }, {
     "location" : {
       "startLine" : 1117,
@@ -332,7 +332,7 @@
       "endLine" : 1117,
       "endColumn" : 83
     },
-    "convertedCode" : "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE creation_time < $1\""
+    "convertedCode" : "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < $1\""
   } ]
 }, {
   "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
@@ -344,7 +344,7 @@
       "endLine" : 75,
       "endColumn" : 73
     },
-    "convertedCode" : "\"INSERT INTO beladeliste\""
+    "convertedCode" : "\"INSERT INTO Beladeliste\""
   }, {
     "location" : {
       "startLine" : 78,
@@ -352,7 +352,7 @@
       "endLine" : 78,
       "endColumn" : 73
     },
-    "convertedCode" : "\"UPDATE beladeliste\""
+    "convertedCode" : "\"UPDATE Beladeliste SET\""
   }, {
     "location" : {
       "startLine" : 81,
@@ -360,7 +360,7 @@
       "endLine" : 81,
       "endColumn" : 73
     },
-    "convertedCode" : "\"SELECT * FROM beladeliste\""
+    "convertedCode" : "\"SELECT * FROM Beladeliste\""
   }, {
     "location" : {
       "startLine" : 84,
@@ -368,7 +368,7 @@
       "endLine" : 84,
       "endColumn" : 81
     },
-    "convertedCode" : "\"SELECT * FROM packstueck_avis\""
+    "convertedCode" : "\"SELECT * FROM Packstueck_Avis\""
   }, {
     "location" : {
       "startLine" : 87,
@@ -376,7 +376,7 @@
       "endLine" : 87,
       "endColumn" : 85
     },
-    "convertedCode" : "\"SELECT * FROM lieferchein_avis\""
+    "convertedCode" : "\"SELECT * FROM Lieferschein_Avis\""
   }, {
     "location" : {
       "startLine" : 90,
@@ -384,7 +384,7 @@
       "endLine" : 90,
       "endColumn" : 99
     },
-    "convertedCode" : "\"SELECT * FROM packstueck_avis_with_jis\""
+    "convertedCode" : "\"SELECT * FROM Packstueck_Avis WITH (JIS)\""
   }, {
     "location" : {
       "startLine" : 93,
@@ -392,7 +392,7 @@
       "endLine" : 93,
       "endColumn" : 65
     },
-    "convertedCode" : "\"SELECT * FROM scanned\""
+    "convertedCode" : "\"SELECT * FROM Scanned\""
   }, {
     "location" : {
       "startLine" : 96,
@@ -400,7 +400,7 @@
       "endLine" : 96,
       "endColumn" : 65
     },
-    "convertedCode" : "\"INSERT INTO scanned\""
+    "convertedCode" : "\"INSERT INTO Scanned\""
   }, {
     "location" : {
       "startLine" : 99,
@@ -408,7 +408,7 @@
       "endLine" : 99,
       "endColumn" : 65
     },
-    "convertedCode" : "\"DELETE FROM scanned\""
+    "convertedCode" : "\"DELETE FROM Scanned\""
   }, {
     "location" : {
       "startLine" : 102,
@@ -416,7 +416,7 @@
       "endLine" : 102,
       "endColumn" : 73
     },
-    "convertedCode" : "\"INSERT INTO fingerprint\""
+    "convertedCode" : "\"INSERT INTO Fingerprint\""
   }, {
     "location" : {
       "startLine" : 105,
@@ -424,7 +424,7 @@
       "endLine" : 105,
       "endColumn" : 73
     },
-    "convertedCode" : "\"SELECT * FROM fingerprint\""
+    "convertedCode" : "\"SELECT * FROM Fingerprint\""
   }, {
     "location" : {
       "startLine" : 108,
@@ -432,7 +432,7 @@
       "endLine" : 108,
       "endColumn" : 79
     },
-    "convertedCode" : "\"SELECT * FROM zollgut_status\""
+    "convertedCode" : "\"SELECT * FROM Zollgut_Status\""
   }, {
     "location" : {
       "startLine" : 111,
@@ -440,6 +440,6 @@
       "endLine" : 111,
       "endColumn" : 73
     },
-    "convertedCode" : "\"SELECT * FROM sachnummern\""
+    "convertedCode" : "\"SELECT * FROM Sachnummern\""
   } ]
 } ]

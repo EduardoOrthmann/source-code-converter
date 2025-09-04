@@ -88,10 +88,11 @@ public class PatchService {
 
                 if (patchFileNameInContainer != null && !patchFileNameInContainer.isBlank()) {
                     String containerSrcPath = dockerConfig.getContainerProjectPath() + "/" + patchFileNameInContainer;
-                    String hostDestPath = patchesDir.resolve(patchFileNameInContainer).toString();
+                    String uniquePatchName = String.format("%04d-%s", (patchCounter - 1), patchFileNameInContainer.substring(5));
+                    String hostDestPath = patchesDir.resolve(uniquePatchName).toString();
 
                     dockerContainerManager.copyFileFromContainer(dockerConfig.getContainerName(), containerSrcPath, hostDestPath);
-                    System.out.println("✅ Successfully created patch: " + patchFileNameInContainer);
+                    System.out.println("✅ Successfully created patch: " + uniquePatchName);
                     appliedPatches++;
                 }
             } else {

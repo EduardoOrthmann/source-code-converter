@@ -29,7 +29,7 @@ public class PatchApplierService {
         String workDir = dockerConfig.getContainerProjectPath();
 
         String originalFileContent = containerManager.readFileFromContainer(containerName, workDir, filePathInContainer);
-        String modifiedFileContent = originalFileContent.replace("\\r\\n", "\n");
+        String modifiedFileContent = originalFileContent.replace("\r\n", "\n");
 
         for (LlmReplacement replacement : llmResponse.getReplacements()) {
             Optional<ConversionUnit.Component> originalComponentOpt = originalTask.getConversionUnits().stream()
@@ -40,7 +40,7 @@ public class PatchApplierService {
 
             if (originalComponentOpt.isPresent()) {
                 String originalCode = originalComponentOpt.get().getCode();
-                String normalizedOriginalCode = originalCode.replace("\\r\\n", "\n");
+                String normalizedOriginalCode = originalCode.replace("\r\n", "\n");
                 String convertedCode = replacement.getConvertedCode();
 
                 if (modifiedFileContent.contains(normalizedOriginalCode)) {
@@ -54,7 +54,7 @@ public class PatchApplierService {
             }
         }
 
-        if (!originalFileContent.replaceAll("\\r\\n", "\n").equals(modifiedFileContent)) {
+        if (!originalFileContent.replaceAll("\r\n", "\n").equals(modifiedFileContent)) {
             System.out.println("Writing patched file back to container: " + filePathInContainer);
             containerManager.writeFileToContainer(containerName, workDir, filePathInContainer, modifiedFileContent);
         } else {
