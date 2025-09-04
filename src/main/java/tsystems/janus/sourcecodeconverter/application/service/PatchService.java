@@ -67,8 +67,14 @@ public class PatchService {
         }
 
         int appliedPatches = 0;
+        int patchCounter = 1;
+
 
         for (LlmReplacementsResponse response : replacements) {
+            String branchName = "patch-branch-" + patchCounter++;
+
+            patchApplierService.createAndCheckoutBranch(branchName);
+
             ConversionTask originalTask = originalTasks.stream()
                     .filter(task -> task.getSink().getFilePath().equals(response.getFile()))
                     .findFirst()
@@ -92,6 +98,8 @@ public class PatchService {
                 System.err.println("Compilation failed for: " + response.getFile() + ". Reverting changes.");
                 patchApplierService.revertChanges(response.getFile());
             }
+
+            patchApplierService.resetAndCleanBranch(branchName);
         }
 
         // Uncomment the following lines if you want to perform a full project build after applying all patches

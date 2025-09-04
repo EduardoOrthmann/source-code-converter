@@ -28,8 +28,8 @@ public class PatchApplierService {
         String filePathInContainer = llmResponse.getFile();
         String workDir = dockerConfig.getContainerProjectPath();
 
-        String originalFileContent = containerManager.readFileFromContainer(containerName, workDir, filePathInContainer).replace("\\r\\n", "\n");
-        String modifiedFileContent = originalFileContent;
+        String originalFileContent = containerManager.readFileFromContainer(containerName, workDir, filePathInContainer);
+        String modifiedFileContent = originalFileContent.replace("\\r\\n", "\n");
 
         for (LlmReplacement replacement : llmResponse.getReplacements()) {
             Optional<ConversionUnit.Component> originalComponentOpt = originalTask.getConversionUnits().stream()
@@ -39,11 +39,12 @@ public class PatchApplierService {
                     .findFirst();
 
             if (originalComponentOpt.isPresent()) {
-                String originalCode = originalComponentOpt.get().getCode().replace("\\r\\n", "\n");
+                String originalCode = originalComponentOpt.get().getCode();
+                String normalizedOriginalCode = originalCode.replace("\\r\\n", "\n");
                 String convertedCode = replacement.getConvertedCode();
 
-                if (modifiedFileContent.contains(originalCode)) {
-                    modifiedFileContent = modifiedFileContent.replace(originalCode, convertedCode);
+                if (modifiedFileContent.contains(normalizedOriginalCode)) {
+                    modifiedFileContent = modifiedFileContent.replace(normalizedOriginalCode, convertedCode);
                     System.out.println("Queued replacement for: " + originalCode.substring(0, Math.min(originalCode.length(), 50)) + "...");
                 } else {
                     System.err.println("Could not find code block in file content. Skipping replacement.");
@@ -53,9 +54,8 @@ public class PatchApplierService {
             }
         }
 
-        if (!originalFileContent.equals(modifiedFileContent)) {
+        if (!originalFileContent.replaceAll("\\r\\n", "\n").equals(modifiedFileContent)) {
             System.out.println("Writing patched file back to container: " + filePathInContainer);
-            System.out.println("--- Modified Content ---\n" + modifiedFileContent + "\n--- End of Modified Content ---");
             containerManager.writeFileToContainer(containerName, workDir, filePathInContainer, modifiedFileContent);
         } else {
             System.out.println("No changes were applied to the file.");
@@ -113,5 +113,20 @@ public class PatchApplierService {
         }
 
         return patchFileName;
+    }
+
+    public void createAndCheckoutBranch(String branchName) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "checkout", "-b", branchName), System.out::println);
+        System.out.println("Created and switched to new branch: " + branchName);
+    }
+
+    public void resetAndCleanBranch(String branchName) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "checkout", "main"), System.out::println);
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "branch", "-D", branchName), System.out::println);
+        System.out.println("Reset to main and deleted temporary branch: " + branchName);
     }
 }
