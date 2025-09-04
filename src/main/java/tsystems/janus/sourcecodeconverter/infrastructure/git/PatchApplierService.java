@@ -1,7 +1,7 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.git;
 
 import org.springframework.stereotype.Service;
-import tsystems.janus.sourcecodeconverter.domain.model.ConstructionStep;
+import tsystems.janus.sourcecodeconverter.domain.model.ConversionUnit;
 import tsystems.janus.sourcecodeconverter.domain.model.ConversionTask;
 import tsystems.janus.sourcecodeconverter.domain.model.LlmReplacement;
 import tsystems.janus.sourcecodeconverter.domain.model.LlmReplacementsResponse;
@@ -28,29 +28,37 @@ public class PatchApplierService {
         String filePathInContainer = llmResponse.getFile();
         String workDir = dockerConfig.getContainerProjectPath();
 
+        String originalFileContent = containerManager.readFileFromContainer(containerName, workDir, filePathInContainer).replace("\\r\\n", "\n");
+        String modifiedFileContent = originalFileContent;
+
         for (LlmReplacement replacement : llmResponse.getReplacements()) {
-            Optional<ConstructionStep> originalStepOpt = originalTask.getConstructionTrace().stream()
-                    .filter(step -> step.getBlockId().equals(replacement.getBlockId()))
+            Optional<ConversionUnit.Component> originalComponentOpt = originalTask.getConversionUnits().stream()
+                    .flatMap(unit -> unit.getComponents().stream())
+                    .filter(component -> component.getLocation().getStartLine() == replacement.getLocation().getStartLine() &&
+                                         component.getLocation().getStartColumn() == replacement.getLocation().getStartColumn())
                     .findFirst();
 
-            if (originalStepOpt.isPresent()) {
-                String originalCode = originalStepOpt.get().getCodeSnippet();
+            if (originalComponentOpt.isPresent()) {
+                String originalCode = originalComponentOpt.get().getCode().replace("\\r\\n", "\n");
                 String convertedCode = replacement.getConvertedCode();
-                String blockId = replacement.getBlockId();
-                int lineNumber = Integer.parseInt(blockId.substring(blockId.lastIndexOf('_') + 1));
 
-                String commandToExecute = String.format("sed -i '%ds#%s#%s#' %s",
-                        lineNumber,
-                        escapeSed(originalCode),
-                        escapeSed(convertedCode),
-                        filePathInContainer);
-
-                containerManager.executeCommandInContainer(containerName, workDir, List.of("bash", "-c", commandToExecute), System.out::println);
-
-                System.out.println("Replaced with: " + convertedCode);
+                if (modifiedFileContent.contains(originalCode)) {
+                    modifiedFileContent = modifiedFileContent.replace(originalCode, convertedCode);
+                    System.out.println("Queued replacement for: " + originalCode.substring(0, Math.min(originalCode.length(), 50)) + "...");
+                } else {
+                    System.err.println("Could not find code block in file content. Skipping replacement.");
+                }
             } else {
-                System.err.println("Could not find original code for blockId: " + replacement.getBlockId());
+                System.err.println("Could not find original code for blockId: " + replacement.getLocation());
             }
+        }
+
+        if (!originalFileContent.equals(modifiedFileContent)) {
+            System.out.println("Writing patched file back to container: " + filePathInContainer);
+            System.out.println("--- Modified Content ---\n" + modifiedFileContent + "\n--- End of Modified Content ---");
+            containerManager.writeFileToContainer(containerName, workDir, filePathInContainer, modifiedFileContent);
+        } else {
+            System.out.println("No changes were applied to the file.");
         }
     }
 
@@ -76,6 +84,21 @@ public class PatchApplierService {
         System.out.println("Committed changes for: " + relativePath);
     }
 
+    public void commit(String filePath, String message) throws IOException, InterruptedException {
+        String containerName = dockerConfig.getContainerName();
+        String workDir = dockerConfig.getContainerProjectPath();
+        String relativePath = filePath.replace(workDir + "/", "");
+
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "config", "user.email", "conversion-bot@example.com"), s -> {
+        });
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "config", "user.name", "Conversion Bot"), s -> {
+        });
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "add", relativePath), System.out::println);
+        containerManager.executeCommandInContainer(containerName, workDir, List.of("git", "commit", "-m", message), System.out::println);
+        System.out.println("Committed changes for: " + relativePath);
+    }
+
+
     public String formatPatch() throws IOException, InterruptedException {
         String containerName = dockerConfig.getContainerName();
         String workDir = dockerConfig.getContainerProjectPath();
@@ -90,17 +113,5 @@ public class PatchApplierService {
         }
 
         return patchFileName;
-    }
-
-    private String escapeSed(String text) {
-        return text.replace("#", "\\#")
-                .replace("\"", "\\\"")
-                .replace("&", "\\&")
-                .replace("*", "\\*")
-                .replace("?", "\\?")
-                .replace(".", "\\.")
-                .replace("[", "\\[")
-                .replace("]", "\\]")
-                .replace("|", "\\|");
     }
 }

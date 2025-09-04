@@ -1,6 +1,7 @@
 package tsystems.janus.sourcecodeconverter.infrastructure.docker;
 
 import org.springframework.stereotype.Component;
+import tsystems.janus.sourcecodeconverter.infrastructure.git.PatchApplierService;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,12 +16,14 @@ public class CodeQLDockerAnalysisRunner {
     private final DockerContainerManager containerManager;
     private final DockerShutdown dockerShutdown;
     private final CodeQLDockerConfig config;
+    private final PatchApplierService patchApplierService;
 
-    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, DockerShutdown dockerShutdown, CodeQLDockerConfig config) {
+    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, DockerShutdown dockerShutdown, CodeQLDockerConfig config, PatchApplierService patchApplierService) {
         this.imageBuilder = imageBuilder;
         this.containerManager = containerManager;
         this.dockerShutdown = dockerShutdown;
         this.config = config;
+        this.patchApplierService = patchApplierService;
     }
 
     public String prepareAnalysisEnvironment(File projectDir, File qlFile, File outputDir, Consumer<String> logConsumer) throws IOException, InterruptedException {
@@ -54,6 +57,9 @@ public class CodeQLDockerAnalysisRunner {
                     List.of("bash", "-c", command),
                     logConsumer
             );
+
+            patchApplierService.commit(config.getContainerProjectPath(), "Add .gitattributes to normalize line endings");
+
             logConsumer.accept("✅ .gitattributes file created successfully.");
         } catch (Exception e) {
             logConsumer.accept("⚠️ Could not create .gitattributes file. Patches may have line ending issues.");

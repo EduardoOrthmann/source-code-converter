@@ -23,8 +23,18 @@ public class BuildTestService {
         String relativePath = filePath.replace(workDir + "/", "");
 
         try {
+            System.out.println("==========================================================");
+            System.out.println("🔬 INSPECTING FILE CONTENT INSIDE CONTAINER BEFORE BUILD  🔬");
+            System.out.println("File: " + relativePath);
+            System.out.println("----------------------------------------------------------");
+            // This command will print the file's true content as the container sees it
+            containerManager.executeCommandInContainer(containerName, workDir, List.of("cat", relativePath), System.out::println);
+            System.out.println("==========================================================");
+
             System.out.println("🧪 Starting Maven compilation test for: " + relativePath);
             String mavenCommand = String.format("mvn compiler:compile -Dmaven.compiler.includes=%s", relativePath);
+
+            System.out.println("Executing command: " + mavenCommand + " for file: " + relativePath);
 
             containerManager.executeCommandInContainer(containerName, workDir, List.of("bash", "-c", mavenCommand), System.out::println);
             System.out.println("✅ Maven compilation successful for: " + relativePath);

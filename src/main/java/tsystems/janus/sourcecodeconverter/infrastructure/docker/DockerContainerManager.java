@@ -3,7 +3,9 @@ package tsystems.janus.sourcecodeconverter.infrastructure.docker;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -93,6 +95,31 @@ public class DockerContainerManager {
 
         commandExecutor.execute(
                 List.of("docker", "cp", containerName + ":" + containerPath, hostPath),
+                System.out::println
+        );
+    }
+
+    public String readFileFromContainer(String containerName, String workDir, String filePathInContainer) throws IOException, InterruptedException {
+        StringBuilder contentBuilder = new StringBuilder();
+
+        String output = executeCommandInContainerAndCaptureOutput(
+                containerName,
+                workDir,
+                List.of("cat", filePathInContainer)
+        );
+        contentBuilder.append(output);
+        return contentBuilder.toString();
+    }
+
+    public void writeFileToContainer(String containerName, String workDir, String filePathInContainer, String content) throws IOException, InterruptedException {
+        String base64Content = Base64.getEncoder().encodeToString(content.getBytes(StandardCharsets.UTF_8));
+
+        String command = String.format("echo \"$1\" | base64 --decode > %s", filePathInContainer);
+
+        executeCommandInContainer(
+                containerName,
+                workDir,
+                List.of("bash", "-c", command, "--", base64Content),
                 System.out::println
         );
     }

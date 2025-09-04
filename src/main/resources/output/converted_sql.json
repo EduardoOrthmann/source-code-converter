@@ -1,147 +1,445 @@
 [ {
-  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing FETCH FIRST with LIMIT, and adjusting sequence and table names to match PostgreSQL conventions.",
-  "replacements" : [ {
-    "blockId" : "DELETETOURS_BLOCK_1117",
-    "convertedCode" : "DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < $1"
-  }, {
-    "blockId" : "GETBORDERONUMMERGENERATIONINTERVAL_BLOCK_1057",
-    "convertedCode" : "SELECT MINVALUE, MAXVALUE FROM information_schema.sequences WHERE sequencename = 'S0XBN_BORDERONR_'"
-  }, {
-    "blockId" : "GETNEWBORDERONUMMER_BLOCK_1000",
-    "convertedCode" : "FROM generate_series(1, 1)"
-  }, {
-    "blockId" : "GETNEWBORDERONUMMER_BLOCK_1000",
-    "convertedCode" : "SELECT NEXTVAL('S0XCTM.S0XBN_BORDERONR_')"
-  } ]
-}, {
-  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing table names to match PostgreSQL conventions.",
-  "replacements" : [ {
-    "blockId" : "<CLINIT>_BLOCK_75",
-    "convertedCode" : "INSERT INTO BELADELISTE"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_78",
-    "convertedCode" : "UPDATE BELADELISTE"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_81",
-    "convertedCode" : "SELECT * FROM BELADELISTE"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_84",
-    "convertedCode" : "SELECT * FROM PACKSTUECK_AVIS"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_87",
-    "convertedCode" : "SELECT * FROM LIEFERSCHEIN_AVIS"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_90",
-    "convertedCode" : "SELECT * FROM PACKSTUECK_AVIS_WITH_JIS"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_93",
-    "convertedCode" : "SELECT * FROM SCANNED"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_96",
-    "convertedCode" : "INSERT INTO SCANNED"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_99",
-    "convertedCode" : "DELETE FROM SCANNED"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_102",
-    "convertedCode" : "INSERT INTO FINGERPRINT"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_105",
-    "convertedCode" : "SELECT * FROM FINGERPRINT"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_108",
-    "convertedCode" : "SELECT * FROM ZOLLGUT_STATUS"
-  }, {
-    "blockId" : "<CLINIT>_BLOCK_111",
-    "convertedCode" : "SELECT * FROM SACHNUMMERN"
-  } ]
-}, {
-  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters.",
-  "replacements" : [ {
-    "blockId" : "ADDPROJECT_BLOCK_15",
-    "convertedCode" : "INSERT INTO Projects (name, department_id) VALUES ($1, $2)"
-  } ]
-}, {
-  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters and FETCH FIRST with LIMIT.",
-  "replacements" : [ {
-    "blockId" : "DELETEDEPARTMENT_BLOCK_67",
-    "convertedCode" : "DELETE FROM Departments WHERE id = $1"
-  }, {
-    "blockId" : "GETDEPARTMENTBYID_BLOCK_24",
-    "convertedCode" : "SELECT * FROM Departments WHERE id = $1"
-  }, {
-    "blockId" : "UPDATEDEPARTMENT_BLOCK_57",
-    "convertedCode" : "UPDATE Departments SET name = $1, location = $2 WHERE id = $3"
-  }, {
-    "blockId" : "LISTDEPARTMENTSWITHPROJECTS_BLOCK_75",
-    "convertedCode" : "SELECT d.name AS dept_name, p.name AS project_name FROM Departments d LEFT OUTER JOIN Projects p ON d.id = p.department_id LIMIT 10"
-  } ]
-}, {
-  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-  "explanation" : "No changes needed.",
-  "replacements" : [ {
-    "blockId" : "GETALLPROJECTS_BLOCK_25",
-    "convertedCode" : "SELECT * FROM Projects"
-  } ]
-}, {
   "file" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing parameter markers with PostgreSQL-style parameters and FETCH FIRST with LIMIT.",
+  "explanation" : "Converted DB2 SQL queries to PostgreSQL syntax",
   "replacements" : [ {
-    "blockId" : "ADDEMPLOYEE_BLOCK_17",
-    "convertedCode" : "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES ($1, $2, $3, $4)"
+    "location" : {
+      "startLine" : 47,
+      "startColumn" : 22,
+      "endLine" : 47,
+      "endColumn" : 78
+    },
+    "convertedCode" : "\"SELECT * FROM Employees LIMIT 5\""
   }, {
-    "blockId" : "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
-    "convertedCode" : "SELECT * FROM Employees LIMIT 5"
+    "location" : {
+      "startLine" : 17,
+      "startColumn" : 22,
+      "endLine" : 17,
+      "endColumn" : 111
+    },
+    "convertedCode" : "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES ($1, $2, $3, $4)\""
   }, {
-    "blockId" : "GETALLEMPLOYEES_BLOCK_29",
-    "convertedCode" : "SELECT * FROM Employees"
+    "location" : {
+      "startLine" : 29,
+      "startColumn" : 22,
+      "endLine" : 29,
+      "endColumn" : 46
+    },
+    "convertedCode" : "\"SELECT * FROM Employees\""
   } ]
 }, {
   "file" : "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing FETCH FIRST with LIMIT.",
+  "explanation" : "Converted DB2 SQL query to PostgreSQL syntax",
   "replacements" : [ {
-    "blockId" : "DOWNLOADDQMINHOUSEXMLFROMDBANDVALIDATE_BLOCK_46",
-    "convertedCode" : "SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP FROM DQM.DQMIMP_DFUE ORDER BY ID DESC LIMIT 100"
+    "location" : {
+      "startLine" : 46,
+      "startColumn" : 22,
+      "endLine" : 50,
+      "endColumn" : 46
+    },
+    "convertedCode" : "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\n                     + \"FROM DQM.DQMIMP_DFUE \"\n                     + \"ORDER BY ID DESC \"\n                     + \"LIMIT 100 \"\n                     + \"FOR SHARE\""
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/project/ProjectRepository.java",
+  "explanation" : "Converted SQL queries from DB2 to PostgreSQL syntax.",
+  "replacements" : [ {
+    "location" : {
+      "startLine" : 25,
+      "startColumn" : 22,
+      "endLine" : 25,
+      "endColumn" : 45
+    },
+    "convertedCode" : "\"SELECT * FROM Projects;\""
+  }, {
+    "location" : {
+      "startLine" : 15,
+      "startColumn" : 22,
+      "endLine" : 15,
+      "endColumn" : 79
+    },
+    "convertedCode" : "\"INSERT INTO Projects (name, department_id) VALUES ($1, $2);\""
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
+  "explanation" : "Converted SQL queries from DB2 to PostgreSQL syntax",
+  "replacements" : [ {
+    "location" : {
+      "startLine" : 57,
+      "startColumn" : 22,
+      "endLine" : 57,
+      "endColumn" : 81
+    },
+    "convertedCode" : "\"UPDATE Departments SET name = $1, location = $2 WHERE id = $3\""
+  }, {
+    "location" : {
+      "startLine" : 24,
+      "startColumn" : 22,
+      "endLine" : 24,
+      "endColumn" : 61
+    },
+    "convertedCode" : "\"SELECT * FROM Departments WHERE id = $1\""
+  }, {
+    "location" : {
+      "startLine" : 67,
+      "startColumn" : 22,
+      "endLine" : 67,
+      "endColumn" : 59
+    },
+    "convertedCode" : "\"DELETE FROM Departments WHERE id = $1\""
+  }, {
+    "location" : {
+      "startLine" : 15,
+      "startColumn" : 22,
+      "endLine" : 15,
+      "endColumn" : 77
+    },
+    "convertedCode" : "\"INSERT INTO Departments (name, location) VALUES ($1, $2)\""
+  }, {
+    "location" : {
+      "startLine" : 42,
+      "startColumn" : 22,
+      "endLine" : 42,
+      "endColumn" : 48
+    },
+    "convertedCode" : "\"SELECT * FROM Departments\""
+  }, {
+    "location" : {
+      "startLine" : 75,
+      "startColumn" : 22,
+      "endLine" : 78,
+      "endColumn" : 47
+    },
+    "convertedCode" : "\"SELECT d.name AS dept_name, p.name AS project_name \" +\n                     \"FROM Departments d \" +\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\n                     \"LIMIT 10\""
   } ]
 }, {
   "file" : "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-  "explanation" : "Converted DB2 syntax to PostgreSQL syntax, replacing table names to match PostgreSQL conventions.",
+  "explanation" : "Converted DB2 SQL queries to PostgreSQL syntax",
   "replacements" : [ {
-    "blockId" : "<CLINIT>_BLOCK_54",
-    "convertedCode" : "SELECT * FROM ERRORCONFIG"
+    "location" : {
+      "startLine" : 54,
+      "startColumn" : 46,
+      "endLine" : 54,
+      "endColumn" : 69
+    },
+    "convertedCode" : "\"SELECT * FROM error_config\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_57",
-    "convertedCode" : "UPDATE ERRORCONFIG"
+    "location" : {
+      "startLine" : 57,
+      "startColumn" : 55,
+      "endLine" : 57,
+      "endColumn" : 74
+    },
+    "convertedCode" : "\"UPDATE error_config SET ...\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_60",
-    "convertedCode" : "INSERT INTO ERRORCONFIG"
+    "location" : {
+      "startLine" : 60,
+      "startColumn" : 55,
+      "endLine" : 60,
+      "endColumn" : 74
+    },
+    "convertedCode" : "\"INSERT INTO error_config (...) VALUES (...)\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_63",
-    "convertedCode" : "DELETE FROM ERRORCONFIG"
+    "location" : {
+      "startLine" : 63,
+      "startColumn" : 55,
+      "endLine" : 63,
+      "endColumn" : 74
+    },
+    "convertedCode" : "\"DELETE FROM error_config ...\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_66",
-    "convertedCode" : "SELECT * FROM CONFIGS WHERE notification = true"
+    "location" : {
+      "startLine" : 66,
+      "startColumn" : 52,
+      "endLine" : 66,
+      "endColumn" : 80
+    },
+    "convertedCode" : "\"SELECT * FROM configs WHERE type = 'notification'\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_70",
-    "convertedCode" : "SELECT * FROM ERRORVALUES"
+    "location" : {
+      "startLine" : 70,
+      "startColumn" : 54,
+      "endLine" : 70,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"SELECT * FROM error_values\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_73",
-    "convertedCode" : "UPDATE ERRORVALUES"
+    "location" : {
+      "startLine" : 73,
+      "startColumn" : 55,
+      "endLine" : 73,
+      "endColumn" : 74
+    },
+    "convertedCode" : "\"UPDATE error_values SET ...\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_76",
-    "convertedCode" : "INSERT INTO ERRORVALUES"
+    "location" : {
+      "startLine" : 76,
+      "startColumn" : 55,
+      "endLine" : 76,
+      "endColumn" : 74
+    },
+    "convertedCode" : "\"INSERT INTO error_values (...) VALUES (...)\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_79",
-    "convertedCode" : "SELECT * FROM ACTUALERRORVALUES"
+    "location" : {
+      "startLine" : 79,
+      "startColumn" : 62,
+      "endLine" : 79,
+      "endColumn" : 87
+    },
+    "convertedCode" : "\"SELECT * FROM actual_error_values\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_82",
-    "convertedCode" : "SELECT * FROM ERRORVALUES WHERE notification = true"
+    "location" : {
+      "startLine" : 82,
+      "startColumn" : 58,
+      "endLine" : 82,
+      "endColumn" : 90
+    },
+    "convertedCode" : "\"SELECT * FROM error_values WHERE type = 'notification'\""
   }, {
-    "blockId" : "<CLINIT>_BLOCK_85",
-    "convertedCode" : "SELECT * FROM ERRORVALUES WHERE hour = (SELECT MAX(hour) FROM ERRORVALUES)"
+    "location" : {
+      "startLine" : 85,
+      "startColumn" : 59,
+      "endLine" : 85,
+      "endColumn" : 98
+    },
+    "convertedCode" : "\"SELECT EXTRACT(HOUR FROM last_record) FROM error_values\""
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
+  "explanation" : "Converted DB2 LUW SQL queries to PostgreSQL 14+ syntax",
+  "replacements" : [ {
+    "location" : {
+      "startLine" : 1057,
+      "startColumn" : 26,
+      "endLine" : 1058,
+      "endColumn" : 60
+    },
+    "convertedCode" : "\"SELECT min_value, max_value FROM information_schema.sequences \" +\n                         \"WHERE sequence_name = 'S0XBN_BORDERONR_'\""
+  }, {
+    "location" : {
+      "startLine" : 1000,
+      "startColumn" : 86,
+      "endLine" : 1000,
+      "endColumn" : 109
+    },
+    "convertedCode" : "\" FROM generate_series\""
+  }, {
+    "location" : {
+      "startLine" : 1000,
+      "startColumn" : 26,
+      "endLine" : 1000,
+      "endColumn" : 69
+    },
+    "convertedCode" : "\"SELECT nextval('S0XCTM.S0XBN_BORDERONR_')\""
+  }, {
+    "location" : {
+      "startLine" : 66,
+      "startColumn" : 61,
+      "endLine" : 66,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"INSERT INTO TOUR\""
+  }, {
+    "location" : {
+      "startLine" : 67,
+      "startColumn" : 61,
+      "endLine" : 67,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"UPDATE TOUR\""
+  }, {
+    "location" : {
+      "startLine" : 68,
+      "startColumn" : 55,
+      "endLine" : 68,
+      "endColumn" : 72
+    },
+    "convertedCode" : "\"UPDATE TOUR SET TIME\""
+  }, {
+    "location" : {
+      "startLine" : 69,
+      "startColumn" : 61,
+      "endLine" : 69,
+      "endColumn" : 77
+    },
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE ID\""
+  }, {
+    "location" : {
+      "startLine" : 70,
+      "startColumn" : 61,
+      "endLine" : 70,
+      "endColumn" : 75
+    },
+    "convertedCode" : "\"SELECT * FROM TOUR\""
+  }, {
+    "location" : {
+      "startLine" : 71,
+      "startColumn" : 61,
+      "endLine" : 71,
+      "endColumn" : 83
+    },
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE STATUS\""
+  }, {
+    "location" : {
+      "startLine" : 72,
+      "startColumn" : 68,
+      "endLine" : 72,
+      "endColumn" : 98
+    },
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE TIMEFRAMEGROUP\""
+  }, {
+    "location" : {
+      "startLine" : 73,
+      "startColumn" : 61,
+      "endLine" : 73,
+      "endColumn" : 87
+    },
+    "convertedCode" : "\"SELECT NEXTVAL('GET.NEXT_PRIMARY_KEY_TOUR')\""
+  }, {
+    "location" : {
+      "startLine" : 74,
+      "startColumn" : 61,
+      "endLine" : 74,
+      "endColumn" : 85
+    },
+    "convertedCode" : "\"SELECT * FROM TOUR WHERE ZEITFENSTER\""
+  }, {
+    "location" : {
+      "startLine" : 75,
+      "startColumn" : 58,
+      "endLine" : 75,
+      "endColumn" : 80
+    },
+    "convertedCode" : "\"SELECT * FROM BORDERONUMMERN\""
+  }, {
+    "location" : {
+      "startLine" : 78,
+      "startColumn" : 53,
+      "endLine" : 78,
+      "endColumn" : 81
+    },
+    "convertedCode" : "\"SELECT * FROM LOKATIONBYWERKNUMMER\""
+  }, {
+    "location" : {
+      "startLine" : 80,
+      "startColumn" : 63,
+      "endLine" : 80,
+      "endColumn" : 92
+    },
+    "convertedCode" : "\"SELECT * FROM KOORDINATENBYLOKATION\""
+  }, {
+    "location" : {
+      "startLine" : 1117,
+      "startColumn" : 26,
+      "endLine" : 1117,
+      "endColumn" : 83
+    },
+    "convertedCode" : "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < $1\""
+  } ]
+}, {
+  "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
+  "explanation" : "Converted SQL queries from DB2 to PostgreSQL syntax",
+  "replacements" : [ {
+    "location" : {
+      "startLine" : 75,
+      "startColumn" : 54,
+      "endLine" : 75,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"INSERT INTO Beladeliste\""
+  }, {
+    "location" : {
+      "startLine" : 78,
+      "startColumn" : 54,
+      "endLine" : 78,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"UPDATE Beladeliste SET\""
+  }, {
+    "location" : {
+      "startLine" : 81,
+      "startColumn" : 54,
+      "endLine" : 81,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"SELECT * FROM Beladeliste\""
+  }, {
+    "location" : {
+      "startLine" : 84,
+      "startColumn" : 58,
+      "endLine" : 84,
+      "endColumn" : 81
+    },
+    "convertedCode" : "\"SELECT * FROM Packstueck_Avis\""
+  }, {
+    "location" : {
+      "startLine" : 87,
+      "startColumn" : 60,
+      "endLine" : 87,
+      "endColumn" : 85
+    },
+    "convertedCode" : "\"SELECT * FROM LieferSchein_Avis\""
+  }, {
+    "location" : {
+      "startLine" : 90,
+      "startColumn" : 67,
+      "endLine" : 90,
+      "endColumn" : 99
+    },
+    "convertedCode" : "\"SELECT * FROM Packstueck_Avis_With_Jis\""
+  }, {
+    "location" : {
+      "startLine" : 93,
+      "startColumn" : 50,
+      "endLine" : 93,
+      "endColumn" : 65
+    },
+    "convertedCode" : "\"SELECT * FROM Scanned\""
+  }, {
+    "location" : {
+      "startLine" : 96,
+      "startColumn" : 50,
+      "endLine" : 96,
+      "endColumn" : 65
+    },
+    "convertedCode" : "\"INSERT INTO Scanned\""
+  }, {
+    "location" : {
+      "startLine" : 99,
+      "startColumn" : 50,
+      "endLine" : 99,
+      "endColumn" : 65
+    },
+    "convertedCode" : "\"DELETE FROM Scanned\""
+  }, {
+    "location" : {
+      "startLine" : 102,
+      "startColumn" : 54,
+      "endLine" : 102,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"INSERT INTO Fingerprint\""
+  }, {
+    "location" : {
+      "startLine" : 105,
+      "startColumn" : 54,
+      "endLine" : 105,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"SELECT * FROM Fingerprint\""
+  }, {
+    "location" : {
+      "startLine" : 108,
+      "startColumn" : 57,
+      "endLine" : 108,
+      "endColumn" : 79
+    },
+    "convertedCode" : "\"SELECT * FROM ZollGut_Status\""
+  }, {
+    "location" : {
+      "startLine" : 111,
+      "startColumn" : 54,
+      "endLine" : 111,
+      "endColumn" : 73
+    },
+    "convertedCode" : "\"SELECT * FROM SachNummern\""
   } ]
 } ]

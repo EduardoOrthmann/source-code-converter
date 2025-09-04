@@ -1,716 +1,630 @@
-[
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-      "methodName": "deleteTours",
-      "approximateEndLine": 1117
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "deleteTours",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "DELETETOURS_BLOCK_1117",
-        "codeSnippet": "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\""
-      }
-    ],
-    "inferredPreConversionSql": "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\"",
-    "supplementalContext": {
-      "sourceClassName": "TourDB"
-    }
+[ {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/employee/EmployeeRepository.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-      "methodName": "getBorderonummerGenerationInterval",
-      "approximateEndLine": 1057
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "getBorderonummerGenerationInterval",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "GETBORDERONUMMERGENERATIONINTERVAL_BLOCK_1057",
-        "codeSnippet": "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\""
+  "conversionUnits" : [ {
+    "unitId" : "EmployeeRepository.getFirstFiveEmployees",
+    "components" : [ {
+      "code" : "\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 47,
+        "startColumn" : 22,
+        "endLine" : 47,
+        "endColumn" : 78
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\"",
-    "supplementalContext": {
-      "sourceClassName": "TourDB"
-    }
+    } ]
+  }, {
+    "unitId" : "EmployeeRepository.addEmployee",
+    "components" : [ {
+      "code" : "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 17,
+        "startColumn" : 22,
+        "endLine" : 17,
+        "endColumn" : 111
+      }
+    } ]
+  }, {
+    "unitId" : "EmployeeRepository.getAllEmployees",
+    "components" : [ {
+      "code" : "\"SELECT * FROM Employees\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 29,
+        "startColumn" : 22,
+        "endLine" : 29,
+        "endColumn" : 46
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-      "methodName": "getNewBorderoNummer",
-      "approximateEndLine": 1000
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "getNewBorderoNummer",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "GETNEWBORDERONUMMER_BLOCK_1000",
-        "codeSnippet": "\" FROM SYSIBM.SYSDUMMY1\""
-      },
-      {
-        "order": 2,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "getNewBorderoNummer",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "GETNEWBORDERONUMMER_BLOCK_1000",
-        "codeSnippet": "\"SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_\""
+  "conversionUnits" : [ {
+    "unitId" : "DataValidationProcess.downloadDqmInhouseXmlFromDbAndValidate",
+    "components" : [ {
+      "code" : "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 46,
+        "startColumn" : 22,
+        "endLine" : 50,
+        "endColumn" : 46
       }
-    ],
-    "inferredPreConversionSql": "\" FROM SYSIBM.SYSDUMMY1\" \"SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_\"",
-    "supplementalContext": {
-      "sourceClassName": "TourDB"
-    }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/project/ProjectRepository.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-      "methodName": "<clinit>",
-      "approximateEndLine": 111
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_75",
-        "codeSnippet": "\"INSERT.BELADELISTE\""
-      },
-      {
-        "order": 2,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_78",
-        "codeSnippet": "\"UPDATE.BELADELISTE\""
-      },
-      {
-        "order": 3,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_81",
-        "codeSnippet": "\"SELECT.BELADELISTE\""
-      },
-      {
-        "order": 4,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_81",
-        "codeSnippet": "\"SELECT.BELADELISTE\""
-      },
-      {
-        "order": 5,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_81",
-        "codeSnippet": "\"SELECT.BELADELISTE\""
-      },
-      {
-        "order": 6,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_81",
-        "codeSnippet": "\"SELECT.BELADELISTE\""
-      },
-      {
-        "order": 7,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_81",
-        "codeSnippet": "\"SELECT.BELADELISTE\""
-      },
-      {
-        "order": 8,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_84",
-        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS\""
-      },
-      {
-        "order": 9,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_84",
-        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS\""
-      },
-      {
-        "order": 10,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_87",
-        "codeSnippet": "\"SELECT.LIEFERSCHEIN_AVIS\""
-      },
-      {
-        "order": 11,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_90",
-        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\""
-      },
-      {
-        "order": 12,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_90",
-        "codeSnippet": "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\""
-      },
-      {
-        "order": 13,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_93",
-        "codeSnippet": "\"SELECT.SCANNED\""
-      },
-      {
-        "order": 14,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_96",
-        "codeSnippet": "\"INSERT.SCANNED\""
-      },
-      {
-        "order": 15,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_99",
-        "codeSnippet": "\"DELETE.SCANNED\""
-      },
-      {
-        "order": 16,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_102",
-        "codeSnippet": "\"INSERT.FINGERPRINT\""
-      },
-      {
-        "order": 17,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_105",
-        "codeSnippet": "\"SELECT.FINGERPRINT\""
-      },
-      {
-        "order": 18,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_108",
-        "codeSnippet": "\"SELECT.ZOLLGUT_STATUS\""
-      },
-      {
-        "order": 19,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class BeladelisteDB",
-        "blockId": "<CLINIT>_BLOCK_111",
-        "codeSnippet": "\"SELECT.SACHNUMMERN\""
+  "conversionUnits" : [ {
+    "unitId" : "ProjectRepository.getAllProjects",
+    "components" : [ {
+      "code" : "\"SELECT * FROM Projects\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 25,
+        "startColumn" : 22,
+        "endLine" : 25,
+        "endColumn" : 45
       }
-    ],
-    "inferredPreConversionSql": "\"INSERT.BELADELISTE\" \"UPDATE.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.BELADELISTE\" \"SELECT.PACKSTUECK_AVIS\" \"SELECT.PACKSTUECK_AVIS\" \"SELECT.LIEFERSCHEIN_AVIS\" \"SELECT.PACKSTUECK_AVIS_WITH_JIS\" \"SELECT.PACKSTUECK_AVIS_WITH_JIS\" \"SELECT.SCANNED\" \"INSERT.SCANNED\" \"DELETE.SCANNED\" \"INSERT.FINGERPRINT\" \"SELECT.FINGERPRINT\" \"SELECT.ZOLLGUT_STATUS\" \"SELECT.SACHNUMMERN\"",
-    "supplementalContext": {
-      "sourceClassName": "BeladelisteDB"
-    }
+    } ]
+  }, {
+    "unitId" : "ProjectRepository.addProject",
+    "components" : [ {
+      "code" : "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 15,
+        "startColumn" : 22,
+        "endLine" : 15,
+        "endColumn" : 79
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/org/example/department/DepartmentRepository.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-      "methodName": "addProject",
-      "approximateEndLine": 15
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-        "methodName": "addProject",
-        "description": "SQL fragment found in class ProjectRepository",
-        "blockId": "ADDPROJECT_BLOCK_15",
-        "codeSnippet": "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\""
+  "conversionUnits" : [ {
+    "unitId" : "DepartmentRepository.updateDepartment",
+    "components" : [ {
+      "code" : "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 57,
+        "startColumn" : 22,
+        "endLine" : 57,
+        "endColumn" : 81
       }
-    ],
-    "inferredPreConversionSql": "\"INSERT INTO Projects (name, department_id) VALUES (?, ?)\"",
-    "supplementalContext": {
-      "sourceClassName": "ProjectRepository"
-    }
+    } ]
+  }, {
+    "unitId" : "DepartmentRepository.getDepartmentById",
+    "components" : [ {
+      "code" : "\"SELECT * FROM Departments WHERE id = ?\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 24,
+        "startColumn" : 22,
+        "endLine" : 24,
+        "endColumn" : 61
+      }
+    } ]
+  }, {
+    "unitId" : "DepartmentRepository.deleteDepartment",
+    "components" : [ {
+      "code" : "\"DELETE FROM Departments WHERE id = ?\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 67,
+        "startColumn" : 22,
+        "endLine" : 67,
+        "endColumn" : 59
+      }
+    } ]
+  }, {
+    "unitId" : "DepartmentRepository.addDepartment",
+    "components" : [ {
+      "code" : "\"INSERT INTO Departments (name, location) VALUES (?, ?)\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 15,
+        "startColumn" : 22,
+        "endLine" : 15,
+        "endColumn" : 77
+      }
+    } ]
+  }, {
+    "unitId" : "DepartmentRepository.getAllDepartments",
+    "components" : [ {
+      "code" : "\"SELECT * FROM Departments\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 42,
+        "startColumn" : 22,
+        "endLine" : 42,
+        "endColumn" : 48
+      }
+    } ]
+  }, {
+    "unitId" : "DepartmentRepository.listDepartmentsWithProjects",
+    "components" : [ {
+      "code" : "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 75,
+        "startColumn" : 22,
+        "endLine" : 78,
+        "endColumn" : 47
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "deleteDepartment",
-      "approximateEndLine": 67
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "deleteDepartment",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "DELETEDEPARTMENT_BLOCK_67",
-        "codeSnippet": "\"DELETE FROM Departments WHERE id = ?\""
+  "conversionUnits" : [ {
+    "unitId" : "ErrorMonitoringDAOBean.<clinit>",
+    "components" : [ {
+      "code" : "\"SELECT.ERRORCONFIG.ALL\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 54,
+        "startColumn" : 46,
+        "endLine" : 54,
+        "endColumn" : 69
       }
-    ],
-    "inferredPreConversionSql": "\"DELETE FROM Departments WHERE id = ?\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
+    }, {
+      "code" : "\"SELECT.ERRORCONFIG.ALL\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 54,
+        "startColumn" : 46,
+        "endLine" : 54,
+        "endColumn" : 69
+      }
+    }, {
+      "code" : "\"SELECT.ERRORCONFIG.ALL\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 54,
+        "startColumn" : 46,
+        "endLine" : 54,
+        "endColumn" : 69
+      }
+    }, {
+      "code" : "\"UPDATE.ERRORCONFIG\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 57,
+        "startColumn" : 55,
+        "endLine" : 57,
+        "endColumn" : 74
+      }
+    }, {
+      "code" : "\"INSERT.ERRORCONFIG\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 60,
+        "startColumn" : 55,
+        "endLine" : 60,
+        "endColumn" : 74
+      }
+    }, {
+      "code" : "\"DELETE.ERRORCONFIG\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 63,
+        "startColumn" : 55,
+        "endLine" : 63,
+        "endColumn" : 74
+      }
+    }, {
+      "code" : "\"SELECT.CONFIGS.NOTIFICATION\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 66,
+        "startColumn" : 52,
+        "endLine" : 66,
+        "endColumn" : 80
+      }
+    }, {
+      "code" : "\"SELECT.ERRORVALUES\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 70,
+        "startColumn" : 54,
+        "endLine" : 70,
+        "endColumn" : 73
+      }
+    }, {
+      "code" : "\"UPDATE.ERRORVALUES\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 73,
+        "startColumn" : 55,
+        "endLine" : 73,
+        "endColumn" : 74
+      }
+    }, {
+      "code" : "\"INSERT.ERRORVALUES\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 76,
+        "startColumn" : 55,
+        "endLine" : 76,
+        "endColumn" : 74
+      }
+    }, {
+      "code" : "\"SELECT.ACTUALERRORVALUES\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 79,
+        "startColumn" : 62,
+        "endLine" : 79,
+        "endColumn" : 87
+      }
+    }, {
+      "code" : "\"SELECT.ERRORVALUES.NOTIFICATION\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 82,
+        "startColumn" : 58,
+        "endLine" : 82,
+        "endColumn" : 90
+      }
+    }, {
+      "code" : "\"SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 85,
+        "startColumn" : 59,
+        "endLine" : 85,
+        "endColumn" : 98
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-      "methodName": "getAllProjects",
-      "approximateEndLine": 25
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/project/ProjectRepository.java",
-        "methodName": "getAllProjects",
-        "description": "SQL fragment found in class ProjectRepository",
-        "blockId": "GETALLPROJECTS_BLOCK_25",
-        "codeSnippet": "\"SELECT * FROM Projects\""
+  "conversionUnits" : [ {
+    "unitId" : "TourDB.getBorderonummerGenerationInterval",
+    "components" : [ {
+      "code" : "\"SELECT MINVALUE, MAXVALUE FROM syscat.SEQUENCES \" +\r\n                         \"WHERE seqname = 'S0XBN_BORDERONR_\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 1057,
+        "startColumn" : 26,
+        "endLine" : 1058,
+        "endColumn" : 60
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT * FROM Projects\"",
-    "supplementalContext": {
-      "sourceClassName": "ProjectRepository"
-    }
+    } ]
+  }, {
+    "unitId" : "TourDB.getNewBorderoNummer",
+    "components" : [ {
+      "code" : "\" FROM SYSIBM.SYSDUMMY1\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 1000,
+        "startColumn" : 86,
+        "endLine" : 1000,
+        "endColumn" : 109
+      }
+    }, {
+      "code" : "\"SELECT NEXTVAL FOR S0XCTM.S0XBN_BORDERONR_\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 1000,
+        "startColumn" : 26,
+        "endLine" : 1000,
+        "endColumn" : 69
+      }
+    } ]
+  }, {
+    "unitId" : "TourDB.<clinit>",
+    "components" : [ {
+      "code" : "\"INSERT.TOUR\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 66,
+        "startColumn" : 61,
+        "endLine" : 66,
+        "endColumn" : 73
+      }
+    }, {
+      "code" : "\"UPDATE.TOUR\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 67,
+        "startColumn" : 61,
+        "endLine" : 67,
+        "endColumn" : 73
+      }
+    }, {
+      "code" : "\"UPDATE.TOUR.TIME\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 68,
+        "startColumn" : 55,
+        "endLine" : 68,
+        "endColumn" : 72
+      }
+    }, {
+      "code" : "\"SELECT.TOURBYID\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 69,
+        "startColumn" : 61,
+        "endLine" : 69,
+        "endColumn" : 77
+      }
+    }, {
+      "code" : "\"SELECT.TOUREN\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 70,
+        "startColumn" : 61,
+        "endLine" : 70,
+        "endColumn" : 75
+      }
+    }, {
+      "code" : "\"SELECT.TOURENBYSTATUS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 71,
+        "startColumn" : 61,
+        "endLine" : 71,
+        "endColumn" : 83
+      }
+    }, {
+      "code" : "\"SELECT.TOURENBYTIMEFRAMEGROUP\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 72,
+        "startColumn" : 68,
+        "endLine" : 72,
+        "endColumn" : 98
+      }
+    }, {
+      "code" : "\"GET.NEXT_PRIMARY_KEY_TOUR\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 73,
+        "startColumn" : 61,
+        "endLine" : 73,
+        "endColumn" : 87
+      }
+    }, {
+      "code" : "\"SELECT.TOUR.ZEITFENSTER\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 74,
+        "startColumn" : 61,
+        "endLine" : 74,
+        "endColumn" : 85
+      }
+    }, {
+      "code" : "\"SELECT.BORDERONUMMERN\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 75,
+        "startColumn" : 58,
+        "endLine" : 75,
+        "endColumn" : 80
+      }
+    }, {
+      "code" : "\"SELECT.LOKATIONBYWERKNUMMER\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 78,
+        "startColumn" : 53,
+        "endLine" : 78,
+        "endColumn" : 81
+      }
+    }, {
+      "code" : "\"SELECT.KOORDINATENBYLOKATION\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 80,
+        "startColumn" : 63,
+        "endLine" : 80,
+        "endColumn" : 92
+      }
+    } ]
+  }, {
+    "unitId" : "TourDB.deleteTours",
+    "components" : [ {
+      "code" : "\"DELETE FROM S0XCTM.S0XRTOUR_TOUR WHERE CREATION_TIME < ?\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 1117,
+        "startColumn" : 26,
+        "endLine" : 1117,
+        "endColumn" : 83
+      }
+    } ]
+  } ]
+}, {
+  "sink" : {
+    "filePath" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java"
   },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-      "methodName": "addEmployee",
-      "approximateEndLine": 17
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-        "methodName": "addEmployee",
-        "description": "SQL fragment found in class EmployeeRepository",
-        "blockId": "ADDEMPLOYEE_BLOCK_17",
-        "codeSnippet": "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\""
+  "conversionUnits" : [ {
+    "unitId" : "BeladelisteDB.<clinit>",
+    "components" : [ {
+      "code" : "\"INSERT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 75,
+        "startColumn" : 54,
+        "endLine" : 75,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)\"",
-    "supplementalContext": {
-      "sourceClassName": "EmployeeRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "getAllDepartments",
-      "approximateEndLine": 42
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "getAllDepartments",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "GETALLDEPARTMENTS_BLOCK_42",
-        "codeSnippet": "\"SELECT * FROM Departments\""
+    }, {
+      "code" : "\"UPDATE.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 78,
+        "startColumn" : 54,
+        "endLine" : 78,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT * FROM Departments\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "addDepartment",
-      "approximateEndLine": 15
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "addDepartment",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "ADDDEPARTMENT_BLOCK_15",
-        "codeSnippet": "\"INSERT INTO Departments (name, location) VALUES (?, ?)\""
+    }, {
+      "code" : "\"SELECT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 81,
+        "startColumn" : 54,
+        "endLine" : 81,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"INSERT INTO Departments (name, location) VALUES (?, ?)\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-      "methodName": "<clinit>",
-      "approximateEndLine": 80
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_66",
-        "codeSnippet": "\"INSERT.TOUR\""
-      },
-      {
-        "order": 2,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_67",
-        "codeSnippet": "\"UPDATE.TOUR\""
-      },
-      {
-        "order": 3,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_68",
-        "codeSnippet": "\"UPDATE.TOUR.TIME\""
-      },
-      {
-        "order": 4,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_69",
-        "codeSnippet": "\"SELECT.TOURBYID\""
-      },
-      {
-        "order": 5,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_70",
-        "codeSnippet": "\"SELECT.TOUREN\""
-      },
-      {
-        "order": 6,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_71",
-        "codeSnippet": "\"SELECT.TOURENBYSTATUS\""
-      },
-      {
-        "order": 7,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_72",
-        "codeSnippet": "\"SELECT.TOURENBYTIMEFRAMEGROUP\""
-      },
-      {
-        "order": 8,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_73",
-        "codeSnippet": "\"GET.NEXT_PRIMARY_KEY_TOUR\""
-      },
-      {
-        "order": 9,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_74",
-        "codeSnippet": "\"SELECT.TOUR.ZEITFENSTER\""
-      },
-      {
-        "order": 10,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_75",
-        "codeSnippet": "\"SELECT.BORDERONUMMERN\""
-      },
-      {
-        "order": 11,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_78",
-        "codeSnippet": "\"SELECT.LOKATIONBYWERKNUMMER\""
-      },
-      {
-        "order": 12,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/tmgmt/tourenverwaltung/dao/TourDB.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class TourDB",
-        "blockId": "<CLINIT>_BLOCK_80",
-        "codeSnippet": "\"SELECT.KOORDINATENBYLOKATION\""
+    }, {
+      "code" : "\"SELECT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 81,
+        "startColumn" : 54,
+        "endLine" : 81,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"INSERT.TOUR\" \"UPDATE.TOUR\" \"UPDATE.TOUR.TIME\" \"SELECT.TOURBYID\" \"SELECT.TOUREN\" \"SELECT.TOURENBYSTATUS\" \"SELECT.TOURENBYTIMEFRAMEGROUP\" \"GET.NEXT_PRIMARY_KEY_TOUR\" \"SELECT.TOUR.ZEITFENSTER\" \"SELECT.BORDERONUMMERN\" \"SELECT.LOKATIONBYWERKNUMMER\" \"SELECT.KOORDINATENBYLOKATION\"",
-    "supplementalContext": {
-      "sourceClassName": "TourDB"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-      "methodName": "getFirstFiveEmployees",
-      "approximateEndLine": 47
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-        "methodName": "getFirstFiveEmployees",
-        "description": "SQL fragment found in class EmployeeRepository",
-        "blockId": "GETFIRSTFIVEEMPLOYEES_BLOCK_47",
-        "codeSnippet": "\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\""
+    }, {
+      "code" : "\"SELECT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 81,
+        "startColumn" : 54,
+        "endLine" : 81,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\"",
-    "supplementalContext": {
-      "sourceClassName": "EmployeeRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
-      "methodName": "downloadDqmInhouseXmlFromDbAndValidate",
-      "approximateEndLine": 46
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/dcx/dqm/validation/process/engine/DataValidationProcess.java",
-        "methodName": "downloadDqmInhouseXmlFromDbAndValidate",
-        "description": "SQL fragment found in class DataValidationProcess",
-        "blockId": "DOWNLOADDQMINHOUSEXMLFROMDBANDVALIDATE_BLOCK_46",
-        "codeSnippet": "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\""
+    }, {
+      "code" : "\"SELECT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 81,
+        "startColumn" : 54,
+        "endLine" : 81,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT ID, EINGANG, DATEINAME, XMLZIP, VDAZIP \"\r\n                     + \"FROM DQM.DQMIMP_DFUE \"\r\n                     + \"ORDER BY ID DESC \"\r\n                     + \"FETCH FIRST 100 ROWS ONLY \"\r\n                     + \"FOR READ ONLY WITH UR\"",
-    "supplementalContext": {
-      "sourceClassName": "DataValidationProcess"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "getDepartmentById",
-      "approximateEndLine": 24
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "getDepartmentById",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "GETDEPARTMENTBYID_BLOCK_24",
-        "codeSnippet": "\"SELECT * FROM Departments WHERE id = ?\""
+    }, {
+      "code" : "\"SELECT.BELADELISTE\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 81,
+        "startColumn" : 54,
+        "endLine" : 81,
+        "endColumn" : 73
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT * FROM Departments WHERE id = ?\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "updateDepartment",
-      "approximateEndLine": 57
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "updateDepartment",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "UPDATEDEPARTMENT_BLOCK_57",
-        "codeSnippet": "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\""
+    }, {
+      "code" : "\"SELECT.PACKSTUECK_AVIS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 84,
+        "startColumn" : 58,
+        "endLine" : 84,
+        "endColumn" : 81
       }
-    ],
-    "inferredPreConversionSql": "\"UPDATE Departments SET name = ?, location = ? WHERE id = ?\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-      "methodName": "listDepartmentsWithProjects",
-      "approximateEndLine": 75
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/department/DepartmentRepository.java",
-        "methodName": "listDepartmentsWithProjects",
-        "description": "SQL fragment found in class DepartmentRepository",
-        "blockId": "LISTDEPARTMENTSWITHPROJECTS_BLOCK_75",
-        "codeSnippet": "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\""
+    }, {
+      "code" : "\"SELECT.PACKSTUECK_AVIS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 84,
+        "startColumn" : 58,
+        "endLine" : 84,
+        "endColumn" : 81
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT d.name AS dept_name, p.name AS project_name \" +\r\n                     \"FROM Departments d \" +\r\n                     \"LEFT OUTER JOIN Projects p ON d.id = p.department_id \" +\r\n                     \"FETCH FIRST 10 ROWS ONLY\"",
-    "supplementalContext": {
-      "sourceClassName": "DepartmentRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-      "methodName": "getAllEmployees",
-      "approximateEndLine": 29
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/org/example/employee/EmployeeRepository.java",
-        "methodName": "getAllEmployees",
-        "description": "SQL fragment found in class EmployeeRepository",
-        "blockId": "GETALLEMPLOYEES_BLOCK_29",
-        "codeSnippet": "\"SELECT * FROM Employees\""
+    }, {
+      "code" : "\"SELECT.LIEFERSCHEIN_AVIS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 87,
+        "startColumn" : 60,
+        "endLine" : 87,
+        "endColumn" : 85
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT * FROM Employees\"",
-    "supplementalContext": {
-      "sourceClassName": "EmployeeRepository"
-    }
-  },
-  {
-    "sink": {
-      "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-      "methodName": "<clinit>",
-      "approximateEndLine": 85
-    },
-    "constructionTrace": [
-      {
-        "order": 1,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_54",
-        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
-      },
-      {
-        "order": 2,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_54",
-        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
-      },
-      {
-        "order": 3,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_54",
-        "codeSnippet": "\"SELECT.ERRORCONFIG.ALL\""
-      },
-      {
-        "order": 4,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_57",
-        "codeSnippet": "\"UPDATE.ERRORCONFIG\""
-      },
-      {
-        "order": 5,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_60",
-        "codeSnippet": "\"INSERT.ERRORCONFIG\""
-      },
-      {
-        "order": 6,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_63",
-        "codeSnippet": "\"DELETE.ERRORCONFIG\""
-      },
-      {
-        "order": 7,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_66",
-        "codeSnippet": "\"SELECT.CONFIGS.NOTIFICATION\""
-      },
-      {
-        "order": 8,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_70",
-        "codeSnippet": "\"SELECT.ERRORVALUES\""
-      },
-      {
-        "order": 9,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_73",
-        "codeSnippet": "\"UPDATE.ERRORVALUES\""
-      },
-      {
-        "order": 10,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_76",
-        "codeSnippet": "\"INSERT.ERRORVALUES\""
-      },
-      {
-        "order": 11,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_79",
-        "codeSnippet": "\"SELECT.ACTUALERRORVALUES\""
-      },
-      {
-        "order": 12,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_82",
-        "codeSnippet": "\"SELECT.ERRORVALUES.NOTIFICATION\""
-      },
-      {
-        "order": 13,
-        "filePath": "/app/project/src/main/java/com/tsystems/dqm/monitoring/ErrorMonitoringDAOBean.java",
-        "methodName": "<clinit>",
-        "description": "SQL fragment found in class ErrorMonitoringDAOBean",
-        "blockId": "<CLINIT>_BLOCK_85",
-        "codeSnippet": "\"SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD\""
+    }, {
+      "code" : "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 90,
+        "startColumn" : 67,
+        "endLine" : 90,
+        "endColumn" : 99
       }
-    ],
-    "inferredPreConversionSql": "\"SELECT.ERRORCONFIG.ALL\" \"SELECT.ERRORCONFIG.ALL\" \"SELECT.ERRORCONFIG.ALL\" \"UPDATE.ERRORCONFIG\" \"INSERT.ERRORCONFIG\" \"DELETE.ERRORCONFIG\" \"SELECT.CONFIGS.NOTIFICATION\" \"SELECT.ERRORVALUES\" \"UPDATE.ERRORVALUES\" \"INSERT.ERRORVALUES\" \"SELECT.ACTUALERRORVALUES\" \"SELECT.ERRORVALUES.NOTIFICATION\" \"SELECT.ERRORVALUES.HOUR.OF.LAST.RECORD\"",
-    "supplementalContext": {
-      "sourceClassName": "ErrorMonitoringDAOBean"
-    }
-  }
-]
+    }, {
+      "code" : "\"SELECT.PACKSTUECK_AVIS_WITH_JIS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 90,
+        "startColumn" : 67,
+        "endLine" : 90,
+        "endColumn" : 99
+      }
+    }, {
+      "code" : "\"SELECT.SCANNED\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 93,
+        "startColumn" : 50,
+        "endLine" : 93,
+        "endColumn" : 65
+      }
+    }, {
+      "code" : "\"INSERT.SCANNED\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 96,
+        "startColumn" : 50,
+        "endLine" : 96,
+        "endColumn" : 65
+      }
+    }, {
+      "code" : "\"DELETE.SCANNED\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 99,
+        "startColumn" : 50,
+        "endLine" : 99,
+        "endColumn" : 65
+      }
+    }, {
+      "code" : "\"INSERT.FINGERPRINT\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 102,
+        "startColumn" : 54,
+        "endLine" : 102,
+        "endColumn" : 73
+      }
+    }, {
+      "code" : "\"SELECT.FINGERPRINT\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 105,
+        "startColumn" : 54,
+        "endLine" : 105,
+        "endColumn" : 73
+      }
+    }, {
+      "code" : "\"SELECT.ZOLLGUT_STATUS\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 108,
+        "startColumn" : 57,
+        "endLine" : 108,
+        "endColumn" : 79
+      }
+    }, {
+      "code" : "\"SELECT.SACHNUMMERN\"",
+      "type" : "String",
+      "location" : {
+        "startLine" : 111,
+        "startColumn" : 54,
+        "endLine" : 111,
+        "endColumn" : 73
+      }
+    } ]
+  } ]
+} ]

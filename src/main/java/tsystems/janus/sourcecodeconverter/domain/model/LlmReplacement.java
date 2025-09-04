@@ -1,15 +1,18 @@
 package tsystems.janus.sourcecodeconverter.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class LlmReplacement {
-    private String blockId;
+    private ConversionUnit.Location location;
     private String convertedCode;
 
-    public String getBlockId() {
-        return blockId;
+    public ConversionUnit.Location getLocation() {
+        return location;
     }
 
-    public void setBlockId(String blockId) {
-        this.blockId = blockId;
+    public void setLocation(ConversionUnit.Location location) {
+        this.location = location;
     }
 
     public String getConvertedCode() {

@@ -1,0 +1,35 @@
+From c5262ca919a04f78427f3e1107843f4e98ea25e8 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Thu, 4 Sep 2025 03:56:12 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted DB2 SQL queries to PostgreSQL syntax
+---
+ src/main/java/org/example/employee/EmployeeRepository.java | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
+
+diff --git a/src/main/java/org/example/employee/EmployeeRepository.java b/src/main/java/org/example/employee/EmployeeRepository.java
+index aeec34f..ceba67f 100644
+--- a/src/main/java/org/example/employee/EmployeeRepository.java
++++ b/src/main/java/org/example/employee/EmployeeRepository.java
+@@ -14,7 +14,7 @@ public class EmployeeRepository {
+     // Commented for testing purposes
+     // SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR
+     public void addEmployee(String firstName, String lastName, int departmentId, double salary) throws SQLException {
+-        String sql = "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES (?, ?, ?, ?)";
++        String sql = "INSERT INTO Employees (first_name, last_name, department_id, salary) VALUES ($1, $2, $3, $4)";
+         try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+             stmt.setString(1, firstName);
+             stmt.setString(2, lastName);
+@@ -44,7 +44,7 @@ public class EmployeeRepository {
+ 
+     public List<Employee> getFirstFiveEmployees() throws SQLException {
+         List<Employee> employees = new ArrayList<>();
+-        String sql = "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR";
++        String sql = "SELECT * FROM Employees LIMIT 5";
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+             while (rs.next()) {
+-- 
+2.34.1
+

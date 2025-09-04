@@ -3,7 +3,7 @@ package tsystems.janus.sourcecodeconverter.infrastructure.codeQL;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.stereotype.Component;
 import tsystems.janus.sourcecodeconverter.domain.model.CodeQLResult;
-import tsystems.janus.sourcecodeconverter.domain.model.ConstructionStep;
+import tsystems.janus.sourcecodeconverter.domain.model.ConversionUnit;
 import tsystems.janus.sourcecodeconverter.domain.model.ConversionTask;
 import tsystems.janus.sourcecodeconverter.domain.model.Sink;
 
@@ -17,54 +17,45 @@ public class CodeQLTraceProcessor {
     private final ObjectMapper objectMapper = new ObjectMapper();
 
     public List<ConversionTask> processResults(List<CodeQLResult> results) {
-        Map<String, List<CodeQLResult>> groupedByMethod = results.stream()
-                .collect(Collectors.groupingBy(
-                        result -> result.getPath() + "::" + result.getMethodName()
-                ));
-
+        Map<String, List<CodeQLResult>> groupedByFile = results.stream()
+                .collect(Collectors.groupingBy(CodeQLResult::getPath));
         List<ConversionTask> conversionTasks = new ArrayList<>();
-        for (List<CodeQLResult> group : groupedByMethod.values()) {
-            conversionTasks.add(createTaskFromGroup(group));
+
+        for (Map.Entry<String, List<CodeQLResult>> entry : groupedByFile.entrySet()) {
+            conversionTasks.add(createTaskFromFileGroup(entry.getKey(), entry.getValue()));
         }
 
         return conversionTasks;
     }
 
-    private ConversionTask createTaskFromGroup(List<CodeQLResult> group) {
-        group.sort(Comparator.comparingInt(CodeQLResult::getStartLine));
+    private ConversionTask createTaskFromFileGroup(String filePath, List<CodeQLResult> fileResults) {
+        fileResults.sort(Comparator.comparingInt(CodeQLResult::getStartLine));
 
-        ConversionTask task = new ConversionTask();
-        task.setConstructionTrace(new ArrayList<>());
+        Sink sink = new Sink(filePath);
+        ConversionTask task = new ConversionTask(sink, new ArrayList<>());
 
-        CodeQLResult firstResult = group.get(0);
-        task.setSink(new Sink(firstResult.getPath(), firstResult.getMethodName()));
+        Map<String, List<CodeQLResult>> groupedByMethod = fileResults.stream()
+                .collect(Collectors.groupingBy(result -> result.getClassName() + "." + result.getMethodName()));
 
-        StringBuilder inferredSqlBuilder = new StringBuilder();
+        for (Map.Entry<String, List<CodeQLResult>> methodEntry : groupedByMethod.entrySet()) {
+            ConversionUnit unit = new ConversionUnit();
+            unit.setUnitId(methodEntry.getKey());
+            unit.setComponents(new ArrayList<>());
 
-        int order = 1;
-        for (CodeQLResult result : group) {
-            ConstructionStep step = new ConstructionStep();
-            step.setOrder(order++);
-            step.setFilePath(result.getPath());
-            step.setMethodName(result.getMethodName());
-            step.setCodeSnippet(result.getCode());
-            step.setDescription("SQL fragment found in class " + result.getClassName());
-            step.setBlockId(String.format("%S_BLOCK_%s",
-                    result.getMethodName().toUpperCase(),
-                    result.getStartLine()
-            ));
-
-            task.getConstructionTrace().add(step);
-            inferredSqlBuilder.append(result.getCode()).append(" ");
+            for (CodeQLResult result : methodEntry.getValue()) {
+                ConversionUnit.Component component = new ConversionUnit.Component();
+                component.setCode(result.getCode());
+                component.setType(result.getSourceExpressionType());
+                component.setLocation(new ConversionUnit.Location(
+                        result.getStartLine(),
+                        result.getStartColumn(),
+                        result.getEndLine(),
+                        result.getEndColumn()
+                ));
+                unit.getComponents().add(component);
+            }
+            task.getConversionUnits().add(unit);
         }
-
-        task.setInferredPreConversionSql(inferredSqlBuilder.toString().trim());
-
-        task.getSink().setApproximateEndLine(group.get(group.size() - 1).getStartLine());
-
-        Map<String, Object> context = new HashMap<>();
-        context.put("sourceClassName", firstResult.getClassName());
-        task.setSupplementalContext(context);
 
         return task;
     }
