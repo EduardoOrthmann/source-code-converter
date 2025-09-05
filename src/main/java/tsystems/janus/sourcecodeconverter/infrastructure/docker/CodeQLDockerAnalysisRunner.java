@@ -36,6 +36,7 @@ public class CodeQLDockerAnalysisRunner {
         String containerName = config.getContainerName();
         containerManager.startContainer(config.getImageName(), containerName, volumes, logConsumer);
 
+        gitInitialize(containerName, logConsumer);
         addGitAttributes(containerName, logConsumer);
 
         logConsumer.accept("Docker environment prepared. Container: '" + containerName + "'");
@@ -63,6 +64,21 @@ public class CodeQLDockerAnalysisRunner {
             logConsumer.accept("✅ .gitattributes file created successfully.");
         } catch (Exception e) {
             logConsumer.accept("⚠️ Could not create .gitattributes file. Patches may have line ending issues.");
+        }
+    }
+
+    private void gitInitialize(String containerName, Consumer<String> logConsumer) {
+        try {
+            logConsumer.accept("🔧 Initializing Git repository in the project directory...");
+            containerManager.executeCommandInContainer(
+                    containerName,
+                    config.getContainerProjectPath(),
+                    List.of("git", "init"),
+                    logConsumer
+            );
+            logConsumer.accept("✅ Git repository initialized successfully.");
+        } catch (Exception e) {
+            logConsumer.accept("⚠️ Could not initialize Git repository. Patches may have line ending issues.");
         }
     }
 

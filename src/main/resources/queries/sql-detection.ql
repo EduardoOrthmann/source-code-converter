@@ -13,7 +13,6 @@ import semmle.code.java.dataflow.DataFlow
 import semmle.code.java.dataflow.FlowSources
 import semmle.code.xml.XML
 
-// ... (SqlExecutionMethod, SqlTaintTrackingConfig, and getSqlQueryType remain the same) ...
 class SqlExecutionMethod extends Method {
   SqlExecutionMethod() {
     // Standard JDBC
@@ -156,15 +155,11 @@ class XmlSqlFinding extends SqlQueryFinding {
     )
   }
 
-  // --- FIX STARTS HERE ---
-  // The location predicates now refer to the XML statementTag, not the Java code.
   override string getFilePath() { result = statementTag.getLocation().getFile().getAbsolutePath() }
   override int getStartLine() { result = statementTag.getLocation().getStartLine() }
   override int getStartColumn() { result = statementTag.getLocation().getStartColumn() }
   override int getEndLine() { result = statementTag.getLocation().getEndLine() }
   override int getEndColumn() { result = statementTag.getLocation().getEndColumn() }
-  // --- FIX ENDS HERE ---
-
   override string getMethodName() { result = ma.getEnclosingCallable().getName() }
   override string getCode() { result = sqlText }
   override string getSourceExpressionType() { result = "String (from XML)" }

@@ -2,10 +2,12 @@ package tsystems.janus.sourcecodeconverter.adapter.cli;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.method.annotation.SseEmitter;
 
 import tsystems.janus.sourcecodeconverter.application.service.*;
@@ -35,6 +37,17 @@ public class CodeConversionController {
     @GetMapping(value = "/conversion-logs", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
     public SseEmitter convertRepository(@RequestParam String repoUrl) {
         return codeConversionService.convertRepositoryWithSse(repoUrl);
+    }
+
+    // 1 starta o container e usa ZIP file ao invés de URL
+    @PostMapping(value = "/conversion-logs-zip", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Map<String, Object>> convertRepositoryFromZip(@RequestParam("file") MultipartFile projectZip) {
+        try {
+            Map<String, Object> result = codeConversionService.convertRepository(projectZip);
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
+        }
     }
 
     // 2 gera estruturar o arquivo gerado pelo primeiro request
