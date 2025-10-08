@@ -98,24 +98,28 @@ public class PatchService {
                     .findFirst()
                     .orElseThrow(() -> new NoSuchElementException("Original task not found for file: " + finalSourcePath));
 
-            patchApplierService.applyPatch(response, originalTask);
+            boolean changesApplied = patchApplierService.applyPatch(response, originalTask);
 
-            if (buildTestService.testSingleFile(filePath)) {
-                patchApplierService.commitChanges(filePath, response.getExplanation());
-                String patchFileNameInContainer = patchApplierService.formatPatch();
+            if (changesApplied) {
+                if (buildTestService.testSingleFile(filePath)) {
+                    patchApplierService.commitChanges(filePath, response.getExplanation());
+                    String patchFileNameInContainer = patchApplierService.formatPatch();
 
-                if (patchFileNameInContainer != null && !patchFileNameInContainer.isBlank()) {
-                    String containerSrcPath = dockerConfig.getContainerProjectPath() + "/" + patchFileNameInContainer;
-                    String uniquePatchName = String.format("%04d-%s", (patchCounter - 1), patchFileNameInContainer.substring(5));
-                    String hostDestPath = patchesDir.resolve(uniquePatchName).toString();
+                    if (patchFileNameInContainer != null && !patchFileNameInContainer.isBlank()) {
+                        String containerSrcPath = dockerConfig.getContainerProjectPath() + "/" + patchFileNameInContainer;
+                        String uniquePatchName = String.format("%04d-%s", (patchCounter - 1), patchFileNameInContainer.substring(5));
+                        String hostDestPath = patchesDir.resolve(uniquePatchName).toString();
 
-                    dockerContainerManager.copyFileFromContainer(dockerConfig.getContainerName(), containerSrcPath, hostDestPath);
-                    System.out.println("✅ Successfully created patch: " + uniquePatchName);
-                    appliedPatches++;
+                        dockerContainerManager.copyFileFromContainer(dockerConfig.getContainerName(), containerSrcPath, hostDestPath);
+                        System.out.println("✅ Successfully created patch: " + uniquePatchName);
+                        appliedPatches++;
+                    }
+                } else {
+                    System.err.println("Compilation failed for: " + filePath + ". Reverting changes.");
+                    patchApplierService.revertChanges(filePath);
                 }
             } else {
-                System.err.println("Compilation failed for: " + filePath + ". Reverting changes.");
-                patchApplierService.revertChanges(filePath);
+                System.out.println("Skipping build and commit for " + filePath + " as no changes were detected.");
             }
 
             patchApplierService.resetAndCleanBranch(branchName);

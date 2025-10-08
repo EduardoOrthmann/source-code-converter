@@ -23,7 +23,7 @@ public class PatchApplierService {
         this.dockerConfig = dockerConfig;
     }
 
-    public void applyPatch(LlmReplacementsResponse llmResponse, ConversionTask originalTask) throws IOException, InterruptedException {
+    public boolean applyPatch(LlmReplacementsResponse llmResponse, ConversionTask originalTask) throws IOException, InterruptedException {
         String containerName = dockerConfig.getContainerName();
         String filePathInContainer = llmResponse.getFile();
         String workDir = dockerConfig.getContainerProjectPath();
@@ -62,8 +62,10 @@ public class PatchApplierService {
         if (!originalFileContent.replaceAll("\r\n", "\n").equals(modifiedFileContent)) {
             System.out.println("Writing patched file back to container: " + filePathInContainer);
             containerManager.writeFileToContainer(containerName, filePathInContainer, modifiedFileContent);
+            return true;
         } else {
             System.out.println("No changes were applied to the file.");
+            return false;
         }
     }
 

@@ -1,0 +1,26 @@
+From 78e3719842f1982480de8f0c57d83e784c0aafb1 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Wed, 8 Oct 2025 02:12:50 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted DB2 SQL syntax to PostgreSQL syntax
+---
+ src/main/java/org/example/department/DepartmentRepository.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/example/department/DepartmentRepository.java b/src/main/java/org/example/department/DepartmentRepository.java
+index cecafaf..14bb311 100755
+--- a/src/main/java/org/example/department/DepartmentRepository.java
++++ b/src/main/java/org/example/department/DepartmentRepository.java
+@@ -75,7 +75,7 @@ public class DepartmentRepository {
+         String sql = "SELECT d.name AS dept_name, p.name AS project_name " +
+                      "FROM Departments d " +
+                      "LEFT OUTER JOIN Projects p ON d.id = p.department_id " +
+-                     "FETCH FIRST 10 ROWS ONLY";
++                     "LIMIT 10";
+ 
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+-- 
+2.25.1
+

@@ -56,7 +56,7 @@
   } ]
 }, {
   "file" : "/app/project/target/classes/com/tsystems/dqm/monitoring/ErrorMonitoringManagement.xml",
-  "explanation" : "Converted SQL syntax from DB2 to PostgreSQL",
+  "explanation" : "Converted DB2 SQL syntax to PostgreSQL syntax",
   "replacements" : [ {
     "location" : {
       "startLine" : 5,
@@ -412,11 +412,11 @@
       "endLine" : 1000,
       "endColumn" : 109
     },
-    "convertedCode" : "\" FROM generate_series(1,1)\""
+    "convertedCode" : "\" FROM generate_series\""
   } ]
 }, {
   "file" : "/app/project/src/main/java/com/tsystems/dqm/tmgmt/beladeliste/dao/BeladelisteDB.java",
-  "explanation" : "Converted SQL syntax from DB2 to PostgreSQL for string literals",
+  "explanation" : "Converted SQL syntax from DB2 to PostgreSQL",
   "replacements" : [ {
     "location" : {
       "startLine" : 75,
