@@ -18,12 +18,15 @@ public class DockerImageBuilder {
 
     public void buildImageIfNecessary(String imageName, File dockerfileDir, Consumer<String> logConsumer) throws IOException, InterruptedException {
         if (!dockerfileDir.exists()) {
+            System.out.println("❌ Dockerfile directory not found: " + dockerfileDir.getAbsolutePath());
             logConsumer.accept("❌ Dockerfile directory not found: " + dockerfileDir.getAbsolutePath());
             throw new RuntimeException("❌ Dockerfile directory not found: " + dockerfileDir.getAbsolutePath());
         }
+        System.out.println("Checking if Docker image '" + imageName + "' exists...");
 
         logConsumer.accept("Checking if Docker image '" + imageName + "' exists...");
         String existingImages = commandExecutor.executeAndCaptureOutput(List.of("docker", "images", "-q", imageName));
+        System.out.println("Existing images output: " + existingImages);
 
         boolean imageExists = !existingImages.isEmpty();
 
@@ -32,7 +35,9 @@ public class DockerImageBuilder {
             return;
         }
 
+        System.out.println("Building Docker image '" + imageName + "' from directory: " + dockerfileDir.getAbsolutePath());
         logConsumer.accept("Building Docker image from: " + dockerfileDir.getAbsolutePath());
         commandExecutor.execute(List.of("docker", "build", "-t", imageName, dockerfileDir.getAbsolutePath()), logConsumer);
+        System.out.println("Docker image '" + imageName + "' built successfully.");
     }
 }

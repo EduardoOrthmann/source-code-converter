@@ -58,47 +58,49 @@ public class LlmPromptExecutor {
                       - `location`: an object with `startLine`, `startColumn`, `endLine`, and `endColumn` of the code to be replaced.
                       - `convertedCode`: the rewritten SQL code
                 
-                    Here is an example of the JSON structure you must produce:
-                    ```json
-                    [
-                       {
-                           "file": "path/to/file.java",
-                           "explanation": "Your concise explanation of the changes made.",
-                           "replacements": [
-                               {
-                                   "location": {
-                                       "startLine": 12,
-                                       "startColumn": 25,
-                                       "endLine": 12,
-                                       "endColumn": 118
-                                   },
-                                   "convertedCode": "SELECT * FROM users WHERE user_id = ? LIMIT 1"
-                               }
-                           ]
-                       }
-                    ]
-                    ```
                  3. You MUST ONLY include the JSON if there are changes. If no changes are needed, don't add it at all.
-                
-                 **Objective:**
-                 Your task is to analyze a "Construction Trace" which shows how a final SQL query is built across multiple files and methods. You must analyze the code and convert it to PostgreSQL syntax, ensuring that the final SQL query remains functionally equivalent.
-                
-                 **PAY ATTENTION TO `sourceExpressionType`:**
-                    - If `sourceExpressionType` is `"String (from XML)"`, the `code` field contains the real SQL from an XML file. This is your highest priority for conversion.
-                    - If `sourceExpressionType` is `"String"`, examine the `code` value. If it contains SQL keywords, convert it. If it is a key (like `"SELECT.BELADELISTE"`), ignore it completely and do not include it in your output.
 
-                 **DON'T CHANGE VARIABLES OR PLACEHOLDERS:**
-                    - Maintain all variable names, placeholders (like `?`), and concatenation logic as is. Only change the SQL syntax.
-
-                **DON'T CHANGE CONSTANTS IF THEY ARE NOT SQL:**
-                    - If a constant does not contain a syntactically relevant SQL part, do not change it.
-                    - For example, do not change `private static final String SELECT_ALL = "SELECT.ERRORCONFIG.ALL";` because it is just a key.
-                
                  **Global Conversion Context:**
                  - Source DB: DB2 LUW
                  - Target DB: PostgreSQL 14+
-                
+
                  ---
+                
+                 **PRIMARY CONVERSION RULES:**
+                 Analyze the `conversionUnits` and use the `type` and file path of each `component` to guide your logic.
+                
+                 **1. If `type` is "String (from XML)":**
+                    -   This code is **ALWAYS** real SQL located in an `.xml` file.
+                    -   You **MUST** convert its syntax from DB2 to PostgreSQL. The output should be the raw converted SQL.
+                    -   For example, convert DB2-style parameters (`@param{VAR}`) to PostgreSQL-style positional placeholders (`$1`, `$2`, etc.).
+                
+                 **2. If `type` is "String":**
+                    -   This code is almost always a **lookup key**, NOT real SQL. These keys are used to find the actual SQL in an XML file.
+                    -   These keys often follow a pattern of words separated by dots (e.g., `INSERT.ERRORVALUES`, `SELECT.ERRORCONFIG.ALL`).
+                    -   **CRITICAL RULE: You MUST NOT modify these keys.** Do not "fix" the dots or change the syntax in any way. Preserve them exactly as they are. They are identifiers, not SQL commands.
+                
+                    -   **THE ONLY EXCEPTION:** You should only convert a component with `type: "String"` if the `code` value is a complete, self-contained SQL statement.
+                
+                    -   **Examples to guide you:**
+                        -   **DO NOT CHANGE:** `private static final String SELECT_ALL = "SELECT.ERRORCONFIG.ALL";`
+                            -   **Reason:** The `code` is `"SELECT.ERRORCONFIG.ALL"`. This is a dot-notation key. Leave it alone.
+                        -   **DO NOT CHANGE:** `private static final String INSERT_SCANNED = "INSERT.SCANNED";`
+                            -   **Reason:** The `code` is `"INSERT.SCANNED"`. This is a dot-notation key. Leave it alone.
+                        -   **DO CHANGE:** `String sql = "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR";`
+                            -   **Reason:** The `code` is `"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR"`. This is a full, valid DB2 SQL statement. Convert it to `"SELECT * FROM Employees LIMIT 5"`.
+                **3. Ensure Syntactic Correctness for the Target File:**
+                   -   The `convertedCode` you provide must be a **syntactically valid replacement** for the original code within its target file.
+                   -   **For `.java` files:** If the original code being replaced is a Java String literal (i.e., enclosed in double quotes), your `convertedCode` **MUST ALSO** be a valid Java String literal, including the surrounding double quotes.
+                
+                   -   **CRITICAL EXAMPLE FOR JAVA FILES:**
+                       -   **Original Code (`code` field in the input):** `"\\"SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR\\""`
+                       -   **INCORRECT `convertedCode`:** `"SELECT * FROM Employees LIMIT 5"` (This is raw SQL and will cause a Java compilation error).
+                       -   **CORRECT `convertedCode`:** `"\\"SELECT * FROM Employees LIMIT 5\\""` (This is a valid Java String literal and will compile correctly).
+                
+                **4. General Rules:**
+                   -   **DO NOT CHANGE VARIABLES OR PLACEHOLDERS:** Maintain all Java variable names and existing placeholders (like `?`). Only change the SQL syntax itself.
+                   -   **Focus on the `code` field:** The code you need to analyze and potentially replace is always inside the `code` field of each component.
+                ---
                 
                 """;
     }

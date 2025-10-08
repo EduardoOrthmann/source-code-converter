@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
 
@@ -14,10 +15,11 @@ import java.util.zip.ZipInputStream;
 public class ZipExtractor {
 
     public File unzip(MultipartFile zipFile) throws IOException {
+        System.out.println("Unzipping file");
         File tempDir = Files.createTempDirectory("unzipped-repo-").toFile();
 
         try (ZipInputStream zipInputStream = new ZipInputStream(zipFile.getInputStream())) {
-            java.util.zip.ZipEntry entry;
+            ZipEntry entry;
             while ((entry = zipInputStream.getNextEntry()) != null) {
                 File newFile = newFile(tempDir, entry);
                 if (entry.isDirectory()) {
@@ -40,7 +42,10 @@ public class ZipExtractor {
                 }
                 zipInputStream.closeEntry();
             }
+        } catch (IOException e) {
+            System.out.println("Error during unzipping: " + e.getMessage());
         }
+        System.out.println("Unzipping completed to directory: " + tempDir.getAbsolutePath());
         return tempDir;
     }
 

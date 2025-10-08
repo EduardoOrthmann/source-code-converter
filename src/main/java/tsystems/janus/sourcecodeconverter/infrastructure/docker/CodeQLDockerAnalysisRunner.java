@@ -14,38 +14,36 @@ public class CodeQLDockerAnalysisRunner {
 
     private final DockerImageBuilder imageBuilder;
     private final DockerContainerManager containerManager;
-    private final DockerShutdown dockerShutdown;
     private final CodeQLDockerConfig config;
     private final PatchApplierService patchApplierService;
 
-    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, DockerShutdown dockerShutdown, CodeQLDockerConfig config, PatchApplierService patchApplierService) {
+    public CodeQLDockerAnalysisRunner(DockerImageBuilder imageBuilder, DockerContainerManager containerManager, CodeQLDockerConfig config, PatchApplierService patchApplierService) {
         this.imageBuilder = imageBuilder;
         this.containerManager = containerManager;
-        this.dockerShutdown = dockerShutdown;
         this.config = config;
         this.patchApplierService = patchApplierService;
     }
 
     public String prepareAnalysisEnvironment(File projectDir, File qlFile, File outputDir, Consumer<String> logConsumer) throws IOException, InterruptedException {
         logConsumer.accept("📦 Building Docker image...");
+        System.out.println("Building Docker image with name: " + config.getImageName() + " from directory: " + config.getDockerfileDir());
         imageBuilder.buildImageIfNecessary(config.getImageName(), config.getDockerfileDir(), logConsumer);
+        System.out.println("Docker image built.");
         logConsumer.accept("✅ Docker image built.");
 
         List<String> volumes = prepareVolumes(projectDir, qlFile, outputDir, logConsumer);
+        System.out.println("Prepared volumes: " + volumes);
 
         String containerName = config.getContainerName();
         containerManager.startContainer(config.getImageName(), containerName, volumes, logConsumer);
+        System.out.println("Started container: " + containerName);
 
         gitInitialize(containerName, logConsumer);
         addGitAttributes(containerName, logConsumer);
+        System.out.println("Docker environment prepared. Container: " + containerName);
 
         logConsumer.accept("Docker environment prepared. Container: '" + containerName + "'");
         return containerName;
-    }
-
-
-    public void cleanupAnalysisEnvironment(String containerName, Consumer<String> logConsumer) {
-        dockerShutdown.cleanupContainer(containerName, config.getDbVolumeName(), config.isPersistDbVolume(), logConsumer);
     }
 
     private void addGitAttributes(String containerName, Consumer<String> logConsumer) {

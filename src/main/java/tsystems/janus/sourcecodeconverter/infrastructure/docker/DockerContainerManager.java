@@ -22,6 +22,7 @@ public class DockerContainerManager {
     public String startContainer(String imageName, String containerName, List<String> volumes, Consumer<String> logConsumer) throws IOException, InterruptedException {
         List<String> startCommand = new ArrayList<>(List.of(
                 "docker", "run", "-d",
+                "--dns=8.8.8.8",
                 "--name", containerName
         ));
         for (String volume : volumes) {

@@ -1,0 +1,12 @@
+<toolchains>
+    <toolchain>
+        <type>jdk</type>
+        <provides>
+            <vendor>ibm</vendor>
+            <version>1.8</version>
+        </provides>
+        <configuration>
+            <jdkHome>/usr/lib/jvm/java-8-openjdk-amd64</jdkHome>
+        </configuration>
+    </toolchain>
+</toolchains>

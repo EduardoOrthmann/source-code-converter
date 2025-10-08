@@ -15,6 +15,15 @@ run:
       tags: db-migration java jdbc xml
   extensionPacks: []
   packs:
+    codeql/java-all#1:
+      name: codeql/java-all
+      version: 0.7.5
+      isLibrary: true
+      isExtensionPack: false
+      localPath: file:///root/.codeql/packages/codeql/java-all/0.7.5/
+      localPackDefinitionFile: file:///root/.codeql/packages/codeql/java-all/0.7.5/qlpack.yml
+      headSha: 2501a701ad93601b7f892d9f510edb65b7e4a2da
+      runDataExtensions: []
     janus/sql-finder#0:
       name: janus/sql-finder
       version: 0.0.1
@@ -3929,15 +3938,6 @@ run:
         locations:
           lineNumbers: A=8+1+3+1+3+1+3+1*3
           columnNumbers: A=9*10
-    codeql/java-all#1:
-      name: codeql/java-all
-      version: 0.7.5
-      isLibrary: true
-      isExtensionPack: false
-      localPath: file:///root/.codeql/packages/codeql/java-all/0.7.5/
-      localPackDefinitionFile: file:///root/.codeql/packages/codeql/java-all/0.7.5/qlpack.yml
-      headSha: 2501a701ad93601b7f892d9f510edb65b7e4a2da
-      runDataExtensions: []
 metadata:
   name: Detect All Database Code and its Sources (Java and XML)
   description: |-

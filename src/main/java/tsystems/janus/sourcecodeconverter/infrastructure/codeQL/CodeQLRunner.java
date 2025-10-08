@@ -26,6 +26,7 @@ public class CodeQLRunner {
                                 "codeql database create " + dbPathInContainer +
                                 " --language=" + language +
                                 " --source-root=" + projectPathInContainer +
+//                                " --command=/opt/custom_build.sh" +
                                 " --overwrite"
                 ),
                 logConsumer

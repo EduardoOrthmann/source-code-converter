@@ -53,6 +53,7 @@ public class CodeConversionService {
     }
 
     private void startConversion(File projectDir, Consumer<String> logConsumer) throws Exception {
+        System.out.println("I am at startConversion method");
         File qlFile = pathProvider.getQueryFile();
         logConsumer.accept("Found CodeQL query file: " + qlFile.getAbsolutePath());
 
@@ -62,8 +63,10 @@ public class CodeConversionService {
         String containerName = null;
         try {
             logConsumer.accept("Preparing Docker environment for CodeQL analysis...");
+            System.out.println("Preparing Docker environment for CodeQL analysis...");
             containerName = codeQLDockerAnalysisRunner.prepareAnalysisEnvironment(projectDir, qlFile, outputDir, logConsumer);
             logConsumer.accept("✅ Docker environment ready. Container: " + containerName);
+            System.out.println("✅ Docker environment ready. Container: " + containerName);
 
             logConsumer.accept("🔍 Checking if CodeQL database already exists in volume...");
 
@@ -82,6 +85,7 @@ public class CodeConversionService {
                 System.out.println("✅ CodeQL database already exists: " + dockerConfig.getDbVolumeName());
             }
 
+            System.out.println("Running CodeQL query inside Docker container...");
             logConsumer.accept("Running CodeQL query inside Docker container...");
             System.out.println("Running CodeQL query inside Docker container...");
             codeQLCliExecutor.runQuery(
@@ -149,6 +153,7 @@ public class CodeConversionService {
         Consumer<String> logConsumer = logs::add;
 
         logConsumer.accept("Starting synchronous code conversion for uploaded ZIP file: " + projectZip.getOriginalFilename());
+        System.out.println("Starting synchronous code conversion for uploaded ZIP file: " + projectZip.getOriginalFilename());
 
         File projectDir = zipExtractor.unzip(projectZip);
         logConsumer.accept("✅ ZIP file extracted to: " + projectDir.getAbsolutePath());

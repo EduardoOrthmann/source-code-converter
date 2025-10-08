@@ -43,7 +43,9 @@ public class CodeConversionController {
     @PostMapping(value = "/conversion-logs-zip", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Map<String, Object>> convertRepositoryFromZip(@RequestParam("file") MultipartFile projectZip) {
         try {
+            System.out.println("Received file: " + projectZip.getOriginalFilename());
             Map<String, Object> result = codeConversionService.convertRepository(projectZip);
+            System.out.println("Conversion result: " + result);
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             return ResponseEntity.status(500).body(Map.of("error", e.getMessage()));
@@ -55,7 +57,6 @@ public class CodeConversionController {
     public ResponseEntity<List<ConversionTask>> getConversionResults() throws IOException {
         List<ConversionTask> conversionTasks = analysisResultService.structureConversionTasks();
         return ResponseEntity.ok(conversionTasks);
-
     }
 
     // 3 precisa do primeiro request para gerar o arquivo results.json, não altera o funcionamento da aplicação
@@ -66,7 +67,7 @@ public class CodeConversionController {
     }
 
     // 4 precisa do primeiro e segundo request para gerar o arquivo converted_sql.json
-    @GetMapping("/convert")
+    @PostMapping("/convert")
     public ResponseEntity<List<LlmReplacementsResponse>> convertSql() throws IOException {
         List<LlmReplacementsResponse> result = llmConversionService.performAndSaveSqlConversion();
         return ResponseEntity.ok(result);

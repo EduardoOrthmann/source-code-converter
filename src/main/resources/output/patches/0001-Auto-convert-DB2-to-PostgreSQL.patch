@@ -1,0 +1,26 @@
+From 3c198fb5c13442affad164ce5dee3b8fe2dfac53 Mon Sep 17 00:00:00 2001
+From: Conversion Bot <conversion-bot@example.com>
+Date: Wed, 8 Oct 2025 01:29:50 +0000
+Subject: [PATCH] Auto-convert DB2 to PostgreSQL
+
+Converted DB2 SQL syntax to PostgreSQL syntax for two SQL statements.
+---
+ src/main/java/org/example/employee/EmployeeRepository.java | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/src/main/java/org/example/employee/EmployeeRepository.java b/src/main/java/org/example/employee/EmployeeRepository.java
+index aeec34f..34d3160 100755
+--- a/src/main/java/org/example/employee/EmployeeRepository.java
++++ b/src/main/java/org/example/employee/EmployeeRepository.java
+@@ -44,7 +44,7 @@ public class EmployeeRepository {
+ 
+     public List<Employee> getFirstFiveEmployees() throws SQLException {
+         List<Employee> employees = new ArrayList<>();
+-        String sql = "SELECT * FROM Employees FETCH FIRST 5 ROWS ONLY WITH UR";
++        String sql = "SELECT * FROM Employees LIMIT 5";
+         try (Statement stmt = connection.createStatement();
+              ResultSet rs = stmt.executeQuery(sql)) {
+             while (rs.next()) {
+-- 
+2.25.1
+

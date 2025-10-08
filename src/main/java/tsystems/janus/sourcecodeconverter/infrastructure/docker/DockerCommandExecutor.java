@@ -12,16 +12,21 @@ import java.util.function.Consumer;
 public class DockerCommandExecutor {
 
     public void execute(List<String> command, Consumer<String> logConsumer) throws IOException, InterruptedException {
+        System.out.println("Executing command: " + String.join(" ", command));
         ProcessBuilder processBuilder = new ProcessBuilder(command);
         processBuilder.redirectErrorStream(true);
 
         Process process = processBuilder.start();
 
         try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+            System.out.println("Reading process output...");
             String line;
             while ((line = reader.readLine()) != null) {
+                System.out.println(line);
                 logConsumer.accept(line);
             }
+        } catch (Exception e) {
+            System.out.println("Error reading process output: " + e.getMessage());
         }
 
         int exitCode = process.waitFor();
